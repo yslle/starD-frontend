@@ -1,0 +1,135 @@
+html {
+    font-size: 62.5%;
+} /*10px*/
+
+.study_detail_container {
+    width: 70%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    bottom: 50px;
+    /*font-family: 'Pretendard-Regular';*/
+}
+.study_detail_container h1 {
+    font-size: 27px;
+    text-align: center;
+    color: #395B64;
+}
+.study_detail_container .arrow_left {
+    text-align: left;
+    font-size: 50px;
+    color: #898989;
+    cursor: pointer;
+}
+.interest{
+    width: fit-content;
+    margin-left: 40px;
+}
+#inter{
+    margin-right: 10px;
+}
+/*.study_open_form {*/
+/*    margin-top: 50px;*/
+/*}*/
+.study_open_form > div:nth-of-type(1){
+    display: flex;
+    justify-content: center;
+}
+.study_open_form span{
+    font-size: 15px;
+}
+.study_open_form .inputbox{
+    width: 300px;
+    height: 40px;
+    position: inherit;
+    border-radius: 10px;
+    box-shadow: inherit;
+    padding-left:10px;
+}
+.study_open_form .inputbox::placeholder{
+    padding:0;
+}
+.study_open_form .left,
+.study_open_form .right{
+    text-align: right;
+}
+.study_open_form .left{
+    margin-right: 34px;
+}
+.study_open_form .left > div,
+.study_open_form .right > div{
+    margin-bottom: 25px;
+}
+.study_open_form .right .onoff {
+    display: inline-block;
+    width:300px;
+    height:50px;
+    text-align: left;
+    font-size: 15px;
+    margin-left: 20px;
+}
+.study_open_form .right input[name="onoff"],
+.study_open_form .right input[name="onOff"]{
+    width:auto;
+    height:auto;
+    background: none;
+    box-shadow: none;
+    margin-left: 0;
+    position: inherit;
+}
+.study_open_form .right .field_wrapper{
+    width:300px;
+    display: inline-block;
+    text-align: left;
+    margin-left:20px;
+}
+.select_estate{
+    display: inherit;
+    margin-bottom: 23px;
+
+}
+
+.study_open_detail{
+    display: flex;
+    margin-top:10px;
+    justify-content: center;
+}
+.study_open_detail span{
+    margin-left: 10px;
+    margin-right:20px;
+    display: inline-block;
+}
+.study_open_detail textarea {
+    border: 1px solid #dbdbdb;
+    border-radius: 10px;
+    padding: 15px 10px;
+    width: 75%;
+    height: 100px;
+    white-space: pre-line;
+    font-family: 'Pretendard-Regular';
+}
+
+.study_tag{
+    display: flex;
+    align-items: center;
+    margin-left: 70px;
+}
+.study_tag span{
+    margin-right:20px;
+}
+
+.btn .recruit_btn {
+    width:inherit;
+    height: inherit;
+    box-shadow: inherit;
+    background-color: #0038FF;
+    border: none;
+    font-size: 20px;
+    color: #fff;
+    padding: 15px 70px;
+    border-radius: 50px;
+    font-family: 'Pretendard-Regular';
+    cursor: pointer;
+}
