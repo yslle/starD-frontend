@@ -8,11 +8,8 @@ import StudyListItem from "./StudyListItem";
 import React from "react";
 
 const ScrapStudySlide = ({studies, toggleLike, toggleScrap, d, index, slide}) => {
-    // const {title, field, author, number, onoff,sido, gugun, deadline, startDate, endDate, description, tag, created_date, id} = study;
   return (
     <li
-      // className="list_detail"
-      // id={id}
       style={{
         transform: `translateX(${slide}px)`,
         transition: "0.5s ease",

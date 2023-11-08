@@ -22,7 +22,7 @@ html {
 	position: relative;
 }
 .arrow_left .openStudy{
-	background-color: #0038FF;
+	background-color: #99A98F;
 	border: none;
 	font-size: 13px;
 	color: #fff;
@@ -79,11 +79,11 @@ html {
 	margin-top: -10px;
 }
 .study_header .study_edit{
-	margin-right:10px;
+	margin-right:5px;
 }
 .study_header .study_edit,
 .study_header .study_remove{
-	background-color: #0038FF;
+	background-color: #99A98F;
 	border-radius: 50px;
 	font-family: 'Pretendard-Regular';
 	cursor: pointer;
@@ -141,7 +141,7 @@ html {
 	justify-content: center;
 }
 .btn .apply_btn {
-	background-color: #0038FF;
+	background-color: #99A98F;
 	border: none;
 	font-size: 20px;
 	color: #fff;
@@ -149,6 +149,10 @@ html {
 	border-radius: 50px;
 	font-family: 'Pretendard-Regular';
 	cursor: pointer;
+}
+.report_btn {
+	cursor: pointer;
+	color: #a8a8a8;
 }
 
 .scrap_img, .like_img{

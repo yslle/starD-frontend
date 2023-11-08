@@ -1,17 +1,8 @@
-//거주지 시 도 구
 import edit from "../css/mypage_css/edit.css";
 
 import $ from 'jquery';
 
 export function selectBOX (mem){
-
-    //mem을 받아서 거주지를 선택하면 상태 업데이트
-
-    // if (selectBOX.initialized) {
-    //     // 이미 초기화되었을 경우, 중복 호출 방지
-    //     return;
-    // }
-    // 시/도/군/구 selectBOX 생성함수
     const areas = {
         "시/도 선택": ["구/군 선택"],
         "서울특별시": ["강남구", "강동구", "강북구", "강서구","관악구","광진구","구로구","금천구","노원구"
@@ -127,9 +118,6 @@ function  saveSelectedGugunVal(selectedGugun){
             $gugunSelect.empty();
         }
     });
-    // 초기화 상태 표시
     selectBOX.initialized = true;
-
-    // 초기화 호출
     initializeSidoSelect();
 }

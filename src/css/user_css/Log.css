@@ -47,6 +47,10 @@
 	justify-content: center;
 	position: relative;
 }
+.input_info p{
+	margin:10px 0 0;
+	font-family: "Pretendard-Regular";
+}
 .input_info .subinfo{
 	display: inline-block;
 }
@@ -63,7 +67,7 @@
 	flex-direction: column;
 }
 .input_info input {
-	/*margin-bottom: 20px;*/
+	margin-bottom: 0;
 	width: 250px;
 	height: 40px;
 	padding-left: 10px;
@@ -127,7 +131,6 @@
 	border-radius: 10px;
 	border-style: none;
 	cursor: pointer;
-	margin-top: -3px;
 	font-family: 'Pretendard-Regular';
 }
 .input_bottom {

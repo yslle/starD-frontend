@@ -39,6 +39,7 @@ html {
 	padding: 15px;
 	width: 20%;
 	margin-left: 20px;
+	font-family: "Pretendard-Regular";
 }
 .c_01,
 .c_02,
@@ -48,7 +49,6 @@ html {
 	/*font-size: 0.7em;*/
 	/*color: lightgray;*/
 	color: #A3A3A3;
-	font-family: Inter;
 	font-size: 15px;
 	font-style: normal;
 	font-weight: 700;
@@ -71,7 +71,6 @@ html {
 }
 .sub_c > nav ul li {
 	color: #000;
-	font-family: Inter;
 	font-size: 18px;
 	font-style: normal;
 	font-weight: 400;
@@ -89,7 +88,7 @@ html {
 .content_container {
 	display: flex;
 	padding-top: 10px;
-	padding-right: 60px;
+	/*padding-right: 60px;*/
 	border-radius: 15px;
 	height: 100%;
 	overflow: hidden;
@@ -106,7 +105,7 @@ html {
 }
 .study_list .list {
 	width: 25%;
-	height: 220px;
+	/*height: 220px;*/
 	margin-right: 12px;
 	margin-bottom: 20px;
 	padding: 30px;
@@ -138,7 +137,7 @@ html {
 	margin-right: 10px;
 }
 .study_list .list_status {
-	background-color: #395b64;
+	background-color: #BBDF9F;
 	color: #ffffff;
 	padding: 7px 10px;
 	border-radius: 50px;
@@ -184,6 +183,27 @@ html {
 	border-bottom: 1px solid #c6c6c6;
 }
 
+.buttons{
+	margin-bottom: 10px;
+	text-align: right;
+}
+#go-teamblog, .evaluation_btn{
+	border-radius: 5px;
+	border-style: none;
+	background-color: #BBDF9F;
+	color: white;
+	padding: 5px;
+	margin-top: 10px;
+	cursor: pointer;
+}
+#go-teamblog:hover, .evaluation_btn:hover{
+	background-color: #7A8E6D;
+	color: white;
+	font-weight: bolder;
+}
+.evaluation_btn{
+	margin-left:10px;
+}
 
 .paging{
 	display: flex;

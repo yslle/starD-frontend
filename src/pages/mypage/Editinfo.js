@@ -28,25 +28,8 @@ const Editinfo = ({sideheader}) => {
         const estate = {city:city, district:district};
         setMem(estate);
     },[]);
-    // //서버에 닉네임 중복확인 요청 함수
-    // const checkDuplicateNicname=()=>{
-    //   let body={
-    //     NICNAME: state.NICNAME
-    //   };
-    //   console.log("바디",body);
-    //   api("","POST",body)
-    //   .then(res => alert(res.message))
-    //   .catch(err.status == 409){
-    //     alert(err.message);
-    //     this.setState({
-    //       NICNAME:"",
 
-    //     });
-    //   }
-    // }
-
-
-    const checkValidEmail = () => { //일정 시간이 지난 후 유효성 검사 및 state 변경
+    const checkValidEmail = () => {
         let timer;
         if (timer) {
             clearTimeout(timer);
@@ -82,19 +65,15 @@ const Editinfo = ({sideheader}) => {
             })
             .catch(error => {
                 if (axios.isAxiosError(error)) {
-                    // AxiosError 처리
                     console.error("AxiosError:", error.message);
-                    // 요청 실패로 인한 오류 처리를 진행하거나 사용자에게 알리는 등의 작업 수행
                 } else {
-                    // 일반 오류 처리
                     console.error("데이터 가져오기 중 오류 발생:", error);
                 }
             });
     }, []);
 
 
-    const handleEditChange = (e) => { //핸들러 나누기
-        // event handler
+    const handleEditChange = (e) => {
         setState({
             ...state,
             [e.target.name]: e.target.value,
@@ -103,21 +82,19 @@ const Editinfo = ({sideheader}) => {
         console.log(e.target.value);
     };
     const handleEditemailChange = (e) => { //이메일 정규식 핸들러
-        // event handler
         setState({
             ...state,
             [e.target.name]: e.target.value,
         });
-        checkValidEmail(); //함수 실행
+        checkValidEmail();
         console.log(e.target.name);
         console.log(e.target.value);
     };
 
     const handleCheckDuplicateNickname = async () => {
-        // 입력한 닉네임 가져오기
+
         const nickname = state.nickname;
 
-        // 입력 값이 없는 경우 요청을 보내지 않음
         if (!nickname) {
             alert("닉네임을 입력해 주세요.");
             return;
@@ -145,27 +122,22 @@ const Editinfo = ({sideheader}) => {
             })
             .catch(error => {
                 if (axios.isAxiosError(error)) {
-                    // AxiosError 처리
                     console.error("AxiosError:", error.message);
-                    // 요청 실패로 인한 오류 처리를 진행하거나 사용자에게 알리는 등의 작업 수행
                 } else {
-                    // 일반 오류 처리
                     console.error("데이터 가져오기 중 오류 발생:", error);
                 }
             });
     };
 
     const handleSaveNickname = async () => {
-        // 입력한 닉네임 가져오기
+
         const nickname = state.nickname;
 
-        // 입력 값이 없는 경우 요청을 보내지 않음
         if (!nickname) {
             alert("닉네임을 입력해 주세요.");
             return;
         }
 
-        // 닉네임 중복 확인 안 함, 중복 => 처리 X
         if (isNicknameDuplicate) {
             alert("닉네임 중복 확인을 해주세요.");
             return;
@@ -196,12 +168,10 @@ const Editinfo = ({sideheader}) => {
             });
     };
 
-    // 이메일 인증은 아직 X
     const handleSaveEmail = async () => {
-        // 입력한 이메일 가져오기
+
         const email = state.email;
 
-        // 입력 값이 없는 경우 요청을 보내지 않음
         if (!email) {
             alert("이메일을 입력해 주세요.");
             return;
@@ -232,12 +202,10 @@ const Editinfo = ({sideheader}) => {
     };
 
     const handleSavePassword = async () => {
-        // 입력한 비밀번호 가져오기
         const password = state.password;
         const newPassword = state.newPassword;
         const checkNewPw = state.checkNewPw;
 
-        // 입력 값이 없는 경우 요청을 보내지 않음
         if (!password || !newPassword) {
             alert("비밀번호를 입력해 주세요.");
             return;
@@ -278,10 +246,7 @@ const Editinfo = ({sideheader}) => {
     };
 
     const handleSavePhone = async () => {
-        // 입력한 전화번호 가져오기
         const phone = state.phone;
-
-        // 입력 값이 없는 경우 요청을 보내지 않음
         if (!phone) {
             alert("전화번호를 입력해 주세요.");
             return;
@@ -312,10 +277,8 @@ const Editinfo = ({sideheader}) => {
     };
 
     const handleSaveAddress = async () => {
-        // 선택한 거주지 정보 가져오기
-        const city = document.getElementById("sido1").value; //시/도
-        const district = document.getElementById("gugun1").value; //구/군
-
+        const city = document.getElementById("sido1").value;
+        const district = document.getElementById("gugun1").value;
         console.log("city : " + city + ", district : " + district);
 
         if (city === "시/도 선택" || district === "구/군 선택" || !city || !district) {
@@ -350,16 +313,15 @@ const Editinfo = ({sideheader}) => {
     return (
         <div>
             <Header showSideCenter={true}/>
-            {/*<Backarrow/>*/}
             <div className="container">
                 <Category/>
                 <div className="main_container" id="edit_main">
-                    <p id={"main-container-title"}>개인정보 수정페이지</p>
+                    <p id={"entry-path"}> 홈 > 카테고리 > 개인정보 수정</p>
+                    <Backarrow subname={"개인정보 수정페이지"}/>
                     <div className="sub_container" id="password">
                         <div className="change_pw">
                             <div id="title">
                                 비밀번호
-                                {/* <span id="sub_title">(현재 비밀번호를 입력해주세요)</span> */}
                             </div>
                             <input
                                 type="password"
@@ -450,7 +412,6 @@ const Editinfo = ({sideheader}) => {
                             <div id="title" style={{padding:"0"}}>거주지</div>
                             <div id="checkestate">
                                 {mem && <RealEstate mem={mem}/>}
-                                {/*<RealEstate/>*/}
                             </div>
 
                             <button id="save" onClick={handleSaveAddress}>저장하기</button>
@@ -459,7 +420,6 @@ const Editinfo = ({sideheader}) => {
                     <div className="sub_container" id="interested">
                         <div className="change_interest">
                             <EditInterest mem = {mem}/>
-                            {/*<button id="save">저장하기</button>*/}
                         </div>
                     </div>
                     <Signout/>

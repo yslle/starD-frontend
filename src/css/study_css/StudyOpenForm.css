@@ -25,20 +25,21 @@ html {
 }
 .interest{
     width: fit-content;
-    margin-left: 40px;
+    margin-left: 60px;
 }
 #inter{
     margin-right: 10px;
 }
-/*.study_open_form {*/
-/*    margin-top: 50px;*/
-/*}*/
+.study_open_form {
+    font-family: 'Pretendard-Regular';
+}
 .study_open_form > div:nth-of-type(1){
     display: flex;
     justify-content: center;
 }
 .study_open_form span{
     font-size: 15px;
+    margin-right:20px;
 }
 .study_open_form .inputbox{
     width: 300px;
@@ -47,6 +48,8 @@ html {
     border-radius: 10px;
     box-shadow: inherit;
     padding-left:10px;
+    margin:0;
+    box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.15);
 }
 .study_open_form .inputbox::placeholder{
     padding:0;
@@ -68,7 +71,6 @@ html {
     height:50px;
     text-align: left;
     font-size: 15px;
-    margin-left: 20px;
 }
 .study_open_form .right input[name="onoff"],
 .study_open_form .right input[name="onOff"]{
@@ -83,7 +85,8 @@ html {
     width:300px;
     display: inline-block;
     text-align: left;
-    margin-left:20px;
+    margin-left:8px;
+    margin-right:0;
 }
 .select_estate{
     display: inherit;
@@ -93,7 +96,9 @@ html {
 
 .study_open_detail{
     display: flex;
-    margin-top:10px;
+    /* [2023-10-18 by 지륜] 2줄 주석 처리 */
+    /*margin-top:10px;*/
+    /*margin-left: 8px;*/
     justify-content: center;
 }
 .study_open_detail span{
@@ -115,6 +120,7 @@ html {
     display: flex;
     align-items: center;
     margin-left: 70px;
+    margin-bottom: 100px;
 }
 .study_tag span{
     margin-right:20px;
@@ -124,7 +130,7 @@ html {
     width:inherit;
     height: inherit;
     box-shadow: inherit;
-    background-color: #0038FF;
+    background-color: #9ba890;
     border: none;
     font-size: 20px;
     color: #fff;
@@ -132,4 +138,13 @@ html {
     border-radius: 50px;
     font-family: 'Pretendard-Regular';
     cursor: pointer;
+}
+#gugun1, #sido1{
+    width: 100px;
+    height: 40px;
+    padding: 5px;
+    border-radius: 10px;
+    border:1px solid #dbdbdb;
+    background: #fff;
+    box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.15);
 }

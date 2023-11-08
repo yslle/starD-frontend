@@ -1,9 +1,17 @@
 
 .Schedulecalendar{
-    width: 90%;
+    width: 60%;
     height: auto;
-    margin-left: 90px;
+    position: relative;
+    left: 40px;
     margin-top: 10px;
+
+}
+.main_schedule_container{
+    width: 100%;
+    max-width: 1300px;
+    position: relative;
+    margin-top: 15px;
 }
 .Schedulecalendar > .header.row{
     display: flex;
@@ -103,4 +111,13 @@ svg{
     width: 85px;
     height:2px;
     margin: 0px;
+}
+
+/*팀블로그 일정*/
+.TeamSchedulecalendar {
+    width: 60%;
+    height: auto;
+    position: relative;
+    left: 40px;
+    margin-top: 10px;
 }

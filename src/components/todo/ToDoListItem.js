@@ -7,9 +7,10 @@ import removeicon from "../../images/remove.png";
 import ToDoListItems from "../../css/todo_css/ToDoListItem.css";
 import {useEffect} from "react";
 
-//할일 보여주는 컴포넌트
+//할 일 보여주는 컴포넌트
 const ToDoListItem = ({todos, onRemove, onToggle, onChangeSelectedTodo, onInsertToggle, selectedDate}) => {
-    console.log('todo:', todos);
+     console.log('todo:', todos);
+    console.log('todo:', todos.toDo.id);
     // 여기에서 todos는 const filteredTodos = todoswithAssignee[dateKey] || [];
     return(
         <li key={todos.toDo.id} className="TodoListItem">

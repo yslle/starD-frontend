@@ -1,65 +1,104 @@
 import React, {useState, useRef, useCallback, useEffect} from "react";
 import Editcss from "../../css/todo_css/ToDoEdit.css";
 import {useLocation} from "react-router-dom";
+import axios from "axios";
 
-const TeamToDoEdit = ({selectedTodo, onUpdate}) => {
-    console.log("selectedTodo",selectedTodo);
-    const [studies, setStudy] = useState([]);//스터디
-    const [ParticipateState, setParticipatedState] = useState({}); //참여멤버
-    const [studyTitles, setStudyTitles] = useState([]);
-    const location = useLocation();
-    //어떤 스터디의 할 일인지 상태
-    const [InsertToDoTitle, setInsertToDoTitle] = useState(selectedTodo.todo.title)
+const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees}) => {
+    const accessToken = localStorage.getItem('accessToken');
+    console.log("selectedTodo", selectedTodo);
+     const n = selectedTodo.assignees.map((item)=> item.member.name);
+    console.log("Assignees", n);
+     const [todoassignees,setTodoAssignees] = useState(n);
+    const inputDate = new Date(selectedTodo.dueDate);
+     const [UpdatedToDo, setUpdatedToDo] = useState({});
+// 로컬 시간대 고려
+    const offset = inputDate.getTimezoneOffset();
+    inputDate.setMinutes(inputDate.getMinutes() - offset);
 
-    useEffect(() => {
-        const EditParticipatedStudy = localStorage.getItem('MyParticipatedStudy');  //참여중인 스터디
-        const parsedEditParticipatedStudy = JSON.parse(EditParticipatedStudy);
-        const EditStudyIdANDMember = localStorage.getItem("ParticipateState");
-        const parsedEditStudyIdAndMember = JSON.parse(EditStudyIdANDMember);
-        const EditstudiesTitle = parsedEditParticipatedStudy.map(studyObj => studyObj.study.title);
-        setStudyTitles(EditstudiesTitle);
-        setStudy(parsedEditParticipatedStudy);
-    }, []);
+    const formattedDate = inputDate;
 
-    const [value, setValue] = useState('');
+    const [task, setTask] = useState('');
+
+    //담당자 선택 함수
+    const handleAddAssignees = (e) => {
+        const assignName = e.target.getAttribute('data-assign-name');
+        const updatedAssignees = [...todoassignees, assignName];
+        setTodoAssignees(updatedAssignees);
+    };
+    //담당자 삭제 함수
+    const handleRemoveAssignees = (e) => {
+        const removeAssignName = Assignees.filter((item) => item !== e.target.value);
+        setTodoAssignees(removeAssignName);
+        console.log("삭제 완료: ", Assignees);
+    };
+
     const onChange = useCallback((e) => {
-        setValue(e.target.value);
-    }, []);
-    const selectStudyTitle = (e) => {
-        setInsertToDoTitle(e.target.value)
-        console.log(e.target.value);
-    }
-    const onSubmit = useCallback((e) => {
-            alert("수정되었습니다.");
-            onUpdate(selectedTodo.todo.id, InsertToDoTitle, value);
-            setValue(''); //value 초기화
-            //기본이벤트(새로고침) 방지
-            e.preventDefault();
+        setTask(e.target.value);
+        setUpdatedToDo((prevState) => {
+            return {
+                ...prevState,
+                assignees:todoassignees,
+                toDo: {
+                    ...prevState.toDo,
+                    id: selectedTodo.id,
+                    task: e.target.value,
+                    study:{id:selectedTodo.study.id},
+                    dueDate: selectedTodo.dueDate,
+                },
+            };
+        });
+        // console.log("setUpdatedToDo", UpdatedToDo);
+    }, [todoassignees,handleAddAssignees]);
 
-        },
-        [onUpdate, value],
-    );
 
+    const onSubmit = useCallback(async (e) => {
+        // alert("수정되었습니다.");
+         console.log("setUpdatedToDo?:", UpdatedToDo);
+        onUpdate(UpdatedToDo);
+    }, [onChange,todoassignees,handleAddAssignees]);
 
     useEffect(() => {
         if (selectedTodo) {
-            setValue(selectedTodo.todo.task);
+            setTask(selectedTodo.task);
         }
+        console.log("selectedTodotask,",selectedTodo.task);
     }, [selectedTodo]);
+
 
     return (
         <div className="background">
             <form onSubmit={onSubmit} className="todoedit_insert">
                 <h2>수정하기</h2>
-                <select id="todo-select" onChange={selectStudyTitle} value={InsertToDoTitle}>
-                    <option value="전체">전체</option>
-                    {studyTitles.map((item, index) => (
-                        <option key={index} value={item}>{item}</option>
+                <div className={"select_assignee"}>
+                    <p>담당자</p>
+                    {Array.isArray(Member) && Member.length > 0 && Member.map((item, index) => (
+                        <div className={"assignees"} key={index}>
+                            <div
+                                className="assignee-name"
+                                data-assign-name={item.member.name}
+                                onClick={handleAddAssignees}
+                            >
+                                {item.member.name}
+                            </div>
+                            {/*<button id={"delete_assignees"} value={item.member.name} onClick={handleRemoveAssignees}>x</button>*/}
+                        </div>
                     ))}
-                </select>
+                </div>
+                <div className={"selected-assignees"}>
+                    <p>선택한 담당자</p>
+                        {todoassignees.map((assignee, index) => (
+                            <div className={"assignees"}>
+                                <div key={index}>{assignee}</div>
+                                <button id={"delete_assignees"} value={assignee}
+                                        onClick={handleRemoveAssignees}>x
+                                </button>
+                            </div>
+                        ))}
+
+                </div>
                 <input
                     onChange={onChange}
-                    value={value}
+                    value={task}
                     placeholder="할 일을 입력하세요"/>
                 <button type="submit">수정하기</button>
             </form>

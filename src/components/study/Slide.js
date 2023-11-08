@@ -11,12 +11,10 @@ import axios from "axios";
 
 const Slide = ({ state }) => {
   const [slidePx, setSlidePx] = useState(0);
-  const [scrapStudies, setScrapStudies] = useState([]); // 스크랩된 스터디 목록
+  const [scrapStudies, setScrapStudies] = useState([]);
     const [scrapStates, setScrapStates] = useState(scrapStudies.scrap);
     const [likeStates, setLikeStates] = useState([]);
     const [studiesChanged, setStudiesChanged] = useState(false);
-
-  console.log(slidePx);
 
   let accessToken = localStorage.getItem('accessToken');
 
@@ -36,10 +34,6 @@ const Slide = ({ state }) => {
   }, []);
 
   useEffect(() => {
-      // 로컬 스토리지에서 스크랩된 스터디 목록 가져오기
-//      const storedStudies = JSON.parse(localStorage.getItem("studies")) || [];
-//      setScrapStudies(storedStudies);
-
     axios.get("http://localhost:8080/scrap/study", {
         withCredentials: true,
         headers: {
@@ -80,7 +74,7 @@ const Slide = ({ state }) => {
         setScrapStudies((prevStudies) => {
             const newStudies = [...prevStudies];
             const studyId = newStudies[index].id;
-            if (newStudies[index].scrap) { // true -> 활성화되어 있는 상태 -> 취소해야 함
+            if (newStudies[index].scrap) {
                 axios.delete(`http://localhost:8080/scrap/study/${studyId}`, {
                     params: { id: studyId },
                     withCredentials: true,
@@ -112,7 +106,7 @@ const Slide = ({ state }) => {
                     });
             }
             newStudies[index] = { ...newStudies[index], scrap: !newStudies[index].scrap };
-            setStudiesChanged(true); // Mark studies as changed
+            setStudiesChanged(true);
             return newStudies;
         });
     };
@@ -121,7 +115,7 @@ const Slide = ({ state }) => {
         setScrapStudies((prevStudies) => {
             const newStudies = [...prevStudies];
             const studyId = newStudies[index].id;
-            if (newStudies[index].like) { // true -> 활성화되어 있는 상태 -> 취소해야 함
+            if (newStudies[index].like) {
                 axios.delete(`http://localhost:8080/star/study/${studyId}`, {
                     params: { id: studyId },
                     withCredentials: true,
@@ -153,7 +147,7 @@ const Slide = ({ state }) => {
                     });
             }
             newStudies[index] = { ...newStudies[index], like: !newStudies[index].like };
-            setStudiesChanged(true); // Mark studies as changed
+            setStudiesChanged(true);
             return newStudies;
         });
     };

@@ -5,7 +5,6 @@ const ReplyForm = ({ author, onReplySubmit, onCancel }) => {
 
     const handleReplySubmit = () => {
         if (replyContent.trim() !== '') {
-            // 작성한 답글을 부모 컴포넌트로 전달하여 댓글 목록에 추가
             onReplySubmit(replyContent);
             setReplyContent('');
         }
@@ -13,7 +12,7 @@ const ReplyForm = ({ author, onReplySubmit, onCancel }) => {
 
     return (
         <div className="comment_reply_form">
-            <span> └ &nbsp;&nbsp;</span><strong>{author}</strong> {/* 작성자의 닉네임 표시 */}
+            <span> └ &nbsp;&nbsp;</span><strong>{author}</strong>
             <br/>
             <input
                 type="text"

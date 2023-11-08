@@ -10,19 +10,19 @@ const ToDoEdit = ({selectedTodo, onUpdate, participatedstudies}) => {
     const [studyTitles, setStudyTitles] = useState([]);
     const [studyMems, setStudyMems] = useState(""); //참여 멤버
     const inputDate = new Date(selectedTodo.toDo.date);
-
+    const [UpdatedToDo, setUpdatedToDo] = useState(selectedTodo);
 // 로컬 시간대 고려
     const offset = inputDate.getTimezoneOffset();
     inputDate.setMinutes(inputDate.getMinutes() - offset);
 
     const formattedDate = inputDate;
 
-
     //어떤 스터디의 할 일인지 상태
     const [InsertToDoStudyTitle, setInsertToDoStudyTitle] = useState(selectedTodo.toDo.study.title)
-    const [InsertToDoStudyId, setInsertToDoStudyId]= useState(selectedTodo.toDo.study.id);
+    const [InsertToDoStudyId, setInsertToDoStudyId] = useState(selectedTodo.toDo.study.id);
+
     useEffect(() => {
-        console.log("participatedstudies", participatedstudies);
+        console.log("participatedstudies", participatedstudies); //참여하고있는 스터디
         const EditstudiesTitle = participatedstudies.map(studyObj => studyObj.study.title);
         setStudyTitles(EditstudiesTitle);
         // setStudy(studies);
@@ -33,44 +33,41 @@ const ToDoEdit = ({selectedTodo, onUpdate, participatedstudies}) => {
 
     const [task, setTask] = useState('');
     const onChange = useCallback((e) => {
+        console.log("task", e.target.value);
         setTask(e.target.value);
-    }, []);
-    const selectStudyTitle = (e) => {
+        setUpdatedToDo((prevState) => {
+            return {
+                ...prevState,
+                toDo: {
+                    ...prevState.toDo,
+                    task: e.target.value,
+                },
+            };
+        });
+        console.log("setUpdatedToDo", UpdatedToDo);
+    }, [task]);
+
+    const selectStudyTitle = useCallback((e) => {
         setInsertToDoStudyTitle(e.target.value)
         const selectedStudyId = participatedstudies.find((studyObj) => studyObj.study.title === e.target.value)?.study.id;
         setInsertToDoStudyId(selectedStudyId);
         console.log(e.target.value);
-    }
-    const onSubmit = useCallback(async (e) => {
-            alert("수정되었습니다.");
-            console.log("selectedTodo.toDo.id", selectedTodo.toDo.id);
-            console.log("InsertToDoStudyTitle", InsertToDoStudyTitle);
-            console.log("task", task);
-            onUpdate(selectedTodo.toDo.id, InsertToDoStudyId, task);
+        setUpdatedToDo((prevState) => {
+            return {
+                ...prevState,
+                study: {
+                    ...prevState.toDo.study,
+                    title: e.target.value,
+                },
+            };
+        });
+    }, [InsertToDoStudyId]);
 
-                // const assigneeStr = studyMems;
-                // const todoData = {
-                //     task: task,
-                //     dueDate: formattedDate,
-                // };
-                //
-                // const postDataResponse = await axios.put(`http://localhost:8080/todo/${selectedTodo.toDo.id}`, todoData, {
-                //     params: {
-                //         studyId: InsertToDoStudyId,
-                //         assigneeStr: assigneeStr,
-                //     },
-                //     withCredentials: true,
-                //     headers: {
-                //         'Authorization': `Bearer ${accessToken}`
-                //     }
-                // });
-                //
-                // console.log("전송 성공:", postDataResponse.data);
-                //
-                // setTask(''); //value 초기화
-                // //기본이벤트(새로고침) 방지
-                // e.preventDefault();
-            }, [],);
+    const onSubmit = useCallback(async (e) => {
+        alert("수정되었습니다.");
+        console.log("setUpdatedToDo?:", UpdatedToDo);
+        onUpdate(UpdatedToDo);
+    }, [onChange,selectStudyTitle,studyMems]);
 
     useEffect(() => {
         if (selectedTodo) {

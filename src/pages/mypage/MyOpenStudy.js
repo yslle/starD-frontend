@@ -10,62 +10,21 @@ import ScrapButton from "../../components/repeat_etc/ScrapButton";
 import Paging from "../../components/repeat_etc/Paging";
 import Pagination from "../../css/study_css/Pagination.css";
 import axios from "axios";
+import Backarrow from "../../components/repeat_etc/Backarrow";
 
 const MyOpenStudy = ({sideheader}) => {
     const [studies, setStudies] = useState([]);
-    const [scrapStates, setScrapStates] = useState([]); //내가 지원한 스터디 스크랩 상태값
-    const [likeStates, setLikeStates] = useState([]); //내가 지원한 스터디 공감 상태값
-
-    // 각 스터디 스크랩, 공감 상태 저장
-    // (위에 scrapStates, likeStates 사용하면 의존성 배열 때문에 useEffect 무한 반복,,)
+    const [scrapStates, setScrapStates] = useState([]);
+    const [likeStates, setLikeStates] = useState([]);
     const [scrapTwoStates, setScrapTwoStates] = useState([]);
     const [likeTwoStates, setLikeTwoStates] = useState([]);
-
     const location = useLocation();
-    const studyState = location.state;
     const [studiesChanged, setStudiesChanged] = useState(false);
-
     const accessToken = localStorage.getItem('accessToken');
     const isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
-
-    //페이징관련 코드
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(9);
-
-    //TODO MyOpenStudy 서버 전달 -> 해결
-    // useEffect(() => {
-    //     if (studiesChanged) {
-    //         const response = axios.post("url", {
-    //                 "study": studies,
-    //                 "scrap": scrapStates,
-    //                 "like": likeStates,
-    //             },
-    //             {
-    //                 withCredentials: true,
-    //                 headers: {
-    //                     'Authorization': `Bearer ${accessToken}`
-    //                 }
-    //             })
-    //             .then((res) => {
-    //                 console.log("전송 성공");
-    //                 console.log(res.data);
-    //                 //성공하면
-    //                 // navigate("/myopenstudy", {state: formData});
-    //
-    //             }).catch((error) => {
-    //                 console.log('전송 실패', error);
-    //             })
-    //         console.log("response : ", response);
-    //
-    //         localStorage.setItem("studies", JSON.stringify(studies));
-    //         localStorage.setItem("ScrapStudies", JSON.stringify(scrapStates));
-    //         localStorage.setItem("LikeStates", JSON.stringify(likeStates));
-    //         // Reset studiesChanged to false
-    //         setStudiesChanged(false);
-    //     }
-    // }, [studiesChanged, studies, scrapStates, likeStates]);
-
     useEffect(() => {
         if (accessToken && isLoggedInUserId) {
             axios.get("http://localhost:8080/mypage/study/star-scrap", { // 공감
@@ -108,8 +67,6 @@ const MyOpenStudy = ({sideheader}) => {
 
     const handlePageChange = ({page, itemsPerPage, totalItemsCount}) => {
         setPage(page);
-
-        // 백엔드에 데이터를 요청합니다.
         const result = axios.get("http://localhost:8080/user/mypage/open-study", {
             params: {
                 page: page,
@@ -169,11 +126,10 @@ const MyOpenStudy = ({sideheader}) => {
 
 
 
-        setItemsPerPage(itemsPerPage); //한페이지 당 아이템 개수
-        setCount(totalItemsCount); //전체 아이템 개수
+        setItemsPerPage(itemsPerPage);
+        setCount(totalItemsCount);
     };
 
-    //TODO MyOpenStudy 데이터 받아오기
     useEffect(() => {
         axios.get("http://localhost:8080/user/mypage/open-study", {
             withCredentials: true,
@@ -195,12 +151,6 @@ const MyOpenStudy = ({sideheader}) => {
 
                 setStudies(updateStudies);
 
-//                handlePageChange({
-//                    itemsPerPage: res.data.pageable.pageSize, // 페이지 당 아이템 수
-//                    totalItemsCount: res.data.totalElements, // 전체 아이템 수
-//                });
-
-				// 페이지 정보를 업데이트합니다.
 				setItemsPerPage(res.data.pageable.pageSize);
 				setCount(res.data.totalElements);
             })
@@ -356,7 +306,8 @@ const MyOpenStudy = ({sideheader}) => {
             <div className="container">
                 <Category/>
                 <div className="main_container">
-                    <h2>스터디 개설 내역</h2>
+                    <p id={"entry-path"}> 홈 > 스터디 개설 내역 </p>
+                    <Backarrow subname={"스터디 개설 내역"}/>
                     <div className="content_container">
                         {mypartistudylist()}
                     </div>

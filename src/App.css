@@ -15,6 +15,7 @@ body {
 	font-family: "Tektur", cursive;
 	font-family: "Yeon Sung", cursive;
 	font-family: "Nanum Myeongjo", serif;
+	font-family: 'Pretendard-Regular';
 
 	min-height: 100vh;
 	margin: 0px;
@@ -28,9 +29,11 @@ body {
 }
 
 .main_wrap{
-	height: 3369px;
+	/*height: 3369px;*/
+	height: fit-content;
 }
-#study.main_wrap {
+#study.main_wrap,
+#community.main_wrap{
 	height: fit-content;
 }
 
@@ -54,6 +57,12 @@ body {
 	flex-direction: row;
 	justify-content: center;
 }
+
+.display-test {
+	display: flex;
+	flex-direction: row;
+}
+
 .intro > #intro-main{
 	color: #FFF;
 	font-family: Inter;
@@ -62,17 +71,30 @@ body {
 	font-weight: 700;
 	line-height: normal;
 }
+
+.display-test > #intro-main{
+	color: #FFF;
+	font-family: Inter;
+	font-size: 40px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+	padding: 20px 0px 20px 0px;
+}
 .LOGO{
-	display: flex;
-	justify-content: center;
+	/*display: flex;*/
+	/*justify-content: center;*/
 	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 .below_intro{
-	display: flex;
-	justify-content: center;
-	position: relative;
-	right: 85px;
-	bottom: 50px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+	/*display: flex;*/
+	/*justify-content: center;*/
+	/*position: relative;*/
+	/*right: 85px;*/
+	/*bottom: 50px;*/
 }
 #intro-sub{
 	color: #FFF;
@@ -103,7 +125,7 @@ header {
 	align-items: center;
 	width: 100%;
 	margin: auto;
-	z-index: 13;
+	z-index: 150;
 	position: fixed;
 	height: 68px;
 }
@@ -225,11 +247,6 @@ nav {
 	margin-bottom: 50px;
 	margin-top: 0px;
 }
-.select_search{
-	position: relative;
-	bottom: 9px;
-	right: 18px;
-}
 #sub{
 	border: 1px solid #d9d9d9;
 	border-radius: 10px;
@@ -238,7 +255,7 @@ nav {
 	width: 111px;
 	height: 47px;
 	margin-right: 10px;
-	margin-bottom: 15px;
+	/*margin-bottom: 15px;*/
 	color:grey;
 	font-family: 'Pretendard-Regular';
 }
@@ -256,8 +273,8 @@ nav {
 }
 
 input {
-	position: relative;
-	bottom: 10px;
+	/*position: relative;*/
+	/*bottom: 10px;*/
 	width: 500px;
 	height: 50px;
 	border-radius: 10px;
@@ -266,7 +283,12 @@ input {
 	box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.15);
 	padding-left: 20px;
 }
-input::placeholder{
+
+/*input::placeholder{*/
+/*	padding-left: 10px;*/
+/*}*/
+
+.input_padding {
 	padding-left: 10px;
 }
 
@@ -291,10 +313,14 @@ input::placeholder{
 	font-size: 1.5rem;
 
 }
-.searchinput img{
+.searchinput{
 	position: relative;
-	right: 35px;
-	bottom: 3.5px;
+}
+.searchinput img{
+	position: absolute;
+	right: 20px;
+	top: 50%;
+	transform: translateY(-50%);
 }
 .welcome{
 	display: flex;
@@ -310,12 +336,18 @@ input::placeholder{
 }
 .user_wrap{
 	width: 17.5%;
-	border: 3px solid #0d0d2a;
+	border: 1px solid #0d0d2a;
 	margin-left: 10px;
 	font-family: 'Pretendard-Regular';
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
+}
+.dashboard_contents{
+	width: 100%;
+	margin-top: 10px;
+	display: flex;
+	flex-direction: row;
 }
 
 .dashboard_tag_wrap{
@@ -366,7 +398,6 @@ input::placeholder{
 	flex-direction: row;
 	/*justify-content: space-between;*/
 	height: 350px;
-	margin-top: 10px;
 	margin-left: 10px;
 	margin-bottom: 30px;
 }
@@ -374,7 +405,7 @@ input::placeholder{
 .dashboard_todo{
 	width: 30%;
 	font-size: 20px;
-	border: 3px solid #0d0d2a;
+	border: 1px solid #0d0d2a;
 	padding: 10px;
 	margin-left: 10px;
 	font-family: 'Pretendard-Regular';
@@ -387,15 +418,17 @@ input::placeholder{
 	font-weight: bold;
 }
 button#todo_more{
-	background-color: white;
 	border-style: none;
-	color: #99a3af;
+	color: black;
+	background-color: #F6FFDE;
 	cursor: pointer;
 	margin-left: 9vw;
+	position: relative;
+	bottom: 10px;
 }
 .dashboard_detail{
 	width: 45%;
-	border: 3px solid #0d0d2a;
+	border: 1px solid #0d0d2a;
 	margin-left: 10px;
 	font-family: 'Pretendard-Regular';
 
@@ -483,6 +516,7 @@ button#todo_more{
 	font-size: 20px;
 	font-weight: bolder;
 }
+
 
 /*올인원에 관한 설명이 들어가는 부분 css*/
 .wrap-02{
@@ -610,13 +644,72 @@ button#todo_more{
 .wrap-03 .tag_wrap > p{
 	color: #000000;
 }
+.CommunityScreenShot{
+	display: flex;
+}
+.community-field_scrap{
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	bottom: 5px;
+}
+#community_main{
+	border-radius: 10px;
+}
+#c-field, #c-scrap{
+	position: relative;
+	top: 5px;
+	left: 20px;
+	height: 70px;
+	border-radius: 10px;
+}
+#c-scrap{
+	top: 40px;
+}
+#c-info {
+	color: #7C7C7C;
+	font-size: 20px;
+	font-family: Inter;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	position: relative;
+	top: 50px;
+	left: 50px;
+}
 .wrap-04{
-	height: 650px;
+	height: 700px;
 	background-color:#FFFFFF;
 }
 .wrap-04 .tag_wrap > p{
 	color: #000000;
 }
+.wrap-04 .tag_wrap > #content-title{
+	color: #99A98F;
+	font-family: Inter;
+	font-weight: bolder;
+	font-size: 20px;
+	margin: 0 auto;
+	position: relative;
+	top: 90px;
+}
+#detail-images{
+	margin: 0 auto;
+	display: flex;
+	flex-direction: row;
+}
+#detail-images > span{
+	color: #7C7C7C;
+	font-size: 20px;
+	font-family: Inter;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	position: relative;
+	top: 150px;
+	left: 20px;
+}
+
 /* 푸터 */
 footer{
 	/* margin-left: 10px;
@@ -734,6 +827,12 @@ footer p {
 		font-size: 0.6vw;
 	}
 }
+/*진입경로*/
+#entry-path{
+	width: fit-content;
+	margin-bottom: 20px;
+	margin-left: 40px;
+}
 
 /* 투두리스트, 대시보드 세로로 배치하기 */
 @media (max-width: 750px) {
@@ -766,10 +865,10 @@ footer p {
 		margin-bottom: 50px;
 		margin-top: 70px;
 	}
-	.select_search {
-		position: relative;
-		bottom: 4px;
-	}
+	/*.select_search {*/
+	/*	position: relative;*/
+	/*	bottom: 4px;*/
+	/*}*/
 	.searchinput input{
 		width: 240px;
 	}
@@ -930,4 +1029,9 @@ footer p {
 		position: relative;
 		bottom: 3px;
 	}
+}
+
+.study_count {
+	font-size: 16px;
+	margin-left: 30px;
 }

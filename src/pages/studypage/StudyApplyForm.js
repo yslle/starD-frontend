@@ -19,12 +19,8 @@ const StudyApplyForm = ({sideheader}) => {
     const [content, setContent] = useState("");
     const accessToken = localStorage.getItem('accessToken');
     const navigate = useNavigate();
-
-    // const studyDetail = studies.filter((study) => study.id === Number(id));
     const isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
-
-    //신청한 사람들 상태 배열
-    const [ApplyMem,setApplyMem]= useState([]);
+    const [ApplyMem, setApplyMem] = useState([]);
 
     useEffect(() => {
 
@@ -35,24 +31,15 @@ const StudyApplyForm = ({sideheader}) => {
                 'Authorization': `Bearer ${accessToken}`
             }
         }).then((res) => {
-            console.log("전송 성공 : ", res.data);
+            console.log(res.data);
             setStudyDetail(res.data);
 
             if (res.data.recruiter.id === isLoggedInUserId) {
                 console.log("자기 자신의 글");
             }
-        })
-            .catch((error) => {
-                // alert("로그인 해 주세요.");
-                // navigate('/login');
-                console.error("데이터 가져오기 실패:", error);
-            });
-
-        // const storedStudies = localStorage.getItem("studies");
-        // if (storedStudies) {
-        //     setStudies(JSON.parse(storedStudies));
-        // }
-
+        }).catch((error) => {
+            console.error(error);
+        });
     }, [id]);
 
     const handleSubmit = () => {
@@ -62,24 +49,20 @@ const StudyApplyForm = ({sideheader}) => {
             return;
         }
 
-        console.log("지원 동기 : ", content);
-
-        // 백엔드 REST API 호출 코드
-        axios.post(`http://localhost:8080/api/v2/studies/${id}/apply`,{}, {
+        axios.post(`http://localhost:8080/api/v2/studies/${id}/apply`, {}, {
             params: {
-                apply_reason: content},
+                apply_reason: content
+            },
             withCredentials: true,
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
         }).then((res) => {
-            console.log("전송 성공 : ", res.data);
+            console.log(res.data);
             setStudyDetail(res.data);
             navigate("/myapplystudy/");
         })
             .catch((error) => {
-                // alert("로그인 해 주세요.");
-                // navigate('/login');
                 console.error("데이터 가져오기 실패:", error);
             });
 
@@ -102,20 +85,11 @@ const StudyApplyForm = ({sideheader}) => {
                         />
                     </div>
                     <div className="btn">
-                        {/*<Link*/}
-                        {/*    to={`/myapplystudy/`}*/}
-                        {/*    style={{*/}
-                        {/*        textDecoration: "none",*/}
-                        {/*        color: "inherit",*/}
-                        {/*    }}*/}
-                        {/*    // addState={{studies}}*/}
-                        {/*>*/}
                         <button
                             className="apply_btn"
                             onClick={handleSubmit}>
-                            탑승하기
+                           제출하기
                         </button>
-                        {/*</Link>*/}
                     </div>
                 </div>
 

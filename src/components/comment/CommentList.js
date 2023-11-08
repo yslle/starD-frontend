@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
+import Report from "../report/Report.js";
 
 const formatDatetime = (datetime) => {
   const date = new Date(datetime);
@@ -10,10 +11,26 @@ const formatDatetime = (datetime) => {
   const formattedDatetime = `${year}-${month}-${day} ${hours}:${minutes}`;
   return formattedDatetime;
 };
-
 const CommentList = ({ comments, onEditClick, onRemoveClick, onReplySubmit, userNickname }) => {
-console.log("^comments: ",comments);
- // 댓글 목록이 비어있을 때 빈 배열로 대체
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportCommentId, setReportCommentId] = useState(null);
+
+
+  const handleOpenReportModal = (commentId) => {
+    setReportCommentId(commentId);
+    setShowReportModal(true);
+  };
+
+  const handleCloseReportModal = () => {
+    setReportCommentId(null);
+    setShowReportModal(false);
+  };
+
+
+  const handleReportSubmit = (reportReason) => {
+    console.log("신고 사유:", reportReason);
+  };
+
   if (!comments) {
     comments = [];
   }
@@ -24,7 +41,6 @@ console.log("^comments: ",comments);
           <li key={index} className="comment">
             <strong>{comment.author}</strong>
             <div style={{ float: "right" }}>
-              {/* 댓글 작성자와 현재 로그인한 사용자를 비교하여 버튼 표시 여부 결정 */}
               {comment.author === userNickname && (
                 <>
                   <span className="comment_edit_btn" onClick={() => onEditClick(comment.id)}>
@@ -39,7 +55,7 @@ console.log("^comments: ",comments);
             </div>
             <p>{comment.content}</p>
             <span>{formatDatetime(comment.createdAt)}</span>
-            {comment.createdAt !== comment.updatedAt && ( // createdAt과 updatedAt이 다른 경우에만 표시
+            {comment.createdAt !== comment.updatedAt && (
               <>
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <span>( 수정: {formatDatetime(comment.updatedAt)} )</span>
@@ -48,12 +64,19 @@ console.log("^comments: ",comments);
             {comment.author !== userNickname && (
               <>
                 <span>&nbsp;&nbsp; | &nbsp;&nbsp;</span>
-                <span className="comment_report_btn">신고</span>
+                <span className="comment_report_btn"
+                      onClick={() => handleOpenReportModal(comment.id)}>신고</span>
               </>
             )}
           </li>
         ))}
       </ul>
+      <Report
+          show={showReportModal}
+          handleClose={handleCloseReportModal}
+          onReportSubmit={handleReportSubmit}
+          targetId={reportCommentId}
+      />
     </div>
   );
 };

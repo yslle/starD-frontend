@@ -92,7 +92,7 @@ p {
 	font-size: 14px;
 }
 #todocontent{
-	padding: 10px;
+	padding: 5px;
 
 }
 #todocontent li{
@@ -190,6 +190,7 @@ li {
 	}
 	.category {
 		margin-right: 2%;
+		font-family: "Pretendard-Regular";
 	}
 	.main_container {
 		width: 75%;

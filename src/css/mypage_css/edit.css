@@ -5,10 +5,10 @@
 .backarrow{
     width: 50%;
     display: flex;
-    margin-left: 25%;
+    /*margin-left: 25%;*/
     position: relative;
     right: 2%;
-    margin-top: 5%;
+    /*margin-top: 5%;*/
 }
 svg{
     margin-right: 2%;
@@ -78,7 +78,7 @@ input{
     margin:10px;
     cursor: pointer;
     background-color: #F2F2F2;
-    color: #395B64;
+    color: #99A98F;
     border-style: none;
     border-radius: 7px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -89,7 +89,7 @@ input{
     height: 30px;
     font-size: 1.3em;
     color: white;
-    background-color: #395B64;
+    background-color: #99A98F;
     border-style: none;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -153,7 +153,7 @@ select{
 }
 #signout_btn{
     border-radius: 10px;
-    background-color: #395B64;
+    background-color: #99A98F;
     color: white;
     width: 30%;
     height: 30px;
@@ -178,7 +178,7 @@ select{
 #check_double_nicname{
     width: 10%;
     height: 30px;
-    background-color: #395B64;
+    background-color: #99A98F;
     color:white;
     margin-left: 20px;
     margin-top: -5px;
@@ -200,17 +200,21 @@ select{
     width: 40%;
     height: 30px;
 }
-.select_estate #sido1, #gugun1{
+.select_estate #sido1, .select_estate #gugun1{
     margin-right: 10px;
     background-color: #F2F2F2;
-    color: #395B64;
+    color: #99A98F;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     font-family: 'Pretendard-Regular';
+
+}
+.select_estate #gugun1{
+    height: 31px;
 }
 
 option{
     background-color: #F2F2F2;
-    color: blue;
+    color: #99A98F;
     padding: 10px;
     font-size: 10px;
 }

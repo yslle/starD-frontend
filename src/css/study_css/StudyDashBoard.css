@@ -69,7 +69,7 @@ width: 600px;
 .dashboard_sub_header{
     display: flex;
     flex-direction: row;
-    width: 400px;
+    width: 440px;
     /*justify-content: space-between;*/
  }
 .dashboard_day{

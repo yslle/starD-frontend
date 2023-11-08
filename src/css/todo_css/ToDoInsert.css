@@ -11,11 +11,11 @@
 }
 .TodoInsert #insert-input {
     border-radius: 5px;
-    width: 75%;
+    width: 95%;
     height: 30px;
-    margin-left: 30px;
     position: relative;
     bottom: 2px;
+    margin-left: 0px;
 }
 .TodoInsert button{
     background-color: #395b64;

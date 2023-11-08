@@ -1,16 +1,11 @@
-//거주지 시 도 구
+
 import edit from "../css/mypage_css/edit.css";
 
 import $ from 'jquery';
 import {useState} from "react";
-//스터디 지역 선택 컴포넌트(진행방식 온/오프)
+
 export function RegionSelectBOX ({formData,city,district,handleRegionCityChange,handleRegionDistrictChange}){
 
-    // if (selectBOX.initialized) {
-    //     // 이미 초기화되었을 경우, 중복 호출 방지
-    //     return;
-    // }
-    // 시/도/군/구 selectBOX 생성함수
     const areas = {
         "시/도 선택": ["구/군 선택"],
         "서울특별시": ["강남구", "강동구", "강북구", "강서구","관악구","광진구","구로구","금천구","노원구"
@@ -35,8 +30,6 @@ export function RegionSelectBOX ({formData,city,district,handleRegionCityChange,
     const $RegionsidoSelect = $("#sido1");
     const $RegiongugunSelect = $("#gugun1");
 
-
-     // 시,도 / 구,군 초기화
     function initializeSidoSelect() {
         let gugunList = [];
         for (const sido in areas) {
@@ -55,7 +48,7 @@ export function RegionSelectBOX ({formData,city,district,handleRegionCityChange,
             }
         }
     }
-    //선택한 시,도에 따른 구, 군 설정
+
     function updateGugunSelect(selectedSido) {
         const gugunList = areas[selectedSido];
         $RegiongugunSelect.empty();
@@ -67,7 +60,6 @@ export function RegionSelectBOX ({formData,city,district,handleRegionCityChange,
             $RegiongugunSelect.append(`<option   value="${gugun}">${gugun}</option>`);
         }
     }
-    //선택한 시,도 값 저장
     function saveSelectedSidoVal(selectedSido) {
         localStorage.setItem("selectedRegionsido", selectedSido);
          city = selectedSido;
@@ -76,7 +68,6 @@ export function RegionSelectBOX ({formData,city,district,handleRegionCityChange,
         handleRegionCityChange(city);
     }
 
-    //선택한 구,군 값 저장
     function  saveSelectedGugunVal(selectedGugun){
         localStorage.setItem("selectedRegionGugun", selectedGugun);
          district = selectedGugun;
@@ -118,9 +109,6 @@ export function RegionSelectBOX ({formData,city,district,handleRegionCityChange,
             $RegiongugunSelect.empty();
         }
     });
-    // 초기화 상태 표시
     RegionSelectBOX.initialized = true;
-
-    // 초기화 호출
     initializeSidoSelect();
 }

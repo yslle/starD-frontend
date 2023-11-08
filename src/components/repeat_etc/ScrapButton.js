@@ -9,14 +9,10 @@ const ScrapButton = ({ scrap, onClick }) => {
             src={scrap ? StarFill : StarEmpty}
             className="scrap_img"
             alt="Scrap Button"
-            onClick={onClick} // 클릭 시 onClick 함수 실행
+            onClick={onClick}
         />
     );
 };
 
-// ScrapButton.propTypes = {
-//     scrap: PropTypes.bool.isRequired, // 스크랩 상태를 받아와야 함
-//     onClick: PropTypes.func.isRequired, // 클릭 시 실행할 함수를 받아와야 함
-// };
 
 export default ScrapButton;

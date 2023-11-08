@@ -3,17 +3,14 @@ import { useCallback, useState } from "react";
 const CommentEdit = ({ comment, commentId, onCancel, onSave }) => {
   const [editedContent, setEditedContent] = useState(comment.find((c) => c.id === commentId)?.content || "");
 
-  console.log("Edit content: ", editedContent);
-
   const handleInputChange = useCallback((e) => {
-    // 댓글 내용을 수정할 때만 해당 내용을 업데이트하도록 변경
     setEditedContent(e.target.value);
   }, []);
 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      onSave(commentId, editedContent); // 수정된 댓글 저장
+      onSave(commentId, editedContent);
     },
     [commentId, editedContent, onSave]
   );

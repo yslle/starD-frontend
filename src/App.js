@@ -20,7 +20,8 @@ import ToDoList from "./pages/mypage/ToDoList";
 import Schedule from "./pages/mypage/Schedule.js";
 import StudyApplyForm from "./pages/studypage/StudyApplyForm";
 import Study from "./pages/studypage/Study";
-import StudyInsert from "./components/study/StudyInsert";
+import StudyInsert from "./pages/studypage/StudyInsert";
+import StudyEdit from "./pages/studypage/StudyEdit";
 import MyApplyStudy from "./pages/mypage/MyApplyStudy";
 import Header from "./components/repeat_etc/Header";
 import InputSubSign from "./pages/userpage/InputSubSign";
@@ -29,31 +30,24 @@ import SearchBar from "./SearchBar";
 import SearchResult from "./pages/studypage/SearchResult";
 import StudyApplyList from "./pages/studypage/StudyApplyList";
 import TeamBlog from "./pages/studypage/TeamBlog";
-import TeamToDoList from "./pages/teamblog/TeamToDoList";
-
+import Community from "./pages/community/Community";
+import Notice from "./pages/notice/Notice";
+import PostDetail from "./pages/community/PostDetail";
+import CommSearchBar from "./components/community/CommSearchBar";
+import CommSearchResult from "./pages/community/CommSearchResult";
+import Chat from "./components/chat/Chat";
+import FindedID from "./pages/userpage/FindedID.js";
+import TeamToDoList from "./pages/TeamToDo/TeamToDoList";
+import TeamSchedule from "./pages/TeamSchedule/TeamSchedule";
+import FindPW from "./pages/userpage/FindPW";
+import NoticeDetail from "./pages/notice/NoticeDetail";
+import NoticeSearchResult from "./pages/notice/NoticeSearchResult";
+import MemberEvaluate from "./pages/mypage/MemberEvaluate";
 
 function App() {
-
-    // const Home = lazy(() => import('./pages/Home'));
-    // const Login = lazy(() => import('./pages/Login'));
-    // const Signup = lazy(() => import('./pages/Signup'));
     return (
         <BrowserRouter>
             <div className="App">
-
-                {/*<Suspense fallback={<div>Loading...</div>}>*/}
-                {/*    <Routes>*/}
-                {/*        <Route path="/" element={<Home sideheader={rendsidecenter()} />} />*/}
-                {/*        <Route path="/login" element={<Login sideheader={nosidecenter()} />} />*/}
-                {/*    </Routes>*/}
-                {/*</Suspense>*/}
-
-                {/*<Suspense fallback={<div>Loading...</div>}>*/}
-                {/*    <Routes>*/}
-                {/*        <Route path="/signup" element={<Signup sideheader={nosidecenter()} />} />*/}
-                {/*    </Routes>*/}
-                {/*</Suspense>*/}
-
                 <Routes>
                     <Route
                         path="/"
@@ -74,6 +68,14 @@ function App() {
                     <Route
                         path="/login/findeID"
                         element={<FindID/>}
+                    />
+                    <Route
+                        path="/login/findedID"
+                        element={<FindedID/>}
+                    />
+                    <Route
+                        path="/login/findePW"
+                        element={<FindPW/>}
                     />
                     <Route
                         path="/mypage"
@@ -119,15 +121,21 @@ function App() {
                         }
                     />
                     <Route
-                        path="/study"
+                        path="/study/:page"
                         element={
                             <Study/>
                         }
                     />
                     <Route
-                        path="/studyopen"
+                        path="/study/studyInsert"
                         element={
                             <StudyInsert/>
+                        }
+                    />
+                    <Route
+                        path="/:id/StudyDetail/StudyEdit"
+                        element={
+                            <StudyEdit/>
                         }
                     />
                     <Route
@@ -160,6 +168,58 @@ function App() {
                            element={
                             <TeamToDoList/>
                            }
+                    />
+                    <Route path="/:id/teamblog/TeamSchedule"
+                           element={<TeamSchedule/>} />
+
+                    <Route
+                        path="/community"
+                        element={
+                            <Community/>
+                        }
+                    />
+                    <Route
+                        path="/notice"
+                        element={
+                            <Notice/>
+                        }
+                    />
+                    <Route
+                        path="/postdetail/:id"
+                        element={
+                            <PostDetail/>
+                        }
+                    />
+                    <Route
+                        path="/noticedetail/:id"
+                        element={
+                            <NoticeDetail/>
+                        }
+                    />
+                    <Route
+                        path="/comm/search"
+                        element={
+                            <CommSearchResult/>
+                        }
+                    />
+                    <Route
+                        path="/notice/search"
+                        element={
+                            <NoticeSearchResult/>
+                        }
+                    />
+                    <Route path="/comm/search" component={CommSearchResult} />
+                    <Route
+                        path="/chat"
+                        element={
+                            <Chat/>
+                        }
+                    />
+                    <Route
+                        path="/:id/evaluate"
+                        element={
+                            <MemberEvaluate/>
+                        }
                     />
                 </Routes>
 

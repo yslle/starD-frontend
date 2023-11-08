@@ -35,7 +35,7 @@ const EditInterest=({mem})=>{
             if (tags.includes(value)) {
                 setTags(tags.filter((tag) => tag !== value));
             } else {
-                if (tags.length < 3) { //최대 3개까지만 선택 가능하게
+                if (tags.length < 3) {
                     setTags([...tags, value]);
 
                 }
@@ -47,11 +47,6 @@ const EditInterest=({mem})=>{
 
         console.log(tags)
 
-//          useEffect(() => {
-//              mem.tags = tags;
-//              localStorage.setItem('tags', tags);
-//          }, [tags])
-//          ;
         return (
           <div className="tags">
             {props.editoptions.map((editoption) => (
@@ -95,18 +90,14 @@ const EditInterest=({mem})=>{
             })
             .catch(error => {
                 if (axios.isAxiosError(error)) {
-                    // AxiosError 처리
                     console.error("AxiosError:", error.message);
-                    // 요청 실패로 인한 오류 처리를 진행하거나 사용자에게 알리는 등의 작업 수행
                 } else {
-                    // 일반 오류 처리
                     console.error("데이터 가져오기 중 오류 발생:", error);
                 }
             })
     }, []);
 
 const handleSaveTag = async () => {
-//    const encodedTags = tags.map(tag => encodeURIComponent(tag));
     const interests = tags.join(",");
 
     const accessToken = localStorage.getItem('accessToken');

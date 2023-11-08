@@ -3,6 +3,7 @@
     flex-direction: column;
     min-height: 400px;
     margin-bottom: 10px;
+    margin-top: 20px;
 }
 .ListContent{
     display: flex;
@@ -25,11 +26,11 @@
 .study_apply_list tr,
 .study_apply_list td {
     font-family: 'Pretendard-Regular';
-    border: 1px solid #b2b2b2;
+    border: 1px solid #ffffff;
     width: 33%;
 }
 .study_apply_list th{
-    background-color: #395B64;
+    background-color: #bed2aa;
     color: white;
 }
 .study_apply_list td {
@@ -160,7 +161,7 @@
 
 }
 #apply-btn{
-    background-color: #395B64;
+    background-color: #bed2aa;
     color: white;
     font-size: 12px;
     padding: 10px;

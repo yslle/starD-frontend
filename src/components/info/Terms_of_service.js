@@ -8,7 +8,6 @@ const Terms_of_service=({onClose, CheckImg, onCheckImgs})=>{
     const [FirstArticleCheck, setFirstArticleCheck]= useState(false);
     const [SecondArticleCheck, setSecondArticleCheck]= useState(false);
 
-//전체 동의
     const HandleCheckAll= ()=>{
         if(AllCheck === false) {
             setAllCheck(!AllCheck);
@@ -21,7 +20,7 @@ const Terms_of_service=({onClose, CheckImg, onCheckImgs})=>{
             setSecondArticleCheck(false);
         }
     }
-    //STARD 이용약관 동의
+
     const HandleArticleCheckFirst= ()=>{
 
         setFirstArticleCheck(!FirstArticleCheck);
@@ -32,14 +31,9 @@ const Terms_of_service=({onClose, CheckImg, onCheckImgs})=>{
         if( AllCheck===false && FirstArticleCheck === false && SecondArticleCheck === true){
             setAllCheck(!AllCheck);
         }
-        // console.log("FirstArticleCheck",FirstArticleCheck);
-        // console.log("SecondArticleCheck",SecondArticleCheck);
-        // console.log("AllCheck",AllCheck);
-
     }
-    //개인정보 수집 및 이용약관 동의
-    const HandleArticleCheckSecond= ()=>{
 
+    const HandleArticleCheckSecond= ()=>{
         setSecondArticleCheck(!SecondArticleCheck);
         if(AllCheck===true && SecondArticleCheck===true){
             setAllCheck(!AllCheck);
@@ -47,9 +41,6 @@ const Terms_of_service=({onClose, CheckImg, onCheckImgs})=>{
         if(AllCheck === false && FirstArticleCheck===true && SecondArticleCheck === false){
             setAllCheck(!AllCheck);
         }
-        // console.log("FirstArticleCheck",FirstArticleCheck);
-        // console.log("SecondArticleCheck",SecondArticleCheck);
-        // console.log("AllCheck",AllCheck);
     }
     useEffect(() => {
         if(CheckImg){
