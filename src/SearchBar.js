@@ -4,7 +4,6 @@ import searchicon from "./images/search.png";
 import axios from "axios";
 
 
-
 const SearchBar = (props) => {
 
 	const items = props.searchItems;
