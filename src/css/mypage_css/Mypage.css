@@ -114,6 +114,23 @@ p {
 	position: relative;
 	top: 3.1px;
 	margin-left: 2px;
+	font-size: 10px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+/*마이페이지 안에 있는 투두*/
+.mypage-todotext{
+	position: relative;
+	top: 3.1px;
+	margin-left: 2px;
+	font-size: 15px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.meeting-id{
+	font-size: 10px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 .empty_today_todo{
 	margin-top: 20px;
@@ -252,6 +269,22 @@ li {
 		width: 99%;
 	}
 }
+@media (max-width: 1300px){
+	#scrap_study {
+		position: relative;
+		right: 30px;
+		width: 60%;
+	}
+	/*.study_list li .list {*/
+	/*	width: 20%;*/
+	/*	height: inherit;*/
+	/*	margin-bottom: 0;*/
+	/*	padding: 30px;*/
+	/*	margin-right: 20px;*/
+	/*	border: lightgray solid 1px;*/
+	/*	border-radius: 10px;*/
+	/*}*/
+}
 @media (max-width: 1270px) {
 	/* 배치 바꾸기 */
 	.container {
@@ -267,16 +300,10 @@ li {
 
 @media (max-width: 650px) {
 	.container {
-		width: 80vw;
+		width: 70vw;
 		margin: 0 auto;
 	}
 	.category {
 		display: none;
-	}
-
-	.sub_container {
-		/* background-color:aliceblue; */
-		width: 55vw;
-		height: 220px;
 	}
 }

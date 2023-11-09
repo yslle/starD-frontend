@@ -4,9 +4,14 @@ import { ReactComponent as Arrow } from "../../images/Arrow.svg";
 import edit from "../../css/mypage_css/edit.css";
 import arrowdown from "../../images/arrowdown.png";
 import arrowup from "../../images/arrowup.png";
-
+import axios from "axios";
 
 const Signout = () => {
+  const isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
+  const accessToken = localStorage.getItem('accessToken');
+
+  const [password, setPassword] = useState("");
+
   const [toggle4, setToggle4] = useState(false);
   const [arrow4, setarrow4] = useState(`${arrowdown}`);
 
@@ -19,6 +24,30 @@ const Signout = () => {
       setToggle4((toggle4) => !toggle4);
     }
   };
+
+  const handleSignOutClick = () => {
+    const confirmDelete = window.confirm("정말로 탈퇴하시겠습니까?");
+    if (confirmDelete) {
+        axios.post("http://localhost:8080/user/mypage/delete", null, {
+            params: { password: password },
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            },
+        }).then((res) => {
+            console.log("API Response:", res.data);
+            if (res.data === "탈퇴 성공") {
+                console.log("탈퇴 성공");
+
+                // 여기서 로그아웃 + 홈 화면으로
+                window.location.href = "/logout";
+            }
+        }).catch((error) => {
+            alert(error.response.data);
+            console.log("Deletion error:", error);
+        });
+    }
+  }
 
   return (
     <div className="sub_container" id="sign_out">
@@ -53,8 +82,9 @@ const Signout = () => {
 <li>6. 현재 비밀번호를 입력하고 탈퇴하기를 누르시면 위 내용에 동의하는 것으로 간주됩니다.</li>
               </ul>
               <div id="checkpw">
-                <input type="password" id="signout_pw" placeholder="현재 비밀번호를 입력해주세요"></input>
-                <button id ="signout_btn">탈퇴하기</button>
+                <input type="password" id="signout_pw" placeholder="현재 비밀번호를 입력해주세요"
+                    value={password} onChange={(e) => setPassword(e.target.value)}/>
+                <button id ="signout_btn" onClick={handleSignOutClick}>탈퇴하기</button>
               </div>
              
             </div>

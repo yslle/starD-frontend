@@ -134,7 +134,7 @@ const StudyEdit = () => {
             })
             .then((res) => {
                 console.log("API Response:", res.data);
-               console.log("수정성공");
+                console.log("수정성공");
             }).catch((error) => {
             console.log(error);
         })
@@ -154,7 +154,7 @@ const StudyEdit = () => {
                             <span>모집 인원</span>
                             <input type="number" name="capacity" value={updatedStudy.capacity}
                                    onChange={handleInputChange}
-                                   className="inputbox"/>
+                                   className="inputbox" disabled />
                         </div>
                         <div>
                             <span>스터디 시작일</span>
@@ -172,7 +172,7 @@ const StudyEdit = () => {
                         <div style={{marginRight: "10px"}}>
                             <span>분야</span>
                             <span className="field_wrapper">
-                                <select name="field" value={updatedStudy.field} onChange={handleRadioFieldChange}>
+                                <select name="field" value={updatedStudy.field} onChange={handleRadioFieldChange} disabled>
                                     {tagoptions.map((interest, idx) =>
                                         <option key={idx} value={interest.value}>{interest.name}</option>
                                     )}

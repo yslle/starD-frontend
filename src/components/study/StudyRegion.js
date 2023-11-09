@@ -18,7 +18,7 @@ function StudyRegion ({formData, city, district, handleRegionCityChange ,handleR
     useEffect(() => {
         RegionSelectBOX({formData, city , district, handleRegionCityChange,handleRegionDistrictChange });
 
-    }, [formData, city, district, handleRegionCityChange, handleRegionDistrictChange]);
+    }, [formData,city,district]);
 
 
     return (

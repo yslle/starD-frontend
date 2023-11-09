@@ -8,8 +8,8 @@
   background-color: rgba(0, 0, 0, 0.548);
 }
 .background .todoedit_insert {
-  width: 20%;
-  height: fit-content;
+  width: 40%;
+  height: 40%;
   position: absolute;
   top: 30%;
   left: 37%;
@@ -27,6 +27,7 @@
   width: 80%;
   height: 40px;
   border-radius: 10px;
+  margin-bottom: 20px;
 }
 .background .todoedit_insert button{
   background-color: #395b64;

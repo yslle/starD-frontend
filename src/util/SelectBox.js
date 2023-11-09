@@ -27,7 +27,6 @@ export function selectBOX (mem){
     const $sidoSelect = $("#sido1");
     const $gugunSelect = $("#gugun1");
 
-
     function initializeSidoSelect() {
         console.log("거주지 확인 : " + mem.city + " 그리고 " + mem.district);
         let gugunList = [];

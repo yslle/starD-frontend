@@ -189,7 +189,7 @@ const Mypage = ({sideheader}) => {
                         <div className="reliability">
                             <div className="tag">
                                 <p>개인 신뢰도</p>
-                                <button id="more">전체보기</button>
+                                {/*<button id="more">전체보기</button>*/}
                             </div>
                             <div id="detail">당신의 신뢰도는 36℃입니다.</div>
                         </div>

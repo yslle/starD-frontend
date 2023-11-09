@@ -1,11 +1,8 @@
-
 import edit from "../css/mypage_css/edit.css";
-
 import $ from 'jquery';
-import {useState} from "react";
+import { useEffect } from "react";
 
-export function RegionSelectBOX ({formData,city,district,handleRegionCityChange,handleRegionDistrictChange}){
-
+export function RegionSelectBOX({formData, city , district, handleRegionCityChange,handleRegionDistrictChange }) {
     const areas = {
         "시/도 선택": ["구/군 선택"],
         "서울특별시": ["강남구", "강동구", "강북구", "강서구","관악구","광진구","구로구","금천구","노원구"
@@ -31,71 +28,41 @@ export function RegionSelectBOX ({formData,city,district,handleRegionCityChange,
     const $RegiongugunSelect = $("#gugun1");
 
     function initializeSidoSelect() {
-        let gugunList = [];
-        for (const sido in areas) {
-            if (sido) {
-                $RegionsidoSelect.append(`<option value="${sido}">${sido}</option>`);
-                gugunList = areas[sido];
-            }
-        }
-        if ( $RegionsidoSelect === null) {
-            $RegiongugunSelect.append("<option  value='' selected>구/군 선택</option>");
-        } else {
-            $RegiongugunSelect.append("<option  value=''>구/군 선택</option>");
-            for (const gugun of gugunList) {
+        $RegionsidoSelect.empty();
 
-                $RegiongugunSelect.append(`<option  value="${gugun}">${gugun}</option>`);
-            }
+        // Add the "시/도 선택" option
+        $RegiongugunSelect.append('<option value="구/군 선택">구/군 선택</option>');
+
+        // Add options for each "시/도"
+        for (const sido in areas) {
+            $RegionsidoSelect.append(`<option value="${sido}">${sido}</option>`);
+        }
+
+        // Check if a "시/도" is already selected in local storage
+        const selectedRegionsido = localStorage.getItem("selectedRegionsido");
+        if (selectedRegionsido) {
+            $RegionsidoSelect.val(selectedRegionsido);
         }
     }
 
     function updateGugunSelect(selectedSido) {
-        const gugunList = areas[selectedSido];
         $RegiongugunSelect.empty();
-        if(selectedSido != "시/도 선택") {
-            $RegiongugunSelect.append(`<option value=''>구/군 선택</option>`);
-            }
 
+        // Get the list of "구/군" for the selected "시/도"
+        const gugunList = areas[selectedSido] || ["구/군 선택"];
+
+        // Populate "구/군" options
         for (const gugun of gugunList) {
-            $RegiongugunSelect.append(`<option   value="${gugun}">${gugun}</option>`);
+            $RegiongugunSelect.append(`<option value="${gugun}">${gugun}</option>`);
         }
     }
-    function saveSelectedSidoVal(selectedSido) {
-        localStorage.setItem("selectedRegionsido", selectedSido);
-         city = selectedSido;
-
-        saveSelectedGugunVal("");
-        handleRegionCityChange(city);
-    }
-
-    function  saveSelectedGugunVal(selectedGugun){
-        localStorage.setItem("selectedRegionGugun", selectedGugun);
-         district = selectedGugun;
-        handleRegionDistrictChange(district);
-    }
-    function loadSelectedValues() {
-        const selectedSido = localStorage.getItem("selectedSido");
-        const selectedGugun = localStorage.getItem("selectedGugun");
-
-        if (selectedSido) {
-            $RegionsidoSelect.val(selectedSido);
-            updateGugunSelect(selectedSido);
-
-            if (selectedGugun) {
-                $RegiongugunSelect.val(selectedGugun);
-            }
-        }
-        console.log("로드 완료");
-    }
-
 
     $RegionsidoSelect.on("change", function() {
         const selectedSido = $(this).val();
 
         if (selectedSido) {
             updateGugunSelect(selectedSido);
-            saveSelectedSidoVal(selectedSido)
-
+            saveSelectedSidoVal(selectedSido);
         } else {
             $RegiongugunSelect.empty();
         }
@@ -109,6 +76,20 @@ export function RegionSelectBOX ({formData,city,district,handleRegionCityChange,
             $RegiongugunSelect.empty();
         }
     });
-    RegionSelectBOX.initialized = true;
+
+    // Load "시/도" options and initialize the selection
     initializeSidoSelect();
+
+    // Function to save selected "시/도" value
+    function saveSelectedSidoVal(selectedSido) {
+        localStorage.setItem("selectedRegionsido", selectedSido);
+        city = selectedSido;
+        handleRegionCityChange(city);
+    }
+    function  saveSelectedGugunVal(selectedGugun){
+        localStorage.setItem("selectedRegionGugun", selectedGugun);
+        district = selectedGugun;
+        handleRegionDistrictChange(district);
+    }
+
 }

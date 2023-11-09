@@ -9,9 +9,9 @@
   }
   .background .Scheduleedit_insert {
     width: 40%;
-    height: fit-content;
+    height: 70%;
     position: absolute;
-    top: 10%;
+    top: 18%;
     left: 30%;
     padding: 20px;
     background-color: white;
@@ -51,6 +51,7 @@
 
   .selectDay{
     width: fit-content;
+      margin-bottom: 30px;
   }
   .selectstartDay, .selectendDay , .selecttitle, .selectcontent ,.selectstudy , .selectcolor{
     display: flex;
@@ -58,13 +59,27 @@
     margin-top: 10px;
   }
   
- .selectstudy p {
+ .selectstudy p,.selectDay p ,.selecttitle p {
     margin-bottom: 0;
     width: 130px;
     position: relative;
     top: 10px;
     left: 4px;
  }
+.selectDay p {
+    margin-bottom: 0;
+    width: 90px;
+    position: relative;
+    top: 20px;
+    left: 4px;
+}
+.selecttitle p {
+    margin-bottom: 0;
+    width: 100px;
+    position: relative;
+    top: 10px;
+    left: 8px;
+}
   .selectendDay, .selectstudy{
     position: relative;
     right: 10px;
@@ -90,6 +105,7 @@ box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.15);
   .selecttitle, .selectcontent{
     position: relative;
     right: 4px;
+      margin-bottom: 20px;
 }
 .selectcontent{
     margin-left: 125px;
@@ -151,4 +167,10 @@ box-shadow: none;
 }
 .todoedit_insert button{
     height: 22px;
+}
+@media (max-width: 800px) {
+    .background .Scheduleedit_insert {
+        width: 70%;
+    }
+
 }

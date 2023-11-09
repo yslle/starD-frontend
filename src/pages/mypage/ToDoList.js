@@ -34,6 +34,7 @@ const ToDoList = ({sideheader}) => {
     const studyIdAsNumber = parseFloat(InsertToDoStudyId);
     const [todoswithAssignee, setTodoswithAssignee] = useState({});
     let lastTodoId = useRef("1");
+    console.log("########: ", studyMems);
     useEffect(() => {
         axios.get("http://localhost:8080/user/mypage/studying", {
             withCredentials: true, headers: {
@@ -48,7 +49,13 @@ const ToDoList = ({sideheader}) => {
                 setStudyTitles(studiesTitle);
                 const studiesIds = studyList.map(item => item.study.id);
                 setStudyIds(studiesIds);
-                const ParticipatedStudiesMem = studyList.map(item => item.member.id);
+
+                //TODO - map으로 돌면 멤버가 두 번 저장되어있길래..
+                //const ParticipatedStudiesMem = studyList.map(item => item.member.id);
+                const ParticipatedStudiesMem = studyList.length > 0 ? studyList[0].member.id : null;
+
+                console.log("&&&&&&&&   :", studyList);
+                console.log("&&&&&&&&   :", ParticipatedStudiesMem);
                 setStudyMems(ParticipatedStudiesMem);
             })
             .catch((error) => {
@@ -103,7 +110,6 @@ const ToDoList = ({sideheader}) => {
                 } else {
                     console.log('투두 데이터가 없습니다.');
                 }
-                // nextId.current = maxId + 1;
                 const groupedTodos = {};
                 response.data.forEach((todoItem) => {
                     const dueDate = new Date(todoItem.toDo.dueDate).toDateString();
@@ -133,12 +139,11 @@ const ToDoList = ({sideheader}) => {
         setSelectedTodo(todo);
     };
 
-    // const nextId = useRef(1);
+
     const dateKey = selectedDate.toDateString();
 
-    const onInsert = useCallback((title, task, studyId) => {
+    const onInsert = useCallback((title, task, studyId, id) => {
         console.error("studyId:", studyId);
-        // console.error("nextId.current:", nextId.current);
         const filteredObjects = studies.find((item) => item.study.id === studyId);
         if (!filteredObjects) {
             console.error("Study not found for studyId:", studyId);
@@ -148,7 +153,7 @@ const ToDoList = ({sideheader}) => {
             console.log("title", title);
             const dateKey = selectedDate.toDateString();
             const todo = {
-                id: lastTodoId.current+1,
+                id: id,
                 study: filteredObjects.study,
                 task: task,
                 date: dateKey,
@@ -161,7 +166,6 @@ const ToDoList = ({sideheader}) => {
             setTodoswithAssignee((prevTodos) => ({
                 ...prevTodos, [dateKey]: [...(prevTodos[dateKey] || []), TodoWithAssign],
             }));
-            // nextId.current++;
         }
     }, [selectedDate, studies]);
 
@@ -188,13 +192,23 @@ const ToDoList = ({sideheader}) => {
             });
         }, []);
 
-    const onUpdate = useCallback(async (UpdatedToDo) => {
+    const onUpdate = async (UpdatedToDo) => {
         console.log("selectedTodo..:", UpdatedToDo);
         onInsertToggle();
         const assigneeStr = studyMems.toString();
         console.log("assigneeStr..:", assigneeStr);
+        console.log("dueDate..:", UpdatedToDo.toDo.date);
+
+        //TODO - (2023-11-06T16:45:12.958) 이런 식으로 날짜 넘기면 오류 안 나요
+        const currentDate = new Date();
+        const offset = currentDate.getTimezoneOffset();
+        currentDate.setMinutes(currentDate.getMinutes() - offset);
+
+        const isoString = currentDate.toISOString(); // 현재 날짜 및 시간을 ISO 8601 형식의 문자열로 변환
+        console.log("isoString..:", isoString);
+
         const todoData = {
-            task: UpdatedToDo.toDo.task, dueDate: UpdatedToDo.toDo.dueDate,
+            task: UpdatedToDo.toDo.task, dueDate: isoString,
         };
         const postDataResponse = await axios.put(`http://localhost:8080/todo/${UpdatedToDo.toDo.id}`, todoData, {
             params: {
@@ -202,29 +216,33 @@ const ToDoList = ({sideheader}) => {
             }, withCredentials: true, headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
-        });
+        })
+            .then((postDataResponse) => {
+                console.log("전송 성공:", postDataResponse.data);
 
-        console.log("전송 성공:", postDataResponse.data);
-        const updatedTodos = {
-            ...todoswithAssignee,
-            [dateKey]: todoswithAssignee[dateKey].map((todo) =>
-                todo.toDo.id === UpdatedToDo.toDo.id
-                    ? {
-                        toDo: {
-                            ...todo.toDo,
-                            study: {...todo.toDo.study, id: UpdatedToDo.toDo.study.id},
-                            task: UpdatedToDo.toDo.task,
-                        },
-                        toDoStatus: todo.toDoStatus,
-                    }
-                    : todo
-            ),
-        };
+                const updatedTodos = {
+                    ...todoswithAssignee,
+                    [dateKey]: todoswithAssignee[dateKey].map((todo) =>
+                        todo.toDo.id === UpdatedToDo.toDo.id
+                            ? {
+                                toDo: {
+                                    ...todo.toDo,
+                                    study: {...todo.toDo.study, id: UpdatedToDo.toDo.study.id},
+                                    task: UpdatedToDo.toDo.task,
+                                },
+                                toDoStatus: todo.toDoStatus,
+                            }
+                            : todo
+                    ),
+                };
 
-        setTodoswithAssignee(updatedTodos);
-        console.log("전송 성공t:", todoswithAssignee);
-
-    }, [studyMems, selectedDate, studies]);
+                setTodoswithAssignee(updatedTodos);
+                console.log("전송 성공t:", updatedTodos);
+            })
+            .catch((error) => {
+                console.error("전송 실패:", error);
+            });
+    };
 
 
     const onToggle = useCallback(async (id, todo_status) => {
@@ -317,7 +335,9 @@ const ToDoList = ({sideheader}) => {
                         </div>
                         <ToDoInsert onInsert={onInsert} dueDate={selectedDate} Inserttodostudyid={InsertToDoStudyId}
                                     Inserttodotitle={InsertToDoTitle} Inserttodostudy={InsertToDoStudy}
-                                    studyidasnumber={studyIdAsNumber}/>
+                                    studyidasnumber={studyIdAsNumber} onClose={() => {
+                            setInsertToggle((prev) => !prev);
+                        }}/>
                         <ul className="TodoList">
                             {filteredTodos.length === 0 && (<div className="alert_empty_todo">
                                 <span>할 일이 없습니다.<br/>  할 일을 입력해주세요.</span>
@@ -332,12 +352,15 @@ const ToDoList = ({sideheader}) => {
                                         onChangeSelectedTodo={onChangeSelectedTodo}
                                         onInsertToggle={onInsertToggle}
                                         selectedDate={selectedDate}
+
                                     />)
                                 }
                             }))}
                         </ul>
                         {insertToggle && (<ToDoEdit selectedTodo={selectedTodo} onUpdate={onUpdate}
-                                                    participatedstudies={studies}/>)}
+                                                    participatedstudies={studies} onClose={() => {
+                            setInsertToggle((prev) => !prev);
+                        }}/>)}
                     </div>
                     <Calender todo={todoswithAssignee} onDateClick={handleDateClick} prevMonth={prevMonth}
                               nextMonth={nextMonth} currentMonth={currentMonth}/>

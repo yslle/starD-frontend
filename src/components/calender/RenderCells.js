@@ -40,9 +40,12 @@ const RenderCells = ({todo, currentMonth, selectedDate, onDateClick}) => {
                                         format(currentMonth, "M") !== format(day, "M")
                                             ? "text not-valid"
                                             : ""}
+
                                 >{formattedDate}
                                 </span>
+                                <div className={"todoImage"}>
                               <img src={todoImage} width="20px" height="20px"/>
+                                </div>
                             </div>
                         ) :
                         <div><span

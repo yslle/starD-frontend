@@ -224,6 +224,10 @@ const StudyInsert = () => {
             alert("온라인, 오프라인 여부를 선택해주세요.");
             return;
         }
+        if (!formData.field) {
+            alert("분야를 선택해주세요.");
+            return;
+        }
 
         const tagElement = document.querySelector(".HashWrapInner");
         if (!tagElement) {
@@ -273,11 +277,6 @@ const StudyInsert = () => {
 
         console.log("response : ", response);
         e.preventDefault();
-        /*navigate(`/study/${1}`,{
-            state:{
-                page:1,
-            }
-        });*/
     }, [formData, navigate, tags, onInsertStudy]);
 
     const studyinsertform = () => {
@@ -319,7 +318,7 @@ const StudyInsert = () => {
                                 </select>
                             </span>
                         </div>
-                        <div style={{marginRight: "10px"}}>
+                        <div className={"onoffline"} style={{marginRight: "10px"}}>
                             <span className="onoff_title">진행 방식</span>
                             <div className="onoff">
                                 <input type="radio" value="online" name="onoff" onChange={handleRadioChange}/>온라인
@@ -332,7 +331,7 @@ const StudyInsert = () => {
                                 )}
                             </div>
                         </div>
-                        <div>
+                        <div className={"deadline"}>
                             <span>스터디 종료일</span>
                             <input type="date" name="endDate" value={formData.endDate} onChange={handleInputChange}
                                    min={formattedCurrentDate} className="inputbox" placeholder="스터디 종료일을 선택해주세요"/>

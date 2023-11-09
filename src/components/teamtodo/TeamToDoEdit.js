@@ -3,7 +3,7 @@ import Editcss from "../../css/todo_css/ToDoEdit.css";
 import {useLocation} from "react-router-dom";
 import axios from "axios";
 
-const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees}) => {
+const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
     const accessToken = localStorage.getItem('accessToken');
     console.log("selectedTodo", selectedTodo);
      const n = selectedTodo.assignees.map((item)=> item.member.name);
@@ -100,7 +100,12 @@ const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees}) => {
                     onChange={onChange}
                     value={task}
                     placeholder="할 일을 입력하세요"/>
+                <div className={"todo-edit-btn"}>
                 <button type="submit">수정하기</button>
+                <button id="cancel" type="button" onClick={onClose}>
+                    취소
+                </button>
+                </div>
             </form>
 
         </div>

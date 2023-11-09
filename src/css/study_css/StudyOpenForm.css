@@ -15,7 +15,7 @@ html {
 .study_detail_container h1 {
     font-size: 27px;
     text-align: center;
-    color: #395B64;
+    color: #FFFFFF;
 }
 .study_detail_container .arrow_left {
     text-align: left;
@@ -23,7 +23,7 @@ html {
     color: #898989;
     cursor: pointer;
 }
-.interest{
+.interest,.deadline,.onoffline{
     width: fit-content;
     margin-left: 60px;
 }
@@ -32,6 +32,9 @@ html {
 }
 .study_open_form {
     font-family: 'Pretendard-Regular';
+    width: 120%;
+    position: relative;
+    right: 80px;
 }
 .study_open_form > div:nth-of-type(1){
     display: flex;
@@ -72,6 +75,11 @@ html {
     text-align: left;
     font-size: 15px;
 }
+.study_open_form .right .onoffline {
+    position: relative;
+    right: 7px;
+}
+
 .study_open_form .right input[name="onoff"],
 .study_open_form .right input[name="onOff"]{
     width:auto;
@@ -96,10 +104,10 @@ html {
 
 .study_open_detail{
     display: flex;
-    /* [2023-10-18 by 지륜] 2줄 주석 처리 */
-    /*margin-top:10px;*/
-    /*margin-left: 8px;*/
+    width: 90%;
     justify-content: center;
+    position: relative;
+    left: 8%;
 }
 .study_open_detail span{
     margin-left: 10px;
@@ -119,7 +127,7 @@ html {
 .study_tag{
     display: flex;
     align-items: center;
-    margin-left: 70px;
+    margin-left: 190px;
     margin-bottom: 100px;
 }
 .study_tag span{
@@ -147,4 +155,140 @@ html {
     border:1px solid #dbdbdb;
     background: #fff;
     box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 1270px) {
+    .study_open_form .inputbox {
+        width: 150px;
+    }
+    .study_open_form .right .onoffline {
+         position: relative;
+         right: 7px;
+     }
+    .study_open_form span {
+        font-size: 12px;
+        margin-right: 20px;
+    }
+}
+@media (max-width: 1090px) {
+    .study_open_form .inputbox {
+        width: 100px;
+    }
+    .right{
+        width: 50%;
+    }
+    .right{
+        width: 50%;
+    }
+}
+@media (max-width: 1060px) {
+    .study_open_form .inputbox {
+        width: 100px;
+    }
+    .right{
+        width: 50%;
+    }
+    .right{
+        width: 50%;
+    }
+
+}
+@media (max-width: 1000px) {
+    .right{
+        width: 300px;
+    }
+    .study_open_form span {
+        font-size: 12px;
+        margin-right: 20px;
+    }
+    .study_open_form{
+        width: 470px;
+    }
+    .study_open_form .inputbox {
+        width: 80px;
+        height: 30px;
+    }
+
+    .study_open_form .left > div, .study_open_form .right > div {
+        margin-right: 0px;
+        margin-bottom: 25px;
+        width: 200px;
+    }
+    .study_open_form .right > div {
+        margin-right: 0px;
+        margin-bottom: 25px;
+        width: 450px;
+    }
+    .interest{
+        margin-left: 0px;
+    }
+    .study_open_form .right .deadline{
+        margin-right: 0px;
+        margin-bottom: 25px;
+        width: 300px;
+        position: relative;
+        right: 50px;
+    }
+    .study_open_form .left {
+        margin-right: 0px;
+    }
+}
+@media (max-width: 700px) {
+    .right{
+        width: 300px;
+    }
+    .study_open_form span {
+        font-size: 12px;
+        margin-right: 20px;
+    }
+    .study_open_form{
+        width: 470px;
+    }
+    .study_open_form .inputbox {
+        width: 90px;
+        height: 30px;
+    }
+
+    .study_open_form .left > div, .study_open_form .right > div {
+        margin-right: 0px;
+        margin-bottom: 25px;
+        width: 200px;
+    }
+    .study_open_form .right > div {
+        margin-right: 0px;
+        margin-bottom: 25px;
+        width: 450px;
+    }
+    .interest{
+        margin-left: 0px;
+    }
+    .study_open_form .right .deadline{
+        margin-right: 0px;
+        margin-bottom: 25px;
+        width: 300px;
+        position: relative;
+        right: 50px;
+    }
+    .study_open_form .left {
+        margin-right: 0px;
+    }
+    .study_open_form span {
+        font-size: 12px;
+        margin-right: 20px;
+        width: 100px;
+    }
+    .study_open_detail textarea {
+        border: 1px solid #dbdbdb;
+        border-radius: 10px;
+        padding: 15px 10px;
+        width: 80%;
+        height: 100px;
+        white-space: pre-line;
+    }
+    .study_tag {
+        display: flex;
+        align-items: center;
+        margin-left: 30px;
+        margin-bottom: 100px;
+    }
 }

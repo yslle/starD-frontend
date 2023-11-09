@@ -7,7 +7,7 @@ function RealEstate ({mem}) {  // 컴포넌트.
         if (mem) {
             selectBOX(mem);
         }
-    }, [mem]);
+    }, []);
 
 
 

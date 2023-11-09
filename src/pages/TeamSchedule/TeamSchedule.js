@@ -102,7 +102,7 @@ const TeamSchedule = () => {
         console.log("title:", newTitle);
         console.log("COLOR:", newColor);
 
-        axios.put(`http://localhost:8080/schedule/${id}`,{},{
+        axios.put(`http://localhost:8080/schedule/${id}`, {}, {
             params: {
                 title: newTitle, color: newColor,
             }, withCredentials: true, headers: {
@@ -118,7 +118,7 @@ const TeamSchedule = () => {
             console.error("전송 실패", error);
         });
 
-    },[meetings,selectedDate]);
+    }, [meetings, selectedDate]);
 
 
     const onRemove = (id) => {

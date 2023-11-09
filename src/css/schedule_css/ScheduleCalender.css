@@ -62,7 +62,15 @@ svg{
     height: auto;
     font-size: 1.2rem;
     cursor: pointer;
-   
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.Schedulerow > .col.cell::-webkit-scrollbar {
+    width: 5px; /* 스크롤바 너비 */
+}
+
+.Schedulerow > .col.cell::-webkit-scrollbar-thumb {
+    background-color: #a5c9ca; /* 스크롤바 색상 */
 }
 .Schedulerow > .col.cell.selected{
     overflow-y: auto;

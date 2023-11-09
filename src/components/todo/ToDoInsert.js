@@ -77,9 +77,7 @@ const ToDoInsert = ({onInsert, dueDate, Inserttodostudyid, Inserttodotitle, Inse
     //할 일 추가 버튼 함수
     const onSubmit = useCallback(
         async (e) => {
-            if (TaskValue !== '') {
-                onInsert(InsertToDoTitle, TaskValue, studyIdAsNumber);
-            } else {
+            if (TaskValue === '') {
                 alert("할 일을 입력해 주세요.");
                 return;
             }
@@ -90,6 +88,7 @@ const ToDoInsert = ({onInsert, dueDate, Inserttodostudyid, Inserttodotitle, Inse
 
             try {
                 // Step 1: 먼저 필요한 데이터를 서버에서 가져옵니다.
+/*
                 const fetchDataResponse = await axios.get(`http://localhost:8080/todo/all`, {
                     params: {
                         year: year,
@@ -103,6 +102,7 @@ const ToDoInsert = ({onInsert, dueDate, Inserttodostudyid, Inserttodotitle, Inse
                 console.log('가져오기 성공:', fetchDataResponse.data);
                 setResponseData(fetchDataResponse.data);
                 console.log("studyIdAsNumber:", studyIdAsNumber);
+*/
 
 
 
@@ -128,6 +128,10 @@ const ToDoInsert = ({onInsert, dueDate, Inserttodostudyid, Inserttodotitle, Inse
                 });
                 console.log("전송 성공:", postDataResponse.data);
                 setTaskValue("");
+
+                const createdTodoId = postDataResponse.data.id;
+                onInsert(InsertToDoTitle, TaskValue, studyIdAsNumber, createdTodoId);
+
             } catch (error) {
                 console.error("에러:", error);
             }

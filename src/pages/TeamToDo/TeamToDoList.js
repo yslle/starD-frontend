@@ -301,12 +301,17 @@ const TeamToDoList = () => {
                                         onInsertToggle={onInsertToggle}
                                         selectedDate={selectedDate}
                                         Assignees={Assignees}
+                                        onClose={() => {
+                                            setInsertToggle((prev) => !prev);
+                                        }}
                                     />)
                                 }
                             }))}
                         </ul>
                         {insertToggle && (<TeamToDoEdit selectedTodo={selectedTodo} onUpdate={onUpdate} Member={Member}
-                                                        Assignees={Assignees}/>)}
+                                                        Assignees={Assignees} onClose={() => {
+                            setInsertToggle((prev) => !prev);
+                        }}/>)}
                     </div>
                     <Calender todo={todoswithAssignee} onDateClick={handleDateClick} prevMonth={prevMonth}
                               nextMonth={nextMonth} currentMonth={currentMonth}/>
