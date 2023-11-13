@@ -53,7 +53,7 @@ const Notice = () => {
     }, [accessToken]);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/notice")
+        axios.get("http://localhost:8080/notice/all")
             .then((res) => {
                 setPosts(res.data);
             })

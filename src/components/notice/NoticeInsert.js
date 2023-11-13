@@ -69,9 +69,19 @@ const NoticeInsert = () => {
             return;
         }
         setFormData(onInsertPost(formData));
+
+        let url;
+        if (formData.category === "공지") {
+
+            url = "http://localhost:8080/notice"
+        }
+        else if (formData.category === "FAQ") {
+            url = "http://localhost:8080/faq"
+        }
+
         const accessToken = localStorage.getItem('accessToken');
 
-        const response = axios.post("http://localhost:8080/notice",
+        const response = axios.post(url,
             {
                 title:formData.title,
                 category:formData.category,
