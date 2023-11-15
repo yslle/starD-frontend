@@ -31,33 +31,25 @@ const NoticeDetail = () => {
     const [isWriter, setIsWriter] = useState(false);
 
     useEffect(() => {
-        if (accessToken && isLoggedInUserId) {
-            // 타입 조회
-            axios.get(`http://localhost:8080/notice/find-type/${id}`, {
-                params: { id: id },
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
+        // 타입 조회
+        axios.get(`http://localhost:8080/notice/find-type/${id}`, {
+            params: { id: id }
+        })
+            .then((res) => {
+                setType(res.data.type);
+
+                if (res.data.type === "NOTICE") {
+                    setUrl(`http://localhost:8080/notice/${id}`);
                 }
+                else if (res.data.type === "FAQ") {
+                    setUrl(`http://localhost:8080/faq/${id}`);
+                }
+
+                setInitiallyUrlStates(true);
             })
-                .then((res) => {
-                    setType(res.data.type);
-
-                    if (res.data.type === "NOTICE") {
-                        setUrl(`http://localhost:8080/notice/${id}`);
-                    }
-                    else if (res.data.type === "FAQ") {
-                        setUrl(`http://localhost:8080/faq/${id}`);
-                    }
-
-                    setInitiallyUrlStates(true);
-                    console.log("$$$ ", url);
-                })
-                .catch((error) => {
-                    console.error("id로 타입 조회 실패:", error);
-                });
-
-        }
+            .catch((error) => {
+                console.error("id로 타입 조회 실패:", error);
+            });
     }, [id]);
 
     useEffect(() => {
@@ -92,8 +84,7 @@ const NoticeDetail = () => {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
 
-        if (initiallyLikeStates) {
-            console.log("^^^url ", url);
+        if (initiallyUrlStates) {
             axios.get(url, config)
                 .then((res) => {
                     setPostItem(res.data);
@@ -105,7 +96,7 @@ const NoticeDetail = () => {
                     console.error("게시글 세부 데이터 가져오기 실패:", error);
                 });
         }
-    }, [id, accessToken, isLoggedInUserId, initiallyLikeStates]);
+    }, [id, accessToken, isLoggedInUserId, initiallyUrlStates]);
 
     const toggleLike = () => {
         if (!(accessToken && isLoggedInUserId)) {
