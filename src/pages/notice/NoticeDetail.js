@@ -15,10 +15,7 @@ const NoticeDetail = () => {
 
     const [postItem, setPostItem] = useState(null);
 
-    const [scrapStates, setScrapStates] = useState(false);
     const [likeStates, setLikeStates] = useState(false);
-
-    const [initiallyScrapStates, setInitiallyScrapStates] = useState(false);
     const [initiallyLikeStates, setInitiallyLikeStates] = useState(false);
 
     const [posts, setPosts] = useState([]);
@@ -27,8 +24,9 @@ const NoticeDetail = () => {
 
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
-    const [url, setUrl] = useState([]);
-    const [type, setType] = useState([]);
+    const [url, setUrl] = useState(null);
+    const [initiallyUrlStates, setInitiallyUrlStates] = useState(false);
+    const [type, setType] = useState(null);
 
     const [isWriter, setIsWriter] = useState(false);
 
@@ -51,6 +49,9 @@ const NoticeDetail = () => {
                     else if (res.data.type === "FAQ") {
                         setUrl(`http://localhost:8080/faq/${id}`);
                     }
+
+                    setInitiallyUrlStates(true);
+                    console.log("$$$ ", url);
                 })
                 .catch((error) => {
                     console.error("id로 타입 조회 실패:", error);
@@ -60,7 +61,7 @@ const NoticeDetail = () => {
     }, [id]);
 
     useEffect(() => {
-        if (accessToken && isLoggedInUserId) {
+        if (accessToken && isLoggedInUserId && initiallyUrlStates) {
             console.log("TYPE: ", type);
             axios.get(`http://localhost:8080/star/notice/${id}`, {
                 params: { type : type },
@@ -77,26 +78,10 @@ const NoticeDetail = () => {
                     console.log("공감 불러오기 실패", error);
                 });
 
-            axios.get(`http://localhost:8080/scrap/post/${id}`, {
-                params: { id: id },
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
-                .then(response => {
-                    setScrapStates(response.data);
-                    setInitiallyScrapStates(true);
-                })
-                .catch(error => {
-                    console.log("스크랩 불러오기 실패", error);
-                });
-
         } else {
-            setInitiallyLikeStates(true);
-            setInitiallyScrapStates(true);
+            setInitiallyLikeStates(false);
         }
-    }, [id ,type]);
+    }, [id ,initiallyUrlStates]);
 
     useEffect(() => {
         const config = {
@@ -107,7 +92,8 @@ const NoticeDetail = () => {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
 
-        if (initiallyLikeStates && initiallyScrapStates) {
+        if (initiallyLikeStates) {
+            console.log("^^^url ", url);
             axios.get(url, config)
                 .then((res) => {
                     setPostItem(res.data);
@@ -119,7 +105,7 @@ const NoticeDetail = () => {
                     console.error("게시글 세부 데이터 가져오기 실패:", error);
                 });
         }
-    }, [id, accessToken, isLoggedInUserId, initiallyLikeStates, initiallyScrapStates]);
+    }, [id, accessToken, isLoggedInUserId, initiallyLikeStates]);
 
     const toggleLike = () => {
         if (!(accessToken && isLoggedInUserId)) {
@@ -161,49 +147,6 @@ const NoticeDetail = () => {
                 });
 
             setLikeStates(true);
-        }
-    };
-
-    const toggleScrap = () => {
-        if (!(accessToken && isLoggedInUserId)) {
-            alert("로그인 해주세요");
-            navigate("/login");
-        }
-
-        if (scrapStates) { // true -> 활성화되어 있는 상태 -> 취소해야 함
-            axios.delete(`http://localhost:8080/scrap/notice/${id}`, {
-                params: { type : type },
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
-                .then(response => {
-                    console.log("스크랩 취소 성공 " + response.data);
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    console.log("스크랩 취소 실패");
-                });
-
-            setScrapStates(false);
-        } else {
-            axios.post(`http://localhost:8080/scrap/post/${id}`, null, {
-                params: { id: id },
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
-                .then(response => {
-                    console.log("스크랩 성공");
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    console.log("스크랩 실패");
-                });
-
-            setScrapStates(true);
         }
     };
 
