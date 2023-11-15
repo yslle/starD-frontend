@@ -1,155 +1,161 @@
-import React, {Component, useRef} from 'react';
-import {Client} from '@stomp/stompjs';
+import React, { useState, useEffect, useRef } from 'react';
+import { Client } from '@stomp/stompjs';
 import chatting from "../../css/study_css/chatting.css";
 import axios from 'axios';
 
-class Chat extends Component {
-    constructor(props) {
-        super(props);
+const Chat = (props) => {
+    const [connected, setConnected] = useState(false);
+    const [message, setMessage] = useState('');
+    const [greetings, setGreetings] = useState([]);
+    const [studyId, setStudyId] = useState(props.studyId);
+    const [studyTitle, setStudyTitle] = useState(props.studyTitle);
+    const [pendingEnter, setPendingEnter] = useState(false);
 
-        this.state = {
-            connected: false,
-            message: '',
-            greetings: [],
-            studyId: this.props.studyId,
-            studyTitle: this.props.studyTitle,
+
+    const stompClient = useRef(
+        new Client({
+            brokerURL: 'ws://localhost:8080/gs-guide-websocket',
+        })
+    );
+
+    const messageEndRef = useRef(null);
+
+    useEffect(() => {
+        const connect = async () => {
+            console.log('Connecting to WebSocket...');
+            const accessToken = localStorage.getItem('accessToken');
+            if (accessToken) {
+
+                const headers = {
+                    Authorization: `Bearer ${accessToken}`,
+                };
+
+                try {
+                    await stompClient.current.activate({ headers });
+                    console.log('After activation:', stompClient);
+                    setConnected(true);
+                    stompClient.current.onConnect = onConnect;
+                    subscribeToChatRoom(studyId);
+                    fetchChatHistory();
+                    console.error('Clear to connect:');
+                } catch (error) {
+                    console.error('Failed to connect:', error);
+                }
+            } else {
+                console.error('Access token not found.');
+            }
         };
 
-        this.stompClient = new Client({
-            brokerURL: 'ws://localhost:8080/gs-guide-websocket',
-        });
+        connect();
 
-        this.stompClient.onConnect = this.onConnect;
-        this.stompClient.onWebSocketError = this.onWebSocketError;
-        this.stompClient.onStompError = this.onStompError;
+        return () => {
+            sendExitMessage();
+        };
+    }, [studyId]);
 
-        this.messageEndRef = React.createRef();
-    }
+    useEffect(() => {
+        scrollChatToBottom();
+    }, [greetings]);
 
-    state = {
-        connected: false,
-        message: '',
-        greetings: [],
-        newMessage: '',
-        studyId: this.props.studyId,
-    };
-
-    componentDidMount() {
-        this.setConnected(false);
-
-        this.connect()
-            .then(() => {
-                if (this.stompClient.connected) {
-                    this.subscribeToChatRoom(this.state.studyId);
-                }
-            })
-            .catch((error) => {
-                console.error('Failed to connect:', error);
-            });
-
-    }
-
-    componentWillUnmount() {
-        this.sendExitMessage();
-    }
-
-    scrollChatToBottom() {
+    const scrollChatToBottom = () => {
         const chatBox = document.querySelector('.chattingbox');
         if (chatBox) {
             chatBox.scrollTop = chatBox.scrollHeight;
         }
-    }
-    subscribeToChatRoom(studyId) {
-        this.stompClient.subscribe(`/topic/greetings/${studyId}`, (greeting) => {
-            this.showGreeting(JSON.parse(greeting.body));
-        });
-    }
+    };
 
-    fetchChatHistory = () => {
-        const accessToken = localStorage.getItem('accessToken');
-        const { studyId } = this.state;
-        if (accessToken) {
-            axios.get(`http://localhost:8080/chat/history/${studyId}`,{
-                withCredentials: true,
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            })
-                .then(response => {
-                    this.setState({greetings: response.data});
-                    console.log("####: ", response.data);
-                    this.sendEnterMessage();
-                })
-                .catch(error => {
-                    console.error('Error fetching chat history:', error);
-                });
+    const subscribeToChatRoom = (studyId) => {
+        if (stompClient.current.connected) {
+            stompClient.current.subscribe(`/topic/greetings/${studyId}`, (greeting) => {
+                console.log("인사메세지",JSON.parse(greeting.body));
+                showGreeting(JSON.parse(greeting.body));
+            });
         }
     };
 
-    onConnect = (frame) => {
-        const { studyId } = this.state;
-        this.setConnected(true);
-        console.log('Connected: ' + frame);
-        this.stompClient.subscribe(`/topic/greetings/${studyId}`, (greeting) => {
-            this.showGreeting(JSON.parse(greeting.body));
-        });
-        this.fetchChatHistory();
+
+    const fetchChatHistory = async () => {
+        const accessToken = localStorage.getItem('accessToken');
+        if (accessToken) {
+            try {
+                const response = await axios.get(`http://localhost:8080/chat/history/${studyId}`, {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+
+                setGreetings(response.data);
+                console.log("####: ", response.data);
+
+                if (stompClient.current.connected) {
+                    console.log("stompClient  connected",);
+                    console.log("ooo");
+                    sendEnterMessage();
+                } else {
+                    setPendingEnter(true);
+                    console.error('STOMP connection not active. Cannot send enter message.');
+                }
+            } catch (error) {
+                console.error('Error fetching chat history:', error);
+            }
+        }
+    };
+    const onConnect = (isActive) => {
+        setConnected(isActive);
+        console.log('Connected');
+        if (isActive) {
+            subscribeToChatRoom(studyId );
+            fetchChatHistory();
+
+            // Check and send the enter message if it was pending
+            if (pendingEnter) {
+                sendEnterMessage();
+                setPendingEnter(false);
+            }
+        }
     };
 
-    onWebSocketError = (error) => {
+
+    const onWebSocketError = (error) => {
         console.error('Error with websocket', error);
     };
 
-    onStompError = (frame) => {
+    const onStompError = (frame) => {
         console.error('Broker reported error: ' + frame.headers['message']);
         console.error('Additional details: ' + frame.body);
     };
 
-    setConnected = (connected) => {
-        this.setState({
-            connected: connected,
-        });
-    };
-
-    connect = () => {
+    const sendExitMessage = () => {
         const accessToken = localStorage.getItem('accessToken');
-
-        if (accessToken) {
+        if (stompClient.current.connected && accessToken) {
             const headers = {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `${accessToken}`,
             };
-
-            return new Promise((resolve, reject) => {
-                this.stompClient.activate({ headers })
-                    .then(() => {
-                        resolve();
-                    })
-                    .catch((error) => {
-                        reject(error);
-                    });
+            stompClient.current.publish({
+                destination: `/app/exit/${studyId}`,
+                body: JSON.stringify({ type: 'GREETING', studyId: studyId }),
+                headers: headers,
             });
         } else {
             console.error('Access token not found.');
-            return Promise.reject(new Error('Access token not found.'));
         }
+        disconnect();
     };
 
-    disconnect = () => {
-        this.stompClient.deactivate();
-        this.setConnected(false);
+    const disconnect = () => {
+        stompClient.current.deactivate();
+        setConnected(false);
         console.log('Disconnected');
-        //this.sendExitMessage();
     };
 
-    sendEnterMessage = () => {
+    const sendEnterMessage = () => {
         const accessToken = localStorage.getItem('accessToken');
-        const { studyId } = this.state;
-
         if (accessToken) {
             const headers = {
                 Authorization: `${accessToken}`,
             };
-            this.stompClient.publish({
+            stompClient.current.publish({
                 destination: `/app/enter/${studyId}`,
                 body: JSON.stringify({ type: 'GREETING', studyId: studyId }),
                 headers: headers,
@@ -159,30 +165,8 @@ class Chat extends Component {
         }
     };
 
-    sendExitMessage = () => {
+    const sendMessage = () => {
         const accessToken = localStorage.getItem('accessToken');
-        const { studyId } = this.state;
-
-        if (this.stompClient.connected && accessToken) {
-            const headers = {
-                Authorization: `${accessToken}`,
-            };
-            this.stompClient.publish({
-                destination: `/app/exit/${studyId}`,
-                body: JSON.stringify({ type: 'GREETING', studyId: studyId }),
-                headers: headers,
-            });
-        } else {
-            console.error('Access token not found.');
-        }
-        this.disconnect();
-    };
-
-    sendMessage = () => {
-        const accessToken = localStorage.getItem('accessToken');
-        const { message, studyId } = this.state;
-
-
         if (accessToken) {
             const headers = {
                 Authorization: `${accessToken}`,
@@ -190,96 +174,86 @@ class Chat extends Component {
             if (message.length === 0) {
                 alert('메시지를 입력하세요.');
             } else {
-                this.stompClient.publish({
+                stompClient.current.publish({
                     destination: `/app/chat/${studyId}`,
-                    body: JSON.stringify({type: 'TALK', studyId: studyId, message: `${message}`}),
+                    body: JSON.stringify({ type: 'TALK', studyId: studyId, message: `${message}` }),
                     headers: headers,
                 });
-                this.scrollChatToBottom();
-                this.setState({
-                    message: '',
-                });
+                scrollChatToBottom();
+                setMessage('');
             }
         } else {
             console.error('Access token not found.');
         }
     };
 
-    onKeyDown = (e) => {
+    const onKeyDown = (e) => {
         if (e.key === 'Enter') {
-            this.sendMessage();
+            sendMessage();
         }
     };
 
-    showGreeting = (message) => {
-        this.setState((prevState) => ({
-            greetings: [...prevState.greetings, message],
-        }),()=>{
-            this.scrollChatToBottom();
-        });
+    const showGreeting = (message) => {
+        setGreetings((prevGreetings) => [...prevGreetings, message]);
     };
 
-    formatDatetime = (datetime) => {
+
+    const formatDatetime = (datetime) => {
         const date = new Date(datetime);
         const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
         return `${year}-${month}-${day} ${hours}:${minutes}`;
     };
 
-
-
-
-
-    render() {
-        return (
-            <div className={"chat_wrap"}>
-                <div className={"studyTitle"}>
-                    <h2>채팅방</h2><br/><br/>
-                </div>
-                <div className={"chattingbox"}>
-                    <table className={"chatting"}>
-                        <thead>
-                        <tr>
-                            <th>Messages</th>
-                        </tr>
-                        </thead>
-                        <tbody id={"message"}>
-                        {this.state.greetings.map((greeting, index) => (
-                            <tr key={index}>
-                                <td  id={"message-detail"}>
-                                    {greeting.type === "GREETING" ? (
-                                        greeting.message
-                                    ) : (
-                                        <span>
-                                            {greeting.member ? greeting.member.nickname : 'Unknown'}: {greeting.message} [{this.formatDatetime(greeting.createdAt)}]
-                                        </span>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                        <tr>
-                            <td ref={this.messageEndRef}></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div className={"input_chat"}>
-                    <label>채팅 보내기</label>
-                    <input
-                        type="text"
-                        value={this.state.message}
-                        onChange={(e) => this.setState({ message: e.target.value })}
-                        onKeyDown={this.onKeyDown}
-                        placeholder="내용을 입력하세요"
-                    />
-                    <button onClick={this.sendMessage}>Send</button>
-                </div>
+    return (
+        <div className={"chat_wrap"}>
+            <div className={"studyTitle"}>
+                <h2>{studyTitle}</h2><br /><br />
             </div>
-        );
-    }
-}
+            <div className={"chattingbox"}>
+                <table className={"chatting"}>
+                    <thead>
+                    <tr>
+                        <th>Messages</th>
+                    </tr>
+                    </thead>
+                    <tbody id={"message"}>
+                    {greetings.map((greeting, index) => (
+                        <tr key={index}>
+                            <td id={"message-detail"}>
+                                {greeting.type === 'GREETING' ? (
+                                    greeting.message
+                                ) : (
+                                    <span>
+                                            {greeting.member ? greeting.member.nickname : 'Unknown'}: {greeting.message} [
+                                        {formatDatetime(greeting.createdAt)}]
+                                        </span>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                    <tr>
+                        <td ref={messageEndRef}></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div className={"input_chat"}>
+                <label>채팅 보내기</label>
+                <input
+                    type="text"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={onKeyDown}
+                    placeholder="내용을 입력하세요"
+                />
+                <button onClick={sendMessage}>Send</button>
+            </div>
+        </div>
+    );
+};
 
 export default Chat;
