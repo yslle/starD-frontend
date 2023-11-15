@@ -91,7 +91,6 @@ const Notice = () => {
                                     <th>날짜</th>
                                     <th>조회수</th>
                                     <th>공감수</th>
-                                    <th>스크랩수</th>
                                     {posts.map((d, index) => (
                                         <NoticeListItem setPosts={setPosts} posts={d} d={d}
                                                       index={index} key={d.id}/>

@@ -334,8 +334,6 @@ const NoticeDetail = () => {
                                     <div className="right">
                                     <span className="like_btn"><LikeButton like={likeStates}
                                                                            onClick={() => toggleLike()} /></span>
-                                        <span className="scrap_btn"><ScrapButton scrap={scrapStates}
-                                                                                 onClick={() => toggleScrap()} /></span>
                                         <span>조회 <span>{postItem.viewCount}</span></span>
                                     </div>
                                 </div>
