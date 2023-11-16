@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 
 import "../../css/community_css/Community.css";
+import "../../css/notice_css/Notice.css";
 import SearchBar from "../../components/notice/NoticeSearchBar";
 import NoticeListItem from "../../components/notice/NoticeListItem";
 import axios from "axios";
@@ -54,7 +55,7 @@ const Notice = () => {
     }, [accessToken]);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/notice/all")
+        axios.get("http://localhost:8080/notice")
             .then((res) => {
                 setPosts(res.data);
             })
@@ -67,7 +68,7 @@ const Notice = () => {
         <div className={"main_wrap"} id={"community"}>
             <Header showSideCenter={true}/>
             <div className="community_container">
-                <p id={"entry-path"}> 공지사항 </p>
+                <p id={"entry-path"}> 홈 > 공지사항 </p>
                 <Backarrow subname={"NOTICE LIST"}/>
                 {showPostInsert && (
                     <NoticeInsert />
@@ -85,7 +86,7 @@ const Notice = () => {
                         </div>
                         <div className="community">
                             <div>
-                                <table className="post_table" key={posts.id}>
+                                <table className="notice_table" key={posts.id}>
                                     <th>제목</th>
                                     <th>닉네임</th>
                                     <th>날짜</th>

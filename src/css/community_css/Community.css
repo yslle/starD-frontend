@@ -9,6 +9,7 @@ input{
     justify-content: center;
     position: relative;
     font-family: 'Pretendard-Regular';
+    margin-top: 25px;
 }
 .community_container h1 {
     font-size: 27px;
@@ -39,16 +40,16 @@ input{
     font-size:15px;
 }
 .post_table{
-    width: 100%;
+    width: 90%;
     border-top:1px solid #d9d9d9;
     border-bottom:1px solid #d9d9d9;
-    margin-bottom: 30px;
+    margin: 0 auto 30px;
     border-collapse: collapse;
     font-size:13px;
 }
 .post_table th,
 .post_table td{
-    padding:10px 0;
+    padding:10px 10px;
 }
 .post_table tr{
     text-align: center;

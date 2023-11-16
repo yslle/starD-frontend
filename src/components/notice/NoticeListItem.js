@@ -1,4 +1,5 @@
 import {Link} from "react-router-dom";
+import "../../css/notice_css/Notice.css";
 
 const NoticeListItem = ({posts, setPosts}) => {
     const formatDatetime = (datetime) => {
@@ -19,7 +20,7 @@ const NoticeListItem = ({posts, setPosts}) => {
                       textDecoration: "none",
                       color: "inherit",
                   }}>
-                <td className="community_title">{posts.title}</td>
+                <td className="notice_title">{posts.title}</td>
             </Link>
             <td className="community_nickname">관리자</td>
             <td className="community_datetime">{formatDatetime(posts.createdAt)}</td>
