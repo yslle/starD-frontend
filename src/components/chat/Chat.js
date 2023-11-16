@@ -1,7 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Client } from '@stomp/stompjs';
+import React, {useState, useEffect, useRef} from 'react';
+import {Client} from '@stomp/stompjs';
 import chatting from "../../css/study_css/chatting.css";
 import axios from 'axios';
+/* 마지막 수정 : 민영
+클래스형에서 함수형컴포넌트로 변경
+채팅 UI 개선
+* */
 
 const Chat = (props) => {
     const [connected, setConnected] = useState(false);
@@ -9,8 +13,8 @@ const Chat = (props) => {
     const [greetings, setGreetings] = useState([]);
     const [studyId, setStudyId] = useState(props.studyId);
     const [studyTitle, setStudyTitle] = useState(props.studyTitle);
-    const [pendingEnter, setPendingEnter] = useState(false);
-
+    const [pendingEnter, setPendingEnter] = useState(false); //
+    const LogNicname = localStorage.getItem("isLoggedInUserId");
 
     const stompClient = useRef(
         new Client({
@@ -22,7 +26,6 @@ const Chat = (props) => {
 
     useEffect(() => {
         const connect = async () => {
-            console.log('Connecting to WebSocket...');
             const accessToken = localStorage.getItem('accessToken');
             if (accessToken) {
 
@@ -31,13 +34,11 @@ const Chat = (props) => {
                 };
 
                 try {
-                    await stompClient.current.activate({ headers });
-                    console.log('After activation:', stompClient);
+                    await stompClient.current.activate({headers});
                     setConnected(true);
                     stompClient.current.onConnect = onConnect;
                     subscribeToChatRoom(studyId);
                     fetchChatHistory();
-                    console.error('Clear to connect:');
                 } catch (error) {
                     console.error('Failed to connect:', error);
                 }
@@ -67,7 +68,6 @@ const Chat = (props) => {
     const subscribeToChatRoom = (studyId) => {
         if (stompClient.current.connected) {
             stompClient.current.subscribe(`/topic/greetings/${studyId}`, (greeting) => {
-                console.log("인사메세지",JSON.parse(greeting.body));
                 showGreeting(JSON.parse(greeting.body));
             });
         }
@@ -86,11 +86,8 @@ const Chat = (props) => {
                 });
 
                 setGreetings(response.data);
-                console.log("####: ", response.data);
 
                 if (stompClient.current.connected) {
-                    console.log("stompClient  connected",);
-                    console.log("ooo");
                     sendEnterMessage();
                 } else {
                     setPendingEnter(true);
@@ -103,12 +100,10 @@ const Chat = (props) => {
     };
     const onConnect = (isActive) => {
         setConnected(isActive);
-        console.log('Connected');
         if (isActive) {
-            subscribeToChatRoom(studyId );
+            subscribeToChatRoom(studyId);
             fetchChatHistory();
 
-            // Check and send the enter message if it was pending
             if (pendingEnter) {
                 sendEnterMessage();
                 setPendingEnter(false);
@@ -134,7 +129,7 @@ const Chat = (props) => {
             };
             stompClient.current.publish({
                 destination: `/app/exit/${studyId}`,
-                body: JSON.stringify({ type: 'GREETING', studyId: studyId }),
+                body: JSON.stringify({type: 'GREETING', studyId: studyId}),
                 headers: headers,
             });
         } else {
@@ -157,7 +152,7 @@ const Chat = (props) => {
             };
             stompClient.current.publish({
                 destination: `/app/enter/${studyId}`,
-                body: JSON.stringify({ type: 'GREETING', studyId: studyId }),
+                body: JSON.stringify({type: 'GREETING', studyId: studyId}),
                 headers: headers,
             });
         } else {
@@ -176,7 +171,7 @@ const Chat = (props) => {
             } else {
                 stompClient.current.publish({
                     destination: `/app/chat/${studyId}`,
-                    body: JSON.stringify({ type: 'TALK', studyId: studyId, message: `${message}` }),
+                    body: JSON.stringify({type: 'TALK', studyId: studyId, message: `${message}`}),
                     headers: headers,
                 });
                 scrollChatToBottom();
@@ -211,11 +206,11 @@ const Chat = (props) => {
     return (
         <div className={"chat_wrap"}>
             <div className={"studyTitle"}>
-                <h2>{studyTitle}</h2><br /><br />
+                <h2>{studyTitle}</h2><br/><br/>
             </div>
             <div className={"chattingbox"}>
                 <table className={"chatting"}>
-                    <thead>
+                    <thead id={"message-thead"}>
                     <tr>
                         <th>Messages</th>
                     </tr>
@@ -223,16 +218,29 @@ const Chat = (props) => {
                     <tbody id={"message"}>
                     {greetings.map((greeting, index) => (
                         <tr key={index}>
-                            <td id={"message-detail"}>
-                                {greeting.type === 'GREETING' ? (
-                                    greeting.message
+
+                            {greeting.type === 'GREETING' ? (
+                                <td className={"message-detail"} id={"greet"}>
+                                    <span>{greeting.message}</span>
+                                </td>
+                            ) : (
+                                greeting.member.nickname === LogNicname ? (
+                                    <td className={"message-detail"} id={"my-chats"}>
+                                                <span>
+                                             {greeting.member ? greeting.member.nickname : 'Unknown'}: {greeting.message}
+                                                    <br/><p id={"entry-time"}>[{formatDatetime(greeting.createdAt)}]</p>
+                                                        </span>
+                                    </td>
                                 ) : (
-                                    <span>
+                                    <td className={"message-detail"} id={"other-chats"}>
+                                                <span>
                                             {greeting.member ? greeting.member.nickname : 'Unknown'}: {greeting.message} [
-                                        {formatDatetime(greeting.createdAt)}]
-                                        </span>
-                                )}
-                            </td>
+                                                    <br/><p id={"entry-time"}>   {formatDatetime(greeting.createdAt)}]</p>
+                                                       </span>
+                                    </td>
+                                )
+                            )}
+
                         </tr>
                     ))}
                     <tr>
