@@ -31,6 +31,7 @@ const Mypage = ({sideheader}) => {
     const [parsedmeetings, setParsedMeetings] = useState([]);
     const [meetings, setMeetings] = useState({});
     const [todayKey, setTodayKey] = useState("");
+    const [credibility, setCredibility] = useState("");
     const navigate = useNavigate();
     const accessToken = localStorage.getItem('accessToken');
 
@@ -145,6 +146,20 @@ const Mypage = ({sideheader}) => {
         });
     }, []);
 
+    useEffect(() => {
+        axios.get("http://localhost:8080/user/mypage/credibility", {
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json'
+            }
+        }).then((response) => {
+            console.log("개인 신뢰도 가져오기 성공", response.data);
+            setCredibility(response.data);
+        }).catch((error) => {
+            console.error("전송 실패", error.response.data); // Log the response data
+        });
+    }, []);
+
 
     const [filteredToDo, setFilteredToDo] = useState([]);
     useEffect(() => {
@@ -191,7 +206,7 @@ const Mypage = ({sideheader}) => {
                                 <p>개인 신뢰도</p>
                                 {/*<button id="more">전체보기</button>*/}
                             </div>
-                            <div id="detail">당신의 신뢰도는 36℃입니다.</div>
+                            <div id="detail">당신의 신뢰도는 {credibility}입니다.</div>
                         </div>
 
                         <div className="schedule">
