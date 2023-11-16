@@ -22,11 +22,10 @@ const NoticeListItem = ({posts, setPosts}) => {
                   }}>
                 <td className="community_title">{posts.title}</td>
             </Link>
-            <td className="community_nickname">{posts.member.nickname}</td>
+            <td className="community_nickname">관리자</td>
             <td className="community_datetime">{formatDatetime(posts.createdAt)}</td>
             <td>{posts.viewCount}</td>
             <td>{posts.starCount}</td>
-            <td>{posts.scrapCount}</td>
         </tr>
     )
 }
