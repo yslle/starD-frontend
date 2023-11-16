@@ -49,6 +49,7 @@ const Notice = () => {
             })
             .catch((error) => {
                 console.error("권한 조회 실패:", error);
+                setUserIsAdmin(false);
             });
     }, [accessToken]);
 
@@ -85,7 +86,6 @@ const Notice = () => {
                         <div className="community">
                             <div>
                                 <table className="post_table" key={posts.id}>
-                                    <th>카테고리</th>
                                     <th>제목</th>
                                     <th>닉네임</th>
                                     <th>날짜</th>

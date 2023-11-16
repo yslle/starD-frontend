@@ -3,13 +3,6 @@ import React, {useState} from "react";
 const NoticeEdit = ({post, onUpdatePost, onCancel}) => {
     const [updatedPost, setUpdatedPost] = useState(post);
 
-    const [selectedCategory, setSelectedCategory] = useState(post.category);
-
-    const tagoptions = [
-        { value: "공지", name: "공지" },
-        { value: "FAQ", name: "FAQ" },
-    ];
-
     const handleInputChange = (e) => {
         const {name, value} = e.target;
         setUpdatedPost((prevPost) => ({
@@ -31,10 +24,8 @@ const NoticeEdit = ({post, onUpdatePost, onCancel}) => {
             <div>
                 <span>카테고리</span>
                 <span className="field_wrapper">
-                    <select name="category" value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)}>
-                        {tagoptions.map((interest, idx) =>
-                            <option key={idx} value={interest.value}>{interest.name}</option>
-                        )}
+                    <select name="category" onChange={handleInputChange} disabled>
+                        <option value="default">공지</option>
                     </select>
                 </span>
             </div>

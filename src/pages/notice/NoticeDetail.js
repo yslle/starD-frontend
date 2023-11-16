@@ -24,37 +24,12 @@ const NoticeDetail = () => {
 
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
-    const [url, setUrl] = useState(null);
-    const [initiallyUrlStates, setInitiallyUrlStates] = useState(false);
-    const [type, setType] = useState(null);
+    let type = "NOTICE";
 
-    const [isWriter, setIsWriter] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        // 타입 조회
-        axios.get(`http://localhost:8080/notice/find-type/${id}`, {
-            params: { id: id }
-        })
-            .then((res) => {
-                setType(res.data.type);
-
-                if (res.data.type === "NOTICE") {
-                    setUrl(`http://localhost:8080/notice/${id}`);
-                }
-                else if (res.data.type === "FAQ") {
-                    setUrl(`http://localhost:8080/faq/${id}`);
-                }
-
-                setInitiallyUrlStates(true);
-            })
-            .catch((error) => {
-                console.error("id로 타입 조회 실패:", error);
-            });
-    }, [id]);
-
-    useEffect(() => {
-        if (accessToken && isLoggedInUserId && initiallyUrlStates) {
-            console.log("TYPE: ", type);
+        if (accessToken && isLoggedInUserId) {
             axios.get(`http://localhost:8080/star/notice/${id}`, {
                 params: { type : type },
                 withCredentials: true,
@@ -71,9 +46,9 @@ const NoticeDetail = () => {
                 });
 
         } else {
-            setInitiallyLikeStates(false);
+            setInitiallyLikeStates(true);
         }
-    }, [id ,initiallyUrlStates]);
+    }, [id]);
 
     useEffect(() => {
         const config = {
@@ -84,19 +59,20 @@ const NoticeDetail = () => {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
 
-        if (initiallyUrlStates) {
-            axios.get(url, config)
+        if (initiallyLikeStates) {
+            axios.get(`http://localhost:8080/notice/${id}`, config)
                 .then((res) => {
+                    console.log("***", res.data);
                     setPostItem(res.data);
-                    if (res.data.member.id === isLoggedInUserId) { // 자신의 글인지
-                        setIsWriter(true);
+                    if (res.data.member.roles === "ADMIN") { // 자신의 글인지
+                        setIsAdmin(true);
                     }
                 })
                 .catch((error) => {
                     console.error("게시글 세부 데이터 가져오기 실패:", error);
                 });
         }
-    }, [id, accessToken, isLoggedInUserId, initiallyUrlStates]);
+    }, [id, accessToken, isLoggedInUserId, initiallyLikeStates]);
 
     const toggleLike = () => {
         if (!(accessToken && isLoggedInUserId)) {
@@ -150,10 +126,7 @@ const NoticeDetail = () => {
     }
 
     const handlePostUpdate = (updatedPost) => {
-        setEditing(false);
-
-        console.log("수정 예정 : " + updatedPost.id + ", " + updatedPost.title + ", " + updatedPost.content
-            + ", " + updatedPost.category);
+        console.log("수정 예정 : " + updatedPost.id + ", " + updatedPost.title + ", " + updatedPost.content);
 
         const config = {
             headers: {}
@@ -163,10 +136,9 @@ const NoticeDetail = () => {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
 
-        axios.post(url, {
+        axios.post(`http://localhost:8080/notice/${id}`, {
             title: updatedPost.title,
             content: updatedPost.content,
-            category: updatedPost.category
         }, {
             params: { id: updatedPost.id },
             withCredentials: true,
@@ -178,11 +150,7 @@ const NoticeDetail = () => {
                 console.log("공지글 수정 성공");
                 alert("게시글이 수정되었습니다.");
 
-                setPostDetail(response.data);
-                const updatedPosts = posts.map(post =>
-                    post.id === updatedPost.id ? updatedPost : post
-                );
-                setPosts(updatedPosts);
+                setEditing(false);
             })
             .catch(error => {
                 console.error("Error:", error);
@@ -196,7 +164,7 @@ const NoticeDetail = () => {
         const confirmDelete = window.confirm("정말로 게시글을 삭제하시겠습니까?");
         if (confirmDelete) {
 
-            axios.delete(url, {
+            axios.delete(`http://localhost:8080/notice/${id}`, {
                 params: { id: id },
                 withCredentials: true,
                 headers: {
@@ -245,15 +213,11 @@ const NoticeDetail = () => {
                     <div className="community_detail">
                         {postItem && (
                             <div className="post_header">
-                                <div className="post_category">
-                                    <span>카테고리 > </span>
-                                    <span>{postItem.category}</span>
-                                </div>
                                 <div style={{display:"flex", justifyContent:"space-between"}}>
                                     <div className="post_title">
                                         {postItem.title}
                                     </div>
-                                    {isWriter && (
+                                    {isAdmin && (
                                         <div className="button">
                                             <button style={{marginRight:"5px"}} onClick={handleEditClick}>수정</button>
                                             <button onClick={handlePostDelete}>삭제</button>
@@ -264,10 +228,17 @@ const NoticeDetail = () => {
                                     <div className="left">
                                         <span className="post_nickname">관리자</span>
                                         <span className="post_created_date">{formatDatetime(postItem.createdAt)}</span>
+                                        {postItem.createdAt !== postItem.updatedAt && (
+                                            <>
+                                                <span>&nbsp;&nbsp;&nbsp;</span>
+                                                <span>( 수정: {formatDatetime(postItem.updatedAt)} )</span>
+                                            </>
+                                        )}
                                     </div>
                                     <div className="right">
-                                    <span className="like_btn"><LikeButton like={likeStates}
-                                                                           onClick={() => toggleLike()} /></span>
+                                        {!isAdmin && (
+                                            <span className="like_btn"><LikeButton like={likeStates} onClick={() => toggleLike()} /></span>
+                                        )}
                                         <span>조회 <span>{postItem.viewCount}</span></span>
                                     </div>
                                 </div>

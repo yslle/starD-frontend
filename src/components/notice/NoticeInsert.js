@@ -8,15 +8,9 @@ const NoticeInsert = () => {
     const [posts, setPosts] = useState([]);
     const [formData, setFormData] = useState({
         title:"",
-        category:"",
         content:"",
         created_date:new Date(),
     })
-
-    const tagoptions = [
-        { value: "공지", name: "공지" },
-        { value: "FAQ", name: "FAQ" },
-    ];
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -34,11 +28,8 @@ const NoticeInsert = () => {
             created_date
         } = post;
 
-        const selectedCategory = document.querySelector('select[name="category"]').value;
-
         const newData = {
             title,
-            category: selectedCategory,
             content,
             created_date,
             id: dataId,
@@ -69,22 +60,12 @@ const NoticeInsert = () => {
             return;
         }
         setFormData(onInsertPost(formData));
-
-        let url;
-        if (formData.category === "공지") {
-
-            url = "http://localhost:8080/notice"
-        }
-        else if (formData.category === "FAQ") {
-            url = "http://localhost:8080/faq"
-        }
-
+        
         const accessToken = localStorage.getItem('accessToken');
 
-        const response = axios.post(url,
+        const response = axios.post("http://localhost:8080/notice",
             {
                 title:formData.title,
-                category:formData.category,
                 content:formData.content,
             },
             {
@@ -114,10 +95,8 @@ const NoticeInsert = () => {
             <div>
                 <span>카테고리</span>
                 <span className="field_wrapper">
-                    <select name="category" value={formData.category} onChange={handleInputChange}>
-                        {tagoptions.map((interest, idx) =>
-                            <option key={idx} value={interest.value}>{interest.name}</option>
-                        )}
+                    <select name="category" onChange={handleInputChange} disabled>
+                        <option value="default">공지</option>
                     </select>
                 </span>
             </div>

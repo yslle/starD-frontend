@@ -14,7 +14,6 @@ const NoticeListItem = ({posts, setPosts}) => {
 
     return (
         <tr className="post_list">
-            <td className="community_category">{posts.category}</td>
             <Link to={`/noticedetail/${posts.id}`}
                   style={{
                       textDecoration: "none",
