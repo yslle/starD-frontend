@@ -4,24 +4,33 @@ import {Link, useNavigate} from "react-router-dom";
 
 import "../../css/community_css/Community.css";
 import "../../css/notice_css/Notice.css";
-import SearchBar from "../../components/notice/NoticeSearchBar";
-import NoticeListItem from "../../components/notice/NoticeListItem";
+import SearchBar from "../../components/qna/QnaSearchBar";
+import QnaListItem from "../../components/qna/QnaListItem";
 import axios from "axios";
 import Backarrow from "../../components/repeat_etc/Backarrow";
-import NoticeInsert from "../../components/notice/NoticeInsert";
+import QnaInsert from "../../components/qna/QnaInsert";
 
-const Notice = () => {
+const Qna = () => {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
-    const [showPostInsert, setShowPostInsert] = useState(false);
+    const [showQnaInsert, setShowQnaInsert] = useState(false);
+    const [showFaqInsert, setShowFaqInsert] = useState(false);
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
     const [userIsAdmin, setUserIsAdmin] = useState([false]);
+    const [postType, setPostType] = useState(null);
 
-    const handleMoveToStudyInsert = (e) => {
+    const handleMoveToStudyInsert = (e, type) => {
         if (accessToken && isLoggedInUserId) {
             e.preventDefault();
-            setShowPostInsert(!showPostInsert);
+
+            if (userIsAdmin) {
+                setPostType(type);
+                setShowFaqInsert(!showFaqInsert);
+            } else {
+                setPostType(type);
+                setShowQnaInsert(!showQnaInsert);
+            }
         } else {
             alert("로그인 해주세요");
             navigate("/login");
@@ -55,7 +64,7 @@ const Notice = () => {
     }, [accessToken]);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/notice")
+        axios.get("http://localhost:8080/qna/all")
             .then((res) => {
                 setPosts(res.data);
             })
@@ -68,33 +77,42 @@ const Notice = () => {
         <div className={"main_wrap"} id={"community"}>
             <Header showSideCenter={true}/>
             <div className="community_container">
-                <p id={"entry-path"}> 홈 > 공지사항 </p>
-                <Backarrow subname={"NOTICE LIST"}/>
-                {showPostInsert && (
-                    <NoticeInsert />
+                <p id={"entry-path"}> 홈 > QNA </p>
+                <Backarrow subname={"QNA LIST"}/>
+                {showFaqInsert && (
+                    <QnaInsert postType={postType} />
                 )}
-                {!showPostInsert && (
+                {showQnaInsert && (
+                    <QnaInsert postType={postType}/>
+                )}
+                {(!showFaqInsert && !showQnaInsert) && (
                     <div>
                         <div className="community_header">
                             <SearchBar/>
+                            <button onClick={(e) => handleMoveToStudyInsert(e, "QNA")} className="new_post_btn">
+                                QNA 작성
+                            </button>
                             {userIsAdmin ? (
-                                <button onClick={handleMoveToStudyInsert} className="new_post_btn">
-                                    새 글 작성
-                                </button>
+                                <>
+                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    <button onClick={(e) => handleMoveToStudyInsert(e, "FAQ")} className="new_post_btn">
+                                        FAQ 작성
+                                    </button>
+                                </>
                             ) : null}
-
                         </div>
                         <div className="community">
                             <div>
-                                <table className="notice_table" key={posts.id}>
+                                <table className="post_table" key={posts.id}>
+                                    <th>카테고리</th>
                                     <th>제목</th>
                                     <th>닉네임</th>
                                     <th>날짜</th>
                                     <th>조회수</th>
                                     <th>공감수</th>
                                     {posts.map((d, index) => (
-                                        <NoticeListItem setPosts={setPosts} posts={d} d={d}
-                                                      index={index} key={d.id}/>
+                                        <QnaListItem setPosts={setPosts} posts={d} d={d}
+                                                        index={index} key={d.id}/>
                                     ))}
                                 </table>
                             </div>
@@ -105,4 +123,4 @@ const Notice = () => {
         </div>
     );
 }
-export default Notice;
+export default Qna;

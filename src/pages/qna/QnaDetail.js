@@ -5,9 +5,11 @@ import React, {useState, useEffect} from "react";
 import LikeButton from "../../components/repeat_etc/LikeButton";
 import ScrapButton from "../../components/repeat_etc/ScrapButton";
 import axios from "axios";
-import NoticeEdit from "../../components/notice/NoticeEdit";
+import QnaEdit from "../../components/qna/QnaEdit";
+import Comment from "../../components/comment/Comment";
+import Report from "../../components/report/Report";
 
-const NoticeDetail = () => {
+const QnaDetail = () => {
     const navigate = useNavigate();
 
     const {id} = useParams();
@@ -24,30 +26,33 @@ const NoticeDetail = () => {
 
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
-    let type = "NOTICE";
+    const [url, setUrl] = useState(null);
+    const [initiallyUrlStates, setInitiallyUrlStates] = useState(false);
+    const [type, setType] = useState(null);
 
+    const [isWriter, setIsWriter] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        if (accessToken && isLoggedInUserId) {
-            axios.get(`http://localhost:8080/star/notice/${id}`, {
-                params: { type : type },
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
-                .then(response => {
-                    setLikeStates(response.data);
-                    setInitiallyLikeStates(true);
-                })
-                .catch(error => {
-                    console.log("공감 불러오기 실패", error);
-                });
+        // 타입 조회
+        axios.get(`http://localhost:8080/notice/find-type/${id}`, {
+            params: { id: id }
+        })
+            .then((res) => {
+                setType(res.data.type);
 
-        } else {
-            setInitiallyLikeStates(true);
-        }
+                if (res.data.type === "FAQ") {
+                    setUrl(`http://localhost:8080/faq/${id}`);
+                }
+                else if (res.data.type === "QNA") {
+                    setUrl(`http://localhost:8080/qna/${id}`);
+                }
+
+                setInitiallyUrlStates(true);
+            })
+            .catch((error) => {
+                console.error("id로 타입 조회 실패:", error);
+            });
     }, [id]);
 
     useEffect(() => {
@@ -75,6 +80,29 @@ const NoticeDetail = () => {
     }, [accessToken]);
 
     useEffect(() => {
+        if (accessToken && isLoggedInUserId && initiallyUrlStates) {
+            console.log("TYPE: ", type);
+            axios.get(`http://localhost:8080/star/notice/${id}`, {
+                params: { type : type },
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    setLikeStates(response.data);
+                    setInitiallyLikeStates(true);
+                })
+                .catch(error => {
+                    console.log("공감 불러오기 실패", error);
+                });
+
+        } else {
+            setInitiallyLikeStates(true);
+        }
+    }, [id ,initiallyUrlStates]);
+
+    useEffect(() => {
         const config = {
             headers: {}
         };
@@ -83,16 +111,19 @@ const NoticeDetail = () => {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
 
-        if (initiallyLikeStates) {
-            axios.get(`http://localhost:8080/notice/${id}`, config)
+        if (initiallyUrlStates) {
+            axios.get(url, config)
                 .then((res) => {
                     setPostItem(res.data);
+                    if (res.data.member.id === isLoggedInUserId) { // 자신의 글인지
+                        setIsWriter(true);
+                    }
                 })
                 .catch((error) => {
-                    console.error("게시글 세부 데이터 가져오기 실패:", error);
+                    console.error("qna 세부 데이터 가져오기 실패:", error);
                 });
         }
-    }, [id, accessToken, isLoggedInUserId, initiallyLikeStates]);
+    }, [id, accessToken, isLoggedInUserId, initiallyUrlStates]);
 
     const toggleLike = () => {
         if (!(accessToken && isLoggedInUserId)) {
@@ -146,7 +177,8 @@ const NoticeDetail = () => {
     }
 
     const handlePostUpdate = (updatedPost) => {
-        console.log("수정 예정 : " + updatedPost.id + ", " + updatedPost.title + ", " + updatedPost.content);
+        console.log("수정 예정 : " + updatedPost.id + ", " + updatedPost.title + ", " + updatedPost.content
+            + ", " + updatedPost.type);
 
         const config = {
             headers: {}
@@ -156,7 +188,7 @@ const NoticeDetail = () => {
             config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
 
-        axios.post(`http://localhost:8080/notice/${id}`, {
+        axios.post(url, {
             title: updatedPost.title,
             content: updatedPost.content,
         }, {
@@ -167,9 +199,7 @@ const NoticeDetail = () => {
             }
         })
             .then(response => {
-                console.log("공지글 수정 성공");
-                alert("게시글이 수정되었습니다.");
-
+                console.log("qna 수정 성공");
                 const confirmEdit = window.alert("게시글이 수정되었습니다.");
 
                 if (confirmEdit) {
@@ -178,7 +208,7 @@ const NoticeDetail = () => {
             })
             .catch(error => {
                 console.error("Error:", error);
-                console.log("공지글 수정 실패");
+                console.log("qna 수정 실패");
                 alert("수정에 실패했습니다.");
             });
 
@@ -188,7 +218,7 @@ const NoticeDetail = () => {
         const confirmDelete = window.confirm("정말로 게시글을 삭제하시겠습니까?");
         if (confirmDelete) {
 
-            axios.delete(`http://localhost:8080/notice/${id}`, {
+            axios.delete(url, {
                 params: { id: id },
                 withCredentials: true,
                 headers: {
@@ -196,15 +226,15 @@ const NoticeDetail = () => {
                 }
             })
                 .then(response => {
-                    console.log("공지글 삭제 성공 ");
+                    console.log("qna 삭제 성공 ");
                     alert("게시글이 삭제되었습니다.");
                     const updatedPosts = posts.filter(post => post.id !== postDetail[0].id);
                     setPosts(updatedPosts);
-                    navigate("/notice");
+                    navigate("/qna");
                 })
                 .catch(error => {
                     console.error("Error:", error);
-                    console.log("공지글 삭제 실패");
+                    console.log("qna 삭제 실패");
 
                     alert("삭제에 실패했습니다.");
                 });
@@ -226,9 +256,9 @@ const NoticeDetail = () => {
         <div>
             <Header showSideCenter={true}/>
             <div className="community_container">
-                <Backarrow subname={"NOTICE LIST"}/>
+                <Backarrow subname={"QNA LIST"}/>
                 {editing ? (
-                    <NoticeEdit
+                    <QnaEdit
                         post={postItem}
                         onUpdatePost={handlePostUpdate}
                         onCancel={handleCancelEdit}
@@ -237,20 +267,33 @@ const NoticeDetail = () => {
                     <div className="community_detail">
                         {postItem && (
                             <div className="post_header">
+                                <div className="post_category">
+                                    <span>카테고리 > </span>
+                                    <span>{postItem.type}</span>
+                                </div>
                                 <div style={{display:"flex", justifyContent:"space-between"}}>
                                     <div className="post_title">
                                         {postItem.title}
                                     </div>
-                                    {isAdmin && (
+                                    {(isWriter || (isWriter && isAdmin)) && (
                                         <div className="button">
                                             <button style={{marginRight:"5px"}} onClick={handleEditClick}>수정</button>
+                                            <button onClick={handlePostDelete}>삭제</button>
+                                        </div>
+                                    )}
+                                    {(isAdmin && !isWriter) && (
+                                        <div className="button">
                                             <button onClick={handlePostDelete}>삭제</button>
                                         </div>
                                     )}
                                 </div>
                                 <div className="post_info">
                                     <div className="left">
-                                        <span className="post_nickname">관리자</span>
+                                        {postItem.type === "FAQ" ? (
+                                            <td className="community_nickname">관리자</td>
+                                        ) : (
+                                            <td className="community_nickname">{postItem.member.nickname}</td>
+                                        )}
                                         <span className="post_created_date">{formatDatetime(postItem.createdAt)}</span>
                                         {postItem.createdAt !== postItem.updatedAt && (
                                             <>
@@ -260,10 +303,8 @@ const NoticeDetail = () => {
                                         )}
                                     </div>
                                     <div className="right">
-                                        {!isAdmin && (
-                                            <span className="like_btn">
-                                                <LikeButton like={likeStates} onClick={() => toggleLike()} />
-                                            </span>
+                                        {(isAdmin && type === "QNA") || !isAdmin && (
+                                            <span className="like_btn"><LikeButton like={likeStates} onClick={() => toggleLike()} /></span>
                                         )}
                                         <span>조회 <span>{postItem.viewCount}</span></span>
                                     </div>
@@ -275,7 +316,7 @@ const NoticeDetail = () => {
                         )}
 
                         <div className="btn">
-                            <Link to={"/notice"}
+                            <Link to={"/qna"}
                                   style={{
                                       textDecoration: "none",
                                       color: "inherit",
@@ -290,4 +331,4 @@ const NoticeDetail = () => {
         </div>
     )
 }
-export default NoticeDetail;
+export default QnaDetail;

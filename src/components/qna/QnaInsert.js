@@ -2,7 +2,9 @@ import React, {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
-const NoticeInsert = () => {
+const QnaInsert = ({ postType }) => {
+    console.log("type: ",postType);
+
     const navigate = useNavigate();
     const [dataId, setDataId] = useState(0);
     const [posts, setPosts] = useState([]);
@@ -23,7 +25,6 @@ const NoticeInsert = () => {
     const onInsertPost = useCallback((post) => {
         const {
             title,
-            field,
             content,
             created_date
         } = post;
@@ -60,10 +61,18 @@ const NoticeInsert = () => {
             return;
         }
         setFormData(onInsertPost(formData));
-        
+
+        let url;
+        if (postType === "FAQ") {
+            url = "http://localhost:8080/faq"
+        }
+        else if (postType === "QNA") {
+            url = "http://localhost:8080/qna"
+        }
+
         const accessToken = localStorage.getItem('accessToken');
 
-        const response = axios.post("http://localhost:8080/notice",
+        const response = axios.post(url,
             {
                 title:formData.title,
                 content:formData.content,
@@ -78,7 +87,7 @@ const NoticeInsert = () => {
                 console.log(res.data);
                 const id = res.data.id;
                 alert("게시글이 등록되었습니다.");
-                window.location.href = `/noticedetail/${id}`;
+                window.location.href = `/qnadetail/${id}`;
             }).catch((error) => {
                 console.log('전송 실패', error);
                 alert("게시글 등록 실패");
@@ -96,7 +105,10 @@ const NoticeInsert = () => {
                 <span>카테고리</span>
                 <span className="field_wrapper">
                     <select name="category" onChange={handleInputChange} disabled>
-                        <option value="default">공지</option>
+                        {postType === 'FAQ' ? (
+                            <option value="qna">FAQ</option>
+                        ) : <option value="faq">QNA</option>
+                        }
                     </select>
                 </span>
             </div>
@@ -110,4 +122,4 @@ const NoticeInsert = () => {
         </form>
     )
 }
-export default NoticeInsert;
+export default QnaInsert;

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-const NoticeEdit = ({post, onUpdatePost, onCancel}) => {
+const QnaEdit = ({post, onUpdatePost, onCancel}) => {
     const [updatedPost, setUpdatedPost] = useState(post);
 
     const handleInputChange = (e) => {
@@ -25,7 +25,10 @@ const NoticeEdit = ({post, onUpdatePost, onCancel}) => {
                 <span>카테고리</span>
                 <span className="field_wrapper">
                     <select name="category" onChange={handleInputChange} disabled>
-                        <option value="default">공지</option>
+                        {post.type === 'FAQ' ? (
+                            <option value="qna">FAQ</option>
+                        ) : <option value="faq">QNA</option>
+                        }
                     </select>
                 </span>
             </div>
@@ -40,4 +43,4 @@ const NoticeEdit = ({post, onUpdatePost, onCancel}) => {
         </form>
     );
 }
-export default NoticeEdit;
+export default QnaEdit;
