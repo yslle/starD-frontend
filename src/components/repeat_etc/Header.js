@@ -173,6 +173,12 @@ const Header = ({showSideCenter}) => {
                         >
                         <li>공지사항</li>
                         </Link>
+                        <Link
+                            to={"/qna"}
+                            style={{textDecoration: "none", color: "inherit"}}
+                        >
+                        <li>QNA</li>
+                        </Link>
                     </ul>
                 </nav>
             </div>
