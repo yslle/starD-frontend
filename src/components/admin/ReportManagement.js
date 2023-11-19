@@ -3,7 +3,7 @@ import axios from "axios";
 
 const ReportManagement = () => {
     const [reports, setReports] = useState([]);
-    const [reportReason, setReportReason] = useState(null);
+    const [reportReason, setReportReason] = useState([]);
     const [showReasonModal, setShowReasonModal] = useState(false);
 
     const accessToken = localStorage.getItem('accessToken');
@@ -41,7 +41,7 @@ const ReportManagement = () => {
                     console.log(res.data);
 
                     // 신고 이유를 신고 ID를 키로 하는 객체로 설정
-                    setReportReasons(prevReasons => ({
+                    setReportReason(prevReasons => ({
                         ...prevReasons,
                         [report.id]: res.data
                     }));
