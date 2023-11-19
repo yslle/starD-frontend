@@ -89,14 +89,10 @@ html {
 	width: 110%;
 	display: flex;
 	padding-top: 10px;
-	/*padding-right: 60px;*/
 	border-radius: 15px;
 	height: 100%;
 	overflow: hidden;
 	font-family: 'Pretendard-Regular';
-	position: relative;
-	right: 50px;
-
 }
 .content_container .study_list {
 	display: flex;
