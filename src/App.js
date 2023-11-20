@@ -46,6 +46,7 @@ import MemberEvaluate from "./pages/mypage/MemberEvaluate";
 import Qna from "./pages/qna/Qna";
 import QnaDetail from "./pages/qna/QnaDetail";
 import QnaSearchResult from "./pages/qna/QnaSearchResult";
+import Admin from "./pages/admin/Admin";
 
 function App() {
     return (
@@ -240,6 +241,12 @@ function App() {
                         path="/:id/evaluate"
                         element={
                             <MemberEvaluate/>
+                        }
+                    />
+                    <Route
+                        path="/admin"
+                        element={
+                            <Admin/>
                         }
                     />
                 </Routes>

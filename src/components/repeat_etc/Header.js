@@ -179,6 +179,12 @@ const Header = ({showSideCenter}) => {
                         >
                         <li>QNA</li>
                         </Link>
+                        <Link
+                            to={"/admin"}
+                            style={{textDecoration: "none", color: "inherit"}}
+                        >
+                            <li>관리자 페이지</li>
+                        </Link>
                     </ul>
                 </nav>
             </div>
