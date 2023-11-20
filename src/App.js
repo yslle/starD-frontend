@@ -43,6 +43,10 @@ import FindPW from "./pages/userpage/FindPW";
 import NoticeDetail from "./pages/notice/NoticeDetail";
 import NoticeSearchResult from "./pages/notice/NoticeSearchResult";
 import MemberEvaluate from "./pages/mypage/MemberEvaluate";
+import Qna from "./pages/qna/Qna";
+import QnaDetail from "./pages/qna/QnaDetail";
+import QnaSearchResult from "./pages/qna/QnaSearchResult";
+import Admin from "./pages/admin/Admin";
 
 function App() {
     return (
@@ -185,6 +189,12 @@ function App() {
                         }
                     />
                     <Route
+                        path="/qna"
+                        element={
+                            <Qna/>
+                        }
+                    />
+                    <Route
                         path="/postdetail/:id"
                         element={
                             <PostDetail/>
@@ -194,6 +204,12 @@ function App() {
                         path="/noticedetail/:id"
                         element={
                             <NoticeDetail/>
+                        }
+                    />
+                    <Route
+                        path="/qnadetail/:id"
+                        element={
+                            <QnaDetail/>
                         }
                     />
                     <Route
@@ -208,6 +224,12 @@ function App() {
                             <NoticeSearchResult/>
                         }
                     />
+                    <Route
+                        path="/qna/search"
+                        element={
+                            <QnaSearchResult/>
+                        }
+                    />
                     <Route path="/comm/search" component={CommSearchResult} />
                     <Route
                         path="/chat"
@@ -219,6 +241,12 @@ function App() {
                         path="/:id/evaluate"
                         element={
                             <MemberEvaluate/>
+                        }
+                    />
+                    <Route
+                        path="/admin"
+                        element={
+                            <Admin/>
                         }
                     />
                 </Routes>

@@ -1,7 +1,8 @@
 import {Link} from "react-router-dom";
+import React from "react";
 import "../../css/notice_css/Notice.css";
 
-const NoticeListItem = ({posts, setPosts}) => {
+const QnaListItem = ({posts, setPosts}) => {
     const formatDatetime = (datetime) => {
         const date = new Date(datetime);
         const year = date.getFullYear();
@@ -14,19 +15,24 @@ const NoticeListItem = ({posts, setPosts}) => {
     };
 
     return (
-        <tr className="post_list">
-            <Link to={`/noticedetail/${posts.id}`}
+        <tr className={`post_list ${posts.type === "FAQ" ? "faq_row" : ""}`}>
+            <td className="community_category">{posts.type}</td>
+            <Link to={`/qnadetail/${posts.id}`}
                   style={{
                       textDecoration: "none",
                       color: "inherit",
                   }}>
-                <td className="notice_title">{posts.title}</td>
+                <td className="community_title">{posts.title}</td>
             </Link>
-            <td className="community_nickname">관리자</td>
+            {posts.type === "FAQ" ? (
+                <td className="community_nickname">관리자</td>
+            ) : (
+                <td className="community_nickname">{posts.member.nickname}</td>
+            )}
             <td className="community_datetime">{formatDatetime(posts.createdAt)}</td>
             <td>{posts.viewCount}</td>
             <td>{posts.starCount}</td>
         </tr>
     )
 }
-export default NoticeListItem;
+export default QnaListItem;

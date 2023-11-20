@@ -8,10 +8,11 @@ import NoticeInsert from "../../components/notice/NoticeInsert";
 import NoticeListItem from "../../components/notice/NoticeListItem";
 import axios from "axios";
 
-const Notice = () => {
+const QnaSearchResult = () => {
     const location = useLocation();
     const searchQuery = new URLSearchParams(location.search).get("q");
     const selectOption = new URLSearchParams(location.search).get("select");
+    const categoryOption = new URLSearchParams(location.search).get("category");
 
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
@@ -29,11 +30,24 @@ const Notice = () => {
     };
 
     useEffect(() => {
-        let base_url = "http://localhost:8080/com/search";
-        let params = {
-            searchType: selectOption,
-            searchWord: searchQuery
-        };
+        let base_url = "";
+        let params = {};
+        if (categoryOption === "전체") {
+            base_url = "http://localhost:8080/com/search";
+            params = {
+                searchType: selectOption,
+                searchWord: searchQuery
+            };
+        }
+        else {
+            base_url = "http://localhost:8080/com/search/category";
+            params = {
+                searchType: selectOption,
+                category: categoryOption,
+                searchWord: searchQuery
+            };
+        }
+
         axios.get(base_url, { params })
             .then((res) => {
                 setPosts(res.data);
@@ -44,7 +58,16 @@ const Notice = () => {
     }, []);
 
     return (
-        <div className={"main_wrap"} id={"community"}>
+        <div>
+            <button className="select_btn">
+                전체
+            </button>
+            <button className="select_btn">
+                공지
+            </button>
+            <button className="select_btn">
+                FAQ
+            </button>
             <Header showSideCenter={true}/>
             <div className="community_container">
                 <h1>NOTICE LIST</h1>
@@ -64,6 +87,7 @@ const Notice = () => {
                                 {posts.length === 0 && <h3>검색 결과가 없습니다.</h3>}
                                 {posts.length > 0 && (
                                     <table className="post_table" key={posts.id}>
+                                        <th>카테고리</th>
                                         <th>제목</th>
                                         <th>닉네임</th>
                                         <th>날짜</th>
@@ -83,4 +107,4 @@ const Notice = () => {
         </div>
     );
 }
-export default Notice;
+export default QnaSearchResult;
