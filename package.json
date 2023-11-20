@@ -33,7 +33,8 @@
     "react-stomp": "^5.1.0",
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4",
-    "websocket": "^1.0.34"
+    "websocket": "^1.0.34",
+    "proxy": "https://openapi.naver.com"
   },
   "scripts": {
     "start": "react-scripts start",
