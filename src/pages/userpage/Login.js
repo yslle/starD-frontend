@@ -1,13 +1,13 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect, useCallback} from "react";
 import "../../css/user_css/Log.css";
 import axios from "axios";
 import {Link, useNavigate} from 'react-router-dom';
 import Header from "../../components/repeat_etc/Header";
+import MemoizedLink from "../../MemoizedLink";
 
 const Login = () => {
-
     const navigate = useNavigate();
-
+    const f = false;
     const inputID = useRef();
     const inputPW = useRef();
 
@@ -15,12 +15,12 @@ const Login = () => {
         ID: "",
         PW: "",
     });
-    const onChange = (e) => {
+    const onChange = useCallback((e) => {
         setState({
             ...state,
             [e.target.name]: e.target.value,
         });
-    };
+    },);
 
     //엔터키 눌렀을 때
     const handleKeyDown = (event) => {
@@ -67,6 +67,8 @@ const Login = () => {
                 alert("입력값을 확인해주세요.\n로그인 실패");
             });
     };
+
+
     return (
         <div>
             <Header showSideCenter={false}/>
@@ -105,26 +107,28 @@ const Login = () => {
                         <button onClick={handleSubmit}>로그인</button>
                     </div>
                     <div className="findlog">
-                        <Link to={"/login/findeID"}
-                              style={{
-                                  textDecoration: "none",
-                                  color: "blue",
-                              }}>
-                            <span id={"id"}>아이디 찾기 / </span>
-                        </Link>
-                        <Link to={"/login/findePW"}
-                              style={{
-                                  textDecoration: "none",
-                                  color: "blue",
-                              }}>
-                            <span id={"pw"}>&nbsp;비밀번호 찾기 / </span>
-                        </Link>
-                        <Link to={"/subinfo/signup"}
-                              style={{
-                                  textDecoration: "none",
-                                  color: "blue",
-                              }}>
-                            <span id={"signup"}>&nbsp;회원가입</span></Link>
+                        <MemoizedLink to={"/login/findeID"}
+                                      children={<span id={"id"}>아이디 찾기 / </span>}
+                                      style={{
+                                          textDecoration: "none",
+                                          color: "blue",
+                                      }}>
+
+                        </MemoizedLink>
+                        <MemoizedLink to={"/login/findePW"}
+                                      children={<span id={"pw"}>&nbsp;비밀번호 찾기 / </span>}
+                                      style={{
+                                          textDecoration: "none",
+                                          color: "blue",
+                                      }}>
+                        </MemoizedLink>
+                        <MemoizedLink to={"/subinfo/signup"}
+                                      children={<span id={"signup"}>&nbsp;회원가입</span>}
+                                      style={{
+                                          textDecoration: "none",
+                                          color: "blue",
+                                      }}>
+                        </MemoizedLink>
                     </div>
                 </div>
             </div>
@@ -132,4 +136,4 @@ const Login = () => {
 
     );
 };
-export default Login;
+export default React.memo(Login);
