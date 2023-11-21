@@ -16,7 +16,7 @@ const Notice = () => {
     const [showPostInsert, setShowPostInsert] = useState(false);
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
-    const [userIsAdmin, setUserIsAdmin] = useState([false]);
+    const [userIsAdmin, setUserIsAdmin] = useState(false);
 
     const handleMoveToStudyInsert = (e) => {
         if (accessToken && isLoggedInUserId) {
