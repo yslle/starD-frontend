@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import "../../css/admin_css/Admin.css";
 
 const ReportManagement = () => {
     const [reports, setReports] = useState([]);
@@ -26,34 +27,26 @@ const ReportManagement = () => {
                 console.error('신고 목록을 가져오는 중 오류 발생: ', error);
             });
     }, []);
+    
+    const openReasonModal = (report) => {
+        // TODO 신고 사유 조회
+        axios.get(`http://localhost:8080/reports/reason/${report.id}`, {
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+            .then((res) => {
+                console.log("전송 성공");
+                console.log("신고 사유: ", res.data);
 
-    //TODO 신고이유
-    useEffect(() => {
-        reports.forEach((report) => {
-            axios.get(`http://localhost:8080/reason/${report.id}`, {
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
+                setReportReason(res.data);
+                setShowReasonModal(true);
             })
-                .then((res) => {
-                    console.log("전송 성공");
-                    console.log(res.data);
+            .catch((error) => {
+                console.error('신고 이유를 가져오는 중 오류 발생: ', error);
+            });
 
-                    // 신고 이유를 신고 ID를 키로 하는 객체로 설정
-                    setReportReason(prevReasons => ({
-                        ...prevReasons,
-                        [report.id]: res.data
-                    }));
-                })
-                .catch((error) => {
-                    console.error('신고 이유를 가져오는 중 오류 발생: ', error);
-                });
-        });
-    }, [reports]);
-
-    const openReasonModal = () => {
-        setShowReasonModal(true);
         document.body.classList.add("modal-open");
     }
 
@@ -138,6 +131,21 @@ const ReportManagement = () => {
             });
     }
 
+    const getTranslatedReason = (reason) => {
+        switch (reason) {
+            case 'ABUSE':
+                return '욕설/비방';
+            case 'PROMOTION':
+                return '광고';
+            case 'ADULT':
+                return '음란물';
+            case 'SPAM':
+                return '도배성 글';
+            default:
+                return reason;
+        }
+    };
+
     return (
         <div className="admin_sub_container">
             <h2 className="admin_title">신고 관리</h2>
@@ -162,7 +170,8 @@ const ReportManagement = () => {
                             <td>{getTitleOrContent(report)}</td>
                             <td>8</td> {/* 신고 횟수 아직 못함.. */}
                             <td>
-                                <button className="reason_btn" onClick={openReasonModal}>신고 사유</button>
+                                <button className="reason_btn" onClick={() => openReasonModal(report)}>신고 사유</button>
+
                             </td>
                             <td>
                                 <button className="remove_btn" onClick={() => handleReportAccept(report)}>신고 승인(삭제)</button>
@@ -174,8 +183,10 @@ const ReportManagement = () => {
                                 <div className="modal">
                                     <div className="modal-content">
                                         <span className="close" onClick={closeReasonModal}>&times;</span>
-                                        <h4>신고 사유</h4>
-                                        <p>{reportReason}</p>
+                                        <h3>신고 사유</h3>
+                                        {reportReason.map((reason, index) => (
+                                            <p id="report-reason" key={index}>{getTranslatedReason(reason)}</p>
+                                        ))}
                                     </div>
                                 </div>
                             )}

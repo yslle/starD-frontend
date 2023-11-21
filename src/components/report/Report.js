@@ -110,7 +110,7 @@ const Report = ({ show, handleClose, onReportSubmit, targetId }) => {
                     <div className="modal-backdrop" onClick={handleClose}>
                         <div className="modal-view" onClick={(event) => event.stopPropagation()}>
                             <div className="modal-close-button" onClick={handleClose}>X</div>
-                            <div className="modal-content">
+                            <div id="modal-content">
                                 <h3>신고 사유 선택</h3>
                                 <div
                                     className={`report-reason ${selectedReason === 'ABUSE' ? 'selected' : ''}`}

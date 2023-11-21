@@ -40,7 +40,7 @@
     font-size: 17px; /* 글꼴 크기 조절 */
 }
 
-.modal-content {
+#modal-content {
     text-align: center;
     font-size: 17px;
 }
