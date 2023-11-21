@@ -39,6 +39,8 @@ import Chat from "./components/chat/Chat";
 import FindedID from "./pages/userpage/FindedID.js";
 import TeamToDoList from "./pages/TeamToDo/TeamToDoList";
 import TeamSchedule from "./pages/TeamSchedule/TeamSchedule";
+import TeamCommunity from "./pages/TeamCommunity/TeamCommunity";
+import StudyPostDetail from "./pages/TeamCommunity/StudyPostDetail";
 import FindPW from "./pages/userpage/FindPW";
 import NoticeDetail from "./pages/notice/NoticeDetail";
 import NoticeSearchResult from "./pages/notice/NoticeSearchResult";
@@ -175,6 +177,16 @@ function App() {
                     />
                     <Route path="/:id/teamblog/TeamSchedule"
                            element={<TeamSchedule/>} />
+
+                    <Route path="/:id/teamblog/TeamCommunity"
+                           element={<TeamCommunity/>} />
+
+                    <Route
+                        path="/:id/teamblog/TeamCommunity/studypostdetail/:postid"
+                        element={
+                            <StudyPostDetail/>
+                        }
+                    />
 
                     <Route
                         path="/community"
