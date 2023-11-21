@@ -125,7 +125,6 @@ const Home = () => {
         }
 
     };
-
     return (
         <div className="main_wrap">
             <Header showSideCenter={true}/>

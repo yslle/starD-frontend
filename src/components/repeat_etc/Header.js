@@ -3,7 +3,7 @@ import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import LOGO from "../../images/Logo.png"
 
-const Header = ({showSideCenter}) => {
+const Header =  ({showSideCenter}) => {
     let [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
     let accessToken = localStorage.getItem('accessToken');
@@ -237,4 +237,4 @@ const Header = ({showSideCenter}) => {
         </div>
     );
 };
-export default Header;
+export default React.memo(Header);
