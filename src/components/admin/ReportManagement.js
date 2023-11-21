@@ -10,6 +10,7 @@ const ReportManagement = () => {
     const accessToken = localStorage.getItem('accessToken');
 
     //TODO 신고목록 조회
+    // TODO 5회 이상 신고된 목록 가져오기 -> 백엔드에서 1회 이상인 것 가져오도록 잠시 변경
     useEffect(() => {
         axios.get("http://localhost:8080/reports", {
             withCredentials: true,
@@ -93,6 +94,7 @@ const ReportManagement = () => {
             return report.reply.content;
         }
     }
+
     //TODO 신고승인
     const handleReportAccept = ({report}) => {
         axios.post(`http://localhost:8080/reports/accept/${report.id}`, {
@@ -146,6 +148,40 @@ const ReportManagement = () => {
         }
     };
 
+    // 렌더링 전에 신고 수 계산
+    const reportCounts = reports.map(report => report.reportCount || 0);
+
+    // TODO 신고 수 계산
+    useEffect(() => {
+        reports.forEach((report) => {
+            if (!report.reportCount) {
+                axios.get(`http://localhost:8080/reports/report-count/${report.id}`, {
+                    withCredentials: true,
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                })
+                    .then((res) => {
+                        setReports((prevReports) => {
+                            const updatedReports = prevReports.map((prevReport) => {
+                                if (prevReport.id === report.id) {
+                                    return {
+                                        ...prevReport,
+                                        reportCount: res.data
+                                    };
+                                }
+                                return prevReport;
+                            });
+                            return updatedReports;
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('신고 수를 가져오는 중 오류 발생: ', error);
+                    });
+            }
+        });
+    }, [reports, accessToken]);
+
     return (
         <div className="admin_sub_container">
             <h2 className="admin_title">신고 관리</h2>
@@ -163,12 +199,12 @@ const ReportManagement = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {reports.map((report) => (
+                    {reports.map((report, index) => (
                         <tr key={report.id}>
                             <td>{tableType(report)}</td>
                             <td>{tableTypeID(report)}</td>
                             <td>{getTitleOrContent(report)}</td>
-                            <td>8</td> {/* 신고 횟수 아직 못함.. */}
+                            <td>{reportCounts[index]}</td> {/* 신고 횟수 아직 못함.. */}
                             <td>
                                 <button className="reason_btn" onClick={() => openReasonModal(report)}>신고 사유</button>
 
