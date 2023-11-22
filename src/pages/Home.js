@@ -19,6 +19,7 @@ import community from "../images/community.png";
 import communityfield from "../images/communityfield.png";
 import communityscrap from "../images/communityscrap.png";
 import axios from "axios";
+import MemoizedLink from "../MemoizedLink";
 
 const CenteredDiv = styled.div`
   display: flex;
@@ -29,7 +30,6 @@ const CenteredDiv = styled.div`
 `;
 
 const Home = () => {
-
     const [today, setToday] = useState(new Date());
     const [parsedTodos, setParsedTodos] = useState({});
     const [isLogin, setIsLogin] = useState(""); // Login 여부 상태관리
@@ -50,8 +50,9 @@ const Home = () => {
     const accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
     const navigate = useNavigate();
+
+
     useEffect(() => {
-        // Load todos from localStorage when the component mounts
         const isLogin = localStorage.getItem("accessToken");
         const user = localStorage.getItem("isLoggedInUserId");
         setIsLogin(isLogin);
@@ -72,7 +73,9 @@ const Home = () => {
         });
     }, []);
 
-
+    useEffect(() => {
+        console.log("렌더링")
+    });
     const getTodoItemClassName = (checked) => {
         return checked ? "checked" : "unchecked";
     };
@@ -101,6 +104,7 @@ const Home = () => {
             console.log('전체 투두리스트 가져오기 실패:', error);
         })
     }, []);
+
     const [filteredToDo, setFilteredToDo] = useState([]);
     useEffect(() => {
         if (Array.isArray(parsedTodos)) {
@@ -232,7 +236,7 @@ const Home = () => {
                                     {firstRow.map((item, index) => {
                                         return (
 
-                                            <div className={"tagname_wrap"}  data-aos="flip-left">
+                                            <div className={"tagname_wrap"} data-aos="flip-left">
                                                 <span id={"tag-grade"}>TOP {index + 1}</span>
                                                 <button id={"tagbtn"} value={item.field}
                                                         onClick={handleontag}>{item.field}</button>
@@ -280,13 +284,14 @@ const Home = () => {
                                             </div>
                                             <div id={"detail-img-btn"}>
                                                 <button onClick={handleMoveToStudyInsert}>
-                                                <Link to={"/study/studyInsert"}
-                                                      style={{
-                                                          textDecoration: "none",
-                                                          color:"inherit",
-                                                      }}>
-                                                    스터디 모집하기
-                                                </Link>
+                                                    <MemoizedLink to={"/study/studyInsert"}
+                                                                  children={"스터디 모집하기"}
+                                                                  style={{
+                                                                      textDecoration: "none",
+                                                                      color: "inherit",
+                                                                  }}>
+
+                                                    </MemoizedLink>
                                                 </button>
 
                                             </div>
@@ -333,13 +338,13 @@ const Home = () => {
                                             </div>
                                             <div id={"detail-img-btn"}>
                                                 <button onClick={handleMoveToStudyInsert}>
-                                                    <Link to={"/study/studyInsert"}
-                                                          style={{
-                                                              textDecoration: "none",
-                                                              color:"inherit",
-                                                          }}>
-                                                        스터디 모집하기
-                                                    </Link>
+                                                    <MemoizedLink to={"/study/studyInsert"}
+                                                                  children={"스터디 모집하기"}
+                                                                  style={{
+                                                                      textDecoration: "none",
+                                                                      color: "inherit",
+                                                                  }}>
+                                                    </MemoizedLink>
                                                 </button>
                                             </div>
                                         </div>
@@ -358,7 +363,8 @@ const Home = () => {
                                         <img id="community_main" src={community} width="400px" data-aos="flip-left"/>
                                         <div className={"community-field_scrap"}>
                                             <img id="c-field" src={communityfield} width="200px" data-aos="flip-left"/>
-                                            <img id="c-scrap" src={communityscrap} width="200px" height={"80px"} data-aos="flip-left"/>
+                                            <img id="c-scrap" src={communityscrap} width="200px" height={"80px"}
+                                                 data-aos="flip-left"/>
                                         </div>
                                         <span id={"c-info"}>다양한 관심사를 가진 사람들과 <br/>
                                             풍부한 소통의 장을 열수 있어요<br/></span>
@@ -396,4 +402,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default React.memo(Home);

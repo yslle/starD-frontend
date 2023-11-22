@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import LOGO from "../../images/Logo.png"
+import MemoizedLink from "../../MemoizedLink";
 
-const Header =  ({showSideCenter}) => {
+const Header = ({showSideCenter}) => {
     let [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
     let accessToken = localStorage.getItem('accessToken');
@@ -111,38 +112,38 @@ const Header =  ({showSideCenter}) => {
                         {isLoggedIn ? (
                             <React.Fragment>
                                 <li>
-                                    <Link
+                                    <MemoizedLink
                                         to={"/mypage"}
+                                        children={"마이페이지"}
                                         style={{textDecoration: "none", color: "inherit"}}
                                     >
-                                        마이페이지
-                                    </Link>
+                                    </MemoizedLink>
                                 </li>
                                 <li>
-                                    <Link
+                                    <MemoizedLink
                                         to={"/logout"}
                                         style={{textDecoration: "none", color: "inherit"}}>
                                         로그아웃
-                                    </Link>
+                                    </MemoizedLink>
                                 </li>
                             </React.Fragment>
                         ) : (
                             <React.Fragment>
                                 <li>
-                                    <Link
+                                    <MemoizedLink
                                         to={"/login"}
+                                        children={"로그인"}
                                         style={{textDecoration: "none", color: "inherit"}}
                                     >
-                                        로그인
-                                    </Link>
+                                    </MemoizedLink>
                                 </li>
                                 <li>
-                                    <Link
+                                    <MemoizedLink
                                         to={"/subinfo/signup"}
+                                        children={"회원가입"}
                                         style={{textDecoration: "none", color: "inherit"}}
                                     >
-                                        회원가입
-                                    </Link>
+                                    </MemoizedLink>
                                 </li>
                             </React.Fragment>
                         )}
@@ -158,17 +159,16 @@ const Header =  ({showSideCenter}) => {
                 <nav>
                     <ul>
                         <li>
-                            <Link
+                            <MemoizedLink
                                 to={"/"}
-                                style={{textDecoration: "none", color: "inherit"}}
-                            >
-                                <div className={"Header_logo"}>
+                                children={(<div className={"Header_logo"}>
                                     STAR D
-
                                     <div className={"Header_logo_img"}>
                                         <img src={LOGO} width={"60px"}/></div>
-                                </div>
-                            </Link>
+                                </div>)}
+                                style={{textDecoration: "none", color: "inherit"}}
+                            >
+                            </MemoizedLink>
                         </li>
                     </ul>
                 </nav>
@@ -180,43 +180,45 @@ const Header =  ({showSideCenter}) => {
             <div className="sidebar">
                 <nav>
                     <ul>
-                        <Link to={{
+                        <MemoizedLink to={{
                             pathname: `/study/page=${page}`,
                             state: {
                                 page: page,
                             }
                         }}
-                              style={{textDecoration: "none", color: "inherit"}}>
-                            <li>스터디</li>
-                        </Link>
-                        <Link
+                                      children={(<li>스터디</li>)}
+                                      style={{textDecoration: "none", color: "inherit"}}>
+                        </MemoizedLink>
+                        <MemoizedLink
                             to={"/community"}
+                            children={(<li>커뮤니티</li>)}
                             style={{textDecoration: "none", color: "inherit"}}
                         >
-                            <li>커뮤니티</li>
-                        </Link>
-                        <Link
+                        </MemoizedLink>
+                        <MemoizedLink
                             to={"/notice"}
+                            children={(<li>공지사항</li>)}
                             style={{textDecoration: "none", color: "inherit"}}
                         >
-                        <li>공지사항</li>
-                        </Link>
-                        <Link
+                        </MemoizedLink>
+                        <MemoizedLink
                             to={"/qna"}
+                            children={(<li>QNA</li>)}
                             style={{textDecoration: "none", color: "inherit"}}
                         >
-                        <li>QNA</li>
-                        </Link>
-                        <Link
+
+                        </MemoizedLink>
+                        <MemoizedLink
                             to={"/admin"}
+                            children={(<li>관리자 페이지</li>)}
                             style={{
                                 textDecoration: "none",
                                 color: "inherit",
                                 display: isAdmin ? "block" : "none"
                             }}
                         >
-                            <li>관리자 페이지</li>
-                        </Link>
+
+                        </MemoizedLink>
                     </ul>
                 </nav>
             </div>
