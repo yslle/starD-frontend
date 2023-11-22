@@ -9,6 +9,7 @@ const Header =  ({showSideCenter}) => {
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
     const [page, setPage] = useState(1);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const Side = () => {
         useEffect(() => {
@@ -76,6 +77,32 @@ const Header =  ({showSideCenter}) => {
             }
         }, []);
 
+        // TODO 권한 조회
+        useEffect(() => {
+            if (accessToken != null && isLoggedInUserId != null) {
+                axios
+                    .get("http://localhost:8080/member/auth", {
+                        withCredentials: true,
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    })
+                    .then((res) => {
+                        const auth = res.data[0].authority;
+                        console.log("*auth :", auth);
+
+                        if (auth === "ROLE_USER") {
+                            setIsAdmin(false);
+                        } else if (auth === "ROLE_ADMIN") {
+                            setIsAdmin(true);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("권한 조회 실패:", error);
+                        setIsAdmin(false);
+                    });
+            }
+        }, [accessToken]);
 
         return (
             <div className="headerbar">
@@ -182,7 +209,11 @@ const Header =  ({showSideCenter}) => {
                         </Link>
                         <Link
                             to={"/admin"}
-                            style={{textDecoration: "none", color: "inherit"}}
+                            style={{
+                                textDecoration: "none",
+                                color: "inherit",
+                                display: isAdmin ? "block" : "none"
+                            }}
                         >
                             <li>관리자 페이지</li>
                         </Link>

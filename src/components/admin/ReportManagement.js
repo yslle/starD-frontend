@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import "../../css/admin_css/Admin.css";
 
 const ReportManagement = () => {
     const [reports, setReports] = useState([]);
@@ -9,6 +10,7 @@ const ReportManagement = () => {
     const accessToken = localStorage.getItem('accessToken');
 
     //TODO 신고목록 조회
+    // TODO 5회 이상 신고된 목록 가져오기 -> 백엔드에서 1회 이상인 것 가져오도록 잠시 변경
     useEffect(() => {
         axios.get("http://localhost:8080/reports", {
             withCredentials: true,
@@ -26,34 +28,26 @@ const ReportManagement = () => {
                 console.error('신고 목록을 가져오는 중 오류 발생: ', error);
             });
     }, []);
+    
+    const openReasonModal = (report) => {
+        // TODO 신고 사유 조회
+        axios.get(`http://localhost:8080/reports/reason/${report.id}`, {
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+            .then((res) => {
+                console.log("전송 성공");
+                console.log("신고 사유: ", res.data);
 
-    //TODO 신고이유
-    useEffect(() => {
-        reports.forEach((report) => {
-            axios.get(`http://localhost:8080/reason/${report.id}`, {
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
+                setReportReason(res.data);
+                setShowReasonModal(true);
             })
-                .then((res) => {
-                    console.log("전송 성공");
-                    console.log(res.data);
+            .catch((error) => {
+                console.error('신고 이유를 가져오는 중 오류 발생: ', error);
+            });
 
-                    // 신고 이유를 신고 ID를 키로 하는 객체로 설정
-                    setReportReason(prevReasons => ({
-                        ...prevReasons,
-                        [report.id]: res.data
-                    }));
-                })
-                .catch((error) => {
-                    console.error('신고 이유를 가져오는 중 오류 발생: ', error);
-                });
-        });
-    }, [reports]);
-
-    const openReasonModal = () => {
-        setShowReasonModal(true);
         document.body.classList.add("modal-open");
     }
 
@@ -100,6 +94,7 @@ const ReportManagement = () => {
             return report.reply.content;
         }
     }
+
     //TODO 신고승인
     const handleReportAccept = ({report}) => {
         axios.post(`http://localhost:8080/reports/accept/${report.id}`, {
@@ -138,6 +133,55 @@ const ReportManagement = () => {
             });
     }
 
+    const getTranslatedReason = (reason) => {
+        switch (reason) {
+            case 'ABUSE':
+                return '욕설/비방';
+            case 'PROMOTION':
+                return '광고';
+            case 'ADULT':
+                return '음란물';
+            case 'SPAM':
+                return '도배성 글';
+            default:
+                return reason;
+        }
+    };
+
+    // 렌더링 전에 신고 수 계산
+    const reportCounts = reports.map(report => report.reportCount || 0);
+
+    // TODO 신고 수 계산
+    useEffect(() => {
+        reports.forEach((report) => {
+            if (!report.reportCount) {
+                axios.get(`http://localhost:8080/reports/report-count/${report.id}`, {
+                    withCredentials: true,
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                })
+                    .then((res) => {
+                        setReports((prevReports) => {
+                            const updatedReports = prevReports.map((prevReport) => {
+                                if (prevReport.id === report.id) {
+                                    return {
+                                        ...prevReport,
+                                        reportCount: res.data
+                                    };
+                                }
+                                return prevReport;
+                            });
+                            return updatedReports;
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('신고 수를 가져오는 중 오류 발생: ', error);
+                    });
+            }
+        });
+    }, [reports, accessToken]);
+
     return (
         <div className="admin_sub_container">
             <h2 className="admin_title">신고 관리</h2>
@@ -155,14 +199,15 @@ const ReportManagement = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {reports.map((report) => (
+                    {reports.map((report, index) => (
                         <tr key={report.id}>
                             <td>{tableType(report)}</td>
                             <td>{tableTypeID(report)}</td>
                             <td>{getTitleOrContent(report)}</td>
-                            <td>8</td> {/* 신고 횟수 아직 못함.. */}
+                            <td>{reportCounts[index]}</td> {/* 신고 횟수 아직 못함.. */}
                             <td>
-                                <button className="reason_btn" onClick={openReasonModal}>신고 사유</button>
+                                <button className="reason_btn" onClick={() => openReasonModal(report)}>신고 사유</button>
+
                             </td>
                             <td>
                                 <button className="remove_btn" onClick={() => handleReportAccept(report)}>신고 승인(삭제)</button>
@@ -174,8 +219,10 @@ const ReportManagement = () => {
                                 <div className="modal">
                                     <div className="modal-content">
                                         <span className="close" onClick={closeReasonModal}>&times;</span>
-                                        <h4>신고 사유</h4>
-                                        <p>{reportReason}</p>
+                                        <h3>신고 사유</h3>
+                                        {reportReason.map((reason, index) => (
+                                            <p id="report-reason" key={index}>{getTranslatedReason(reason)}</p>
+                                        ))}
                                     </div>
                                 </div>
                             )}

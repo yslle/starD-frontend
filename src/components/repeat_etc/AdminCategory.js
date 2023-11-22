@@ -21,7 +21,15 @@ const AdminCategory = ({onCategoryChange}) => {
                                     신고 관리
                                 </Link>
                             </li>
-                            <li>FAQ 등록</li>
+                            <li>
+                                <Link to="/qna"
+                                      style={{
+                                          textDecoration: "none",
+                                          color: "inherit"
+                                      }}>
+                                    FAQ 등록
+                                </Link>
+                            </li>
                             <li>
                                 <Link to="/notice"
                                       style={{
