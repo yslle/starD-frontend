@@ -177,12 +177,10 @@ const Home = () => {
                             <div className="dashboard_todo">
 
                 <span id="today">{`${Year}. ${Month}. ${Dates} / 오늘의 할 일`}
-                    <Link to={"/ToDoList"}
-                          style={{
-                              textDecoration: "none",
-                              color: "inherit",
-                          }}> <button
-                        id="todo_more">{`ToDoList Page >>`}</button></Link></span>
+                    <MemoizedLink to={"/ToDoList"}
+                                  style={{textDecoration: "none",
+                                            color: "inherit",}}> <button
+                        id="todo_more">{`ToDoList Page >>`}</button></MemoizedLink></span>
                                 <hr/>
                                 {filteredToDo.length === 0 ? (
                                     <div className="empty_today_todo">

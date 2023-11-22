@@ -315,4 +315,4 @@ const HomeDashBoard = () => {
         </div>
     );
 };
-export default HomeDashBoard;
+export default React.memo(HomeDashBoard);
