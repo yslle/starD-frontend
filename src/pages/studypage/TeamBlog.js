@@ -14,6 +14,7 @@ import uncheckbox from "../../images/unchecked.png";
 import Category from "../../components/repeat_etc/Category";
 import Chat from "../../components/chat/Chat";
 import TeamSchedule from "../TeamSchedule/TeamSchedule";
+import TeamCommunity from "../TeamCommunity/TeamCommunity";
 import Backarrow from "../../components/repeat_etc/Backarrow";
 
 
@@ -62,6 +63,13 @@ const TeamBlog = () => {
             }
         })
 
+    }
+    const showTeamCommunity = () => {
+        navigate(`/${studyIdAsNumber}/teamblog/TeamCommunity`, {
+            state: {
+                studyId: studyId,
+            }
+        })
     }
 
 
@@ -182,7 +190,7 @@ const TeamBlog = () => {
 
                             <li onClick={ShowAllToDo}>TODO</li>
                             <li onClick={ShowAllSchedule}>일정</li>
-                            <li>팀 커뮤니티</li>
+                            <li onClick={showTeamCommunity}>팀 커뮤니티</li>
                         </ul>
                     </div>
                     <div className="content">
