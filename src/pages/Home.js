@@ -19,6 +19,7 @@ import community from "../images/community.png";
 import communityfield from "../images/communityfield.png";
 import communityscrap from "../images/communityscrap.png";
 import axios from "axios";
+import MemoizedLink from "../MemoizedLink";
 
 const CenteredDiv = styled.div`
   display: flex;
@@ -29,39 +30,33 @@ const CenteredDiv = styled.div`
 `;
 
 const Home = () => {
-
     const [today, setToday] = useState(new Date());
-    const [parsedTodos, setParsedTodos] = useState({});
+    const [parsedTodos, setParsedTodos] = useState([]);
     const [isLogin, setIsLogin] = useState(""); // Login 여부 상태관리
     const [user, setUser] = useState(""); // 로그인 유저이름 상태관리
-    const [tag, setTag] = useState([{id: 1, tagname: "취업"},
-        {id: 2, tagname: "자소서"}, {id: 3, tagname: "프로그래밍"},
-        {id: 4, tagname: "독서"}, {id: 5, tagname: "여행"}]);
-    const [isTag, setIsTag] = useState("");
     const [top5Field, setTop5Field] = useState([]);
-
     const Year = today.getFullYear();
     const Month = today.getMonth() + 1;
     const Dates = today.getDate();
-    const tags = tag;
-
     const [firstRow, setFirstRow] = useState([]);
     const [secondRow, setSecondRow] = useState([]);
     const accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
     const navigate = useNavigate();
+
+
     useEffect(() => {
-        // Load todos from localStorage when the component mounts
         const isLogin = localStorage.getItem("accessToken");
         const user = localStorage.getItem("isLoggedInUserId");
         setIsLogin(isLogin);
         setUser(user);
-        console.log(tags);
     }, []);
 
 
     // TODO 가장 인기 있는 분야 Top 5
     useEffect(() => {
+        AOS.init();
+
         axios.get("http://localhost:8080/api/v2/studies/study-ranking")
             .then((res) => {
                 setTop5Field(res.data.data.slice(0, 5));
@@ -70,23 +65,7 @@ const Home = () => {
             }).catch(error => {
             console.log('Top 5 전송 실패', error);
         });
-    }, []);
 
-
-    const getTodoItemClassName = (checked) => {
-        return checked ? "checked" : "unchecked";
-    };
-
-    const handleontag = (e) => {
-        console.log(e.target.value);
-        setIsTag(e.target.value);
-    }
-
-    useEffect(() => {
-        AOS.init();
-    }, []);
-
-    useEffect(() => {
         axios.get(`http://localhost:8080/todo/all`, {
             params: {
                 year: Year, month: Month,
@@ -101,8 +80,20 @@ const Home = () => {
             console.log('전체 투두리스트 가져오기 실패:', error);
         })
     }, []);
-    const [filteredToDo, setFilteredToDo] = useState([]);
+
     useEffect(() => {
+        console.log("렌더링")
+    });
+
+    const getTodoItemClassName = (checked) => {
+        return checked ? "checked" : "unchecked";
+    };
+
+
+    const [filteredToDo, setFilteredToDo] = useState([]);
+
+    useEffect(() => {
+        console.log("parsedTodos",parsedTodos);
         if (Array.isArray(parsedTodos)) {
             const filteredToDo = parsedTodos.filter((todo) => {
                 const todoDueDate = new Date(todo.toDo.dueDate).toDateString();
@@ -168,7 +159,8 @@ const Home = () => {
                                     <div className="dashboard_Tags">
                                         {top5Field.map((item, index) => {
                                             return (
-                                                <div className={"dashboard_tagname_wrap"} data-aos="fade-down">
+                                                <div className={"dashboard_tagname_wrap"} data-aos="fade-down"
+                                                     key={index}>
                                                     <p id={"ranking"}>{index + 1}</p>
                                                     <button id={"dashboard_tagbtn"}
                                                             value={item.field}>{item.field}</button>
@@ -185,12 +177,10 @@ const Home = () => {
                             <div className="dashboard_todo">
 
                 <span id="today">{`${Year}. ${Month}. ${Dates} / 오늘의 할 일`}
-                    <Link to={"/ToDoList"}
-                          style={{
-                              textDecoration: "none",
-                              color: "inherit",
-                          }}> <button
-                        id="todo_more">{`ToDoList Page >>`}</button></Link></span>
+                    <MemoizedLink to={"/ToDoList"}
+                                  style={{textDecoration: "none",
+                                            color: "inherit",}}> <button
+                        id="todo_more">{`ToDoList Page >>`}</button></MemoizedLink></span>
                                 <hr/>
                                 {filteredToDo.length === 0 ? (
                                     <div className="empty_today_todo">
@@ -232,10 +222,9 @@ const Home = () => {
                                     {firstRow.map((item, index) => {
                                         return (
 
-                                            <div className={"tagname_wrap"}  data-aos="flip-left">
+                                            <div className={"tagname_wrap"} data-aos="flip-left">
                                                 <span id={"tag-grade"}>TOP {index + 1}</span>
-                                                <button id={"tagbtn"} value={item.field}
-                                                        onClick={handleontag}>{item.field}</button>
+                                                <button id={"tagbtn"} value={item.field}>{item.field}</button>
                                             </div>
 
                                         )
@@ -247,8 +236,7 @@ const Home = () => {
                                         return (
                                             <div className={"tagname_wrap"} data-aos="flip-left">
                                                 <span id={"tag-grade"}>TOP {index + 4}</span>
-                                                <button id={"tagbtn"} value={item.field}
-                                                        onClick={handleontag}>{item.field}</button>
+                                                <button id={"tagbtn"} value={item.field}>{item.field}</button>
                                             </div>
                                         )
                                     })
@@ -280,13 +268,14 @@ const Home = () => {
                                             </div>
                                             <div id={"detail-img-btn"}>
                                                 <button onClick={handleMoveToStudyInsert}>
-                                                <Link to={"/study/studyInsert"}
-                                                      style={{
-                                                          textDecoration: "none",
-                                                          color:"inherit",
-                                                      }}>
-                                                    스터디 모집하기
-                                                </Link>
+                                                    <MemoizedLink to={"/study/studyInsert"}
+                                                                  children={"스터디 모집하기"}
+                                                                  style={{
+                                                                      textDecoration: "none",
+                                                                      color: "inherit",
+                                                                  }}>
+
+                                                    </MemoizedLink>
                                                 </button>
 
                                             </div>
@@ -333,13 +322,13 @@ const Home = () => {
                                             </div>
                                             <div id={"detail-img-btn"}>
                                                 <button onClick={handleMoveToStudyInsert}>
-                                                    <Link to={"/study/studyInsert"}
-                                                          style={{
-                                                              textDecoration: "none",
-                                                              color:"inherit",
-                                                          }}>
-                                                        스터디 모집하기
-                                                    </Link>
+                                                    <MemoizedLink to={"/study/studyInsert"}
+                                                                  children={"스터디 모집하기"}
+                                                                  style={{
+                                                                      textDecoration: "none",
+                                                                      color: "inherit",
+                                                                  }}>
+                                                    </MemoizedLink>
                                                 </button>
                                             </div>
                                         </div>
@@ -358,7 +347,8 @@ const Home = () => {
                                         <img id="community_main" src={community} width="400px" data-aos="flip-left"/>
                                         <div className={"community-field_scrap"}>
                                             <img id="c-field" src={communityfield} width="200px" data-aos="flip-left"/>
-                                            <img id="c-scrap" src={communityscrap} width="200px" height={"80px"} data-aos="flip-left"/>
+                                            <img id="c-scrap" src={communityscrap} width="200px" height={"80px"}
+                                                 data-aos="flip-left"/>
                                         </div>
                                         <span id={"c-info"}>다양한 관심사를 가진 사람들과 <br/>
                                             풍부한 소통의 장을 열수 있어요<br/></span>
@@ -396,4 +386,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default React.memo(Home);

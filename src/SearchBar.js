@@ -1,5 +1,5 @@
 import {Link, Route, Router, useParams, useNavigate} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState,useCallback} from "react";
 import searchicon from "./images/search.png";
 import axios from "axios";
 
@@ -21,10 +21,10 @@ const SearchBar = () => {
 		setSearch(e.target.value)
 	}
 
-	const onHandleselect = (e)=>{
+	const onHandleselect=(e)=>{
 		setSelectOption(e.target.value);
 		console.log(`value = ${e.target.value}`)
-	}
+	};
 
 	const searchItem = (item)=>{
 		console.log("타깃",item)
@@ -59,4 +59,4 @@ const SearchBar = () => {
 	);
 };
 
-export default SearchBar;
+export default React.memo(SearchBar);
