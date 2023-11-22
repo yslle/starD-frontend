@@ -169,10 +169,10 @@ const Home = () => {
                                 <div className="dashboard_tag_wrap">
                                     <p id={"tag-title"}>STAR_D의 요즘 뜨는 분야</p>
                                     <p id={"tag-subtitle"}>TOP 5</p>
-                                    <div className="dashboard_Tags">
+                                    <div className="dashboard_Tags" >
                                         {top5Field.map((item, index) => {
                                             return (
-                                                <div className={"dashboard_tagname_wrap"} data-aos="fade-down">
+                                                <div className={"dashboard_tagname_wrap"} data-aos="fade-down" key={index}>
                                                     <p id={"ranking"}>{index + 1}</p>
                                                     <button id={"dashboard_tagbtn"}
                                                             value={item.field}>{item.field}</button>
