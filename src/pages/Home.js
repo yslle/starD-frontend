@@ -31,20 +31,13 @@ const CenteredDiv = styled.div`
 
 const Home = () => {
     const [today, setToday] = useState(new Date());
-    const [parsedTodos, setParsedTodos] = useState({});
+    const [parsedTodos, setParsedTodos] = useState([]);
     const [isLogin, setIsLogin] = useState(""); // Login 여부 상태관리
     const [user, setUser] = useState(""); // 로그인 유저이름 상태관리
-    const [tag, setTag] = useState([{id: 1, tagname: "취업"},
-        {id: 2, tagname: "자소서"}, {id: 3, tagname: "프로그래밍"},
-        {id: 4, tagname: "독서"}, {id: 5, tagname: "여행"}]);
-    const [isTag, setIsTag] = useState("");
     const [top5Field, setTop5Field] = useState([]);
-
     const Year = today.getFullYear();
     const Month = today.getMonth() + 1;
     const Dates = today.getDate();
-    const tags = tag;
-
     const [firstRow, setFirstRow] = useState([]);
     const [secondRow, setSecondRow] = useState([]);
     const accessToken = localStorage.getItem('accessToken');
@@ -57,12 +50,13 @@ const Home = () => {
         const user = localStorage.getItem("isLoggedInUserId");
         setIsLogin(isLogin);
         setUser(user);
-        console.log(tags);
     }, []);
 
 
     // TODO 가장 인기 있는 분야 Top 5
     useEffect(() => {
+        AOS.init();
+
         axios.get("http://localhost:8080/api/v2/studies/study-ranking")
             .then((res) => {
                 setTop5Field(res.data.data.slice(0, 5));
@@ -71,25 +65,7 @@ const Home = () => {
             }).catch(error => {
             console.log('Top 5 전송 실패', error);
         });
-    }, []);
 
-    useEffect(() => {
-        console.log("렌더링")
-    });
-    const getTodoItemClassName = (checked) => {
-        return checked ? "checked" : "unchecked";
-    };
-
-    const handleontag = (e) => {
-        console.log(e.target.value);
-        setIsTag(e.target.value);
-    }
-
-    useEffect(() => {
-        AOS.init();
-    }, []);
-
-    useEffect(() => {
         axios.get(`http://localhost:8080/todo/all`, {
             params: {
                 year: Year, month: Month,
@@ -105,8 +81,19 @@ const Home = () => {
         })
     }, []);
 
-    const [filteredToDo, setFilteredToDo] = useState([]);
     useEffect(() => {
+        console.log("렌더링")
+    });
+
+    const getTodoItemClassName = (checked) => {
+        return checked ? "checked" : "unchecked";
+    };
+
+
+    const [filteredToDo, setFilteredToDo] = useState([]);
+
+    useEffect(() => {
+        console.log("parsedTodos",parsedTodos);
         if (Array.isArray(parsedTodos)) {
             const filteredToDo = parsedTodos.filter((todo) => {
                 const todoDueDate = new Date(todo.toDo.dueDate).toDateString();
@@ -169,10 +156,11 @@ const Home = () => {
                                 <div className="dashboard_tag_wrap">
                                     <p id={"tag-title"}>STAR_D의 요즘 뜨는 분야</p>
                                     <p id={"tag-subtitle"}>TOP 5</p>
-                                    <div className="dashboard_Tags" >
+                                    <div className="dashboard_Tags">
                                         {top5Field.map((item, index) => {
                                             return (
-                                                <div className={"dashboard_tagname_wrap"} data-aos="fade-down" key={index}>
+                                                <div className={"dashboard_tagname_wrap"} data-aos="fade-down"
+                                                     key={index}>
                                                     <p id={"ranking"}>{index + 1}</p>
                                                     <button id={"dashboard_tagbtn"}
                                                             value={item.field}>{item.field}</button>
@@ -238,8 +226,7 @@ const Home = () => {
 
                                             <div className={"tagname_wrap"} data-aos="flip-left">
                                                 <span id={"tag-grade"}>TOP {index + 1}</span>
-                                                <button id={"tagbtn"} value={item.field}
-                                                        onClick={handleontag}>{item.field}</button>
+                                                <button id={"tagbtn"} value={item.field}>{item.field}</button>
                                             </div>
 
                                         )
@@ -251,8 +238,7 @@ const Home = () => {
                                         return (
                                             <div className={"tagname_wrap"} data-aos="flip-left">
                                                 <span id={"tag-grade"}>TOP {index + 4}</span>
-                                                <button id={"tagbtn"} value={item.field}
-                                                        onClick={handleontag}>{item.field}</button>
+                                                <button id={"tagbtn"} value={item.field}>{item.field}</button>
                                             </div>
                                         )
                                     })
