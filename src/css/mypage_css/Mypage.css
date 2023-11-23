@@ -307,3 +307,43 @@ li {
 		display: none;
 	}
 }
+
+
+
+/* myscore_css */
+.main_myscore_container{
+	width: 100%;
+	max-width: 1300px;
+}
+.main_myscore_container .sub_container{
+	width:90%;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+.sub_container .my_score{
+	font-size:25px;
+	margin-bottom:50px;
+}
+.my_parti_study_select{
+	display: flex;
+	justify-content: center;
+}
+.evaluate_table{
+	text-align: center;
+	font-size: 13px;
+	border-collapse: collapse;
+}
+.evaluate_table tr{
+	border-top:1px solid #d9d9d9;
+}
+.evaluate_table th{
+	background: #f0f0f0;
+}
+.evaluate_table .member_name,
+.evaluate_table .star_rating{
+	width:20%;
+}
+.evaluate_table .reason{
+	width:80%;
+}

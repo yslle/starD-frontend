@@ -49,6 +49,7 @@ import Qna from "./pages/qna/Qna";
 import QnaDetail from "./pages/qna/QnaDetail";
 import QnaSearchResult from "./pages/qna/QnaSearchResult";
 import Admin from "./pages/admin/Admin";
+import MyScore from "./pages/mypage/MyScore";
 
 function App() {
     return (
@@ -259,6 +260,12 @@ function App() {
                         path="/admin"
                         element={
                             <Admin/>
+                        }
+                    />
+                    <Route
+                        path="/MyPage/myscore"
+                        element={
+                            <MyScore/>
                         }
                     />
                 </Routes>
