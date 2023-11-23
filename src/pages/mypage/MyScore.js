@@ -14,20 +14,20 @@ const MyScore = () => {
 
     //TODO 참여한스터디 목록
     useEffect(() => {
-        axios.get("http://localhost:8080/user/mypage/studying", {
+        axios.get("http://localhost:8080/user/mypage/wrap-up-study", {
             withCredentials: true,
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
         })
             .then((res) => {
-                console.log("참여한 스터디 전송 성공");
+                console.log("진행 완료 스터디 전송 성공");
                 console.log(res.data);
 
-                setMyPartiStudy(res.data.content);
+                setMyPartiStudy(res.data);
             })
             .catch((error) => {
-                console.error('신고 횟수가 1이상인 멤버 리스트 가져오는 중 오류 발생: ', error);
+                console.error('진행 완료 스터디 가져오는 중 오류 발생: ', error);
             });
     }, []);
 
@@ -50,7 +50,7 @@ const MyScore = () => {
     //TODO 평가당한 내역 가져오기
     useEffect(() => {
         if (selectedStudy) {
-            axios.get(`http://localhost:8080/user/mypage/rate/target/${selectedStudy}`, {
+            axios.get(`http://localhost:8080/user/mypage/rate/target/study/${selectedStudy}`, {
                 withCredentials: true,
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -97,7 +97,7 @@ const MyScore = () => {
                                 <tbody>
                                     {evaluation.map((item) => (
                                         <tr key={item.id}>
-                                            <td>{item.member}</td>
+                                            <td>{item.member.nickname}</td>
                                             <td>{item.starRating}</td>
                                             <td>{item.reason}</td>
                                         </tr>
