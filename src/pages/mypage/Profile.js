@@ -27,6 +27,11 @@ const Profile = () => {
             .then((res) => {
                 console.error("프로필 가져오기 성공:", res.data);
                 setProfile(res.data);
+                console.log("이미지:",res.data.imgUrl );
+                const fullImageUrl = `http://localhost:3030${res.data.imgUrl}`;
+                setUploadImgUrl(res.data.imgUrl);
+                // setUploadImgUrl(res.data.imgUrl);
+
 
             })
             .catch((error) => {
@@ -34,20 +39,6 @@ const Profile = () => {
             });
     }, []);
 
-    //프로필 사진 업로드
-    const onchangeImageUpload = (e) => {
-        console.log("사진", e.target.files);
-        const file = e.target.files[0];
-        if (file) {
-            console.log("File details:", file);
-            const imageUrl = URL.createObjectURL(file);
-            setUploadImgUrl(imageUrl);
-        } else {
-            console.error("No file selected");
-            alert("이미지를 선택해주세요");
-            return;
-        }
-    }
 
     //프로필 사진 삭제
     const onchangeImageDelete = (e) => {
@@ -69,8 +60,8 @@ const Profile = () => {
                     <Backarrow subname={"프로필"}/>
                     <div className="sub_container">
                         <div className={"profile_content"}>
-                            {uploadImgUrl ? (
-                                <img className="profile-img" src={uploadImgUrl} alt="프로필 없을때"/>
+                            {profile?.imgUrl ? (
+                                <img className="profile-img" src={profile?.imgUrl} alt="프로필 없을때"/>
                             ) : (
 
                                 <img className="profile-img" src={default_profile_img} alt="프로필사진"/>

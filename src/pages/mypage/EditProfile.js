@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import Category from "../../components/repeat_etc/Category";
 import Backarrow from "../../components/repeat_etc/Backarrow"
 import Header from "../../components/repeat_etc/Header";
@@ -12,6 +13,8 @@ const EditProfile = () => {
     const [selfintro, setSelfIntro] = useState("");
     const [profile, setProfile] =useState(null);
     const [imgfile, setImgFile] = useState(null);
+
+    const navigate = useNavigate();
 
     //프로필 조회하기
     useEffect(() => {
@@ -40,8 +43,9 @@ const EditProfile = () => {
             setImgFile(file);
             console.log("File details:", file);
             const imageUrl = URL.createObjectURL(file);
-            const parsedimageUrl = imageUrl.toString();
-            setUploadImgUrl(parsedimageUrl);
+            console.log("imageUrl:", imageUrl);
+            // const parsedimageUrl = imageUrl.toString();
+            setUploadImgUrl(imageUrl);
         } else {
             console.error("No file selected");
             alert("이미지를 선택해주세요");
@@ -75,8 +79,8 @@ const EditProfile = () => {
             .then((res) => {
                 console.error("프로필 수정 성공:", res.data);
                 setProfile(res.data);
-                alert("프로필 수정 완료")
-
+                alert("프로필 수정 완료");
+                navigate("/mypage/profile");
             })
             .catch((error) => {
                 console.error("프로필 수정 실패:", error);
