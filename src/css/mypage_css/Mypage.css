@@ -195,6 +195,11 @@ li {
 	border: lightgray solid 1px;
 }
 
+.profile-img{
+	border-radius: 100%;
+	width: 150px;
+	height: 150px;
+}
 
 
 
