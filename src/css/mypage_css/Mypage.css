@@ -244,6 +244,7 @@ li {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	margin-left: 50px;
 }
 #self-intro-p{
 	font-size: 20px;
@@ -252,6 +253,9 @@ li {
 	width: 100%;
 	display: flex;
 	justify-content: center;
+}
+.self-intro-input{
+	margin-left: 0px;
 }
 
 

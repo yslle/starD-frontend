@@ -1,19 +1,17 @@
 import React, {useEffect, useState} from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
 import Category from "../../components/repeat_etc/Category";
 import Backarrow from "../../components/repeat_etc/Backarrow"
 import Header from "../../components/repeat_etc/Header";
 import default_profile_img from "../../images/default_profile_img.png";
+import axios from "axios";
 
-
-const Profile = () => {
+const EditProfile = () => {
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
-    const [uploadImgUrl, setUploadImgUrl] = useState(null);
+    const [uploadImgUrl, setUploadImgUrl] = useState("");
     const [selfintro, setSelfIntro] = useState("");
-    const [toggle, setToggle] = useState(false);
     const [profile, setProfile] =useState(null);
+    const [imgfile, setImgFile] = useState(null);
 
     //프로필 조회하기
     useEffect(() => {
@@ -39,9 +37,11 @@ const Profile = () => {
         console.log("사진", e.target.files);
         const file = e.target.files[0];
         if (file) {
+            setImgFile(file);
             console.log("File details:", file);
             const imageUrl = URL.createObjectURL(file);
-            setUploadImgUrl(imageUrl);
+            const parsedimageUrl = imageUrl.toString();
+            setUploadImgUrl(parsedimageUrl);
         } else {
             console.error("No file selected");
             alert("이미지를 선택해주세요");
@@ -51,12 +51,37 @@ const Profile = () => {
 
     //프로필 사진 삭제
     const onchangeImageDelete = (e) => {
-        setUploadImgUrl(null);
+        setUploadImgUrl("");
         return;
     }
-
-    const onchangeselfIntroduce=(e)=>{
+    const onchangeselfintro=(e)=>{
         setSelfIntro(e.target.value);
+    }
+
+    //프로필 수정
+    const saveProfile=(e)=>{
+        const formData = new FormData();
+        formData.append("introduce", selfintro);
+        formData.append("imgFile", imgfile);
+
+        axios
+            .put("http://localhost:8080/user/mypage/profile", formData, {
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((res) => {
+                console.error("프로필 수정 성공:", res.data);
+                setProfile(res.data);
+                alert("프로필 수정 완료")
+
+            })
+            .catch((error) => {
+                console.error("프로필 수정 실패:", error);
+            });
+
     }
 
     return (
@@ -66,7 +91,7 @@ const Profile = () => {
                 <Category/>
                 <div className="main_container">
                     <p id={"entry-path"}> 홈 > 마이페이지 > 프로필 </p>
-                    <Backarrow subname={"프로필"}/>
+                    <Backarrow subname={"프로필 수정"}/>
                     <div className="sub_container">
                         <div className={"profile_content"}>
                             {uploadImgUrl ? (
@@ -75,34 +100,21 @@ const Profile = () => {
 
                                 <img className="profile-img" src={default_profile_img} alt="프로필사진"/>
                             )}
+                            <input className="image-upload" type="file" accept="image/*"
+                                   onChange={onchangeImageUpload}/>
+                            <button className="image-delete" onClick={onchangeImageDelete}>삭제</button>
                         </div>
                         <div className={"One-line-self-introduction"}>
                             <p id={"self-intro-p"}>한줄 자기소개</p>
-                            <div>
-                                {profile?.introduce === null ? (
-                                    <>
-                                        <p>자기소개란이 비었어요! 한줄소개를 해주세요!</p>
-                                    </>
-                                ) : (
-                                    <p>{profile?.introduce}</p>
-                                )}
-                            </div>
-
+                            <input className="self-intro-input" placeholder={"15자이내 자기소개를 적어주세요"} onChange={onchangeselfintro}/>
                         </div>
                     </div>
                     <div className={"save_profile_content"}>
-                        <Link
-                            to={"/mypage/profile/Editprofile"}
-                            style={{
-                                textDecoration: "none",
-                                color: "inherit",
-                            }}
-                        > <button className={"save-profile"}>수정하기</button>
-                        </Link>
+                        <button className={"save-profile"} onClick={saveProfile}>저장하기</button>
                     </div>
                 </div>
             </div>
         </div>
     )
 };
-export default Profile;
+export default EditProfile;

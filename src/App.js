@@ -50,6 +50,7 @@ import QnaDetail from "./pages/qna/QnaDetail";
 import QnaSearchResult from "./pages/qna/QnaSearchResult";
 import Admin from "./pages/admin/Admin";
 import Profile from "./pages/mypage/Profile";
+import EditProfile from "./pages/mypage/EditProfile";
 
 function App() {
     return (
@@ -91,6 +92,10 @@ function App() {
                     <Route
                         path="/mypage/profile"
                         element={<Profile/>}
+                    />
+                    <Route
+                        path="/mypage/profile/Editprofile"
+                        element={<EditProfile/>}
                     />
                     <Route
                         path="/editinfo"
