@@ -222,6 +222,29 @@ const StudyPostDetail = ( ) => {
         return formattedDatetime;
     };
 
+    const handleDownloadClick = () => {
+        axios.get(`http://localhost:8080/study/post/download/${postid}`, {
+            params: { postId: postid },
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            },
+            responseType: 'blob'
+        })
+            .then(res => {
+                const url = window.URL.createObjectURL(new Blob([res.data]));
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = postItem.fileName;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                console.error('파일 다운로드 중 오류 발생 :', error);
+            });
+    };
+
     return (
         <div>
             <Header showSideCenter={true}/>
@@ -277,7 +300,18 @@ const StudyPostDetail = ( ) => {
                                 </div>
                             )}
                             {postItem && (
-                                <div className="post_content" dangerouslySetInnerHTML={{ __html: postItem.content.replace(/\n/g, '<br>') }} />
+                                <div>
+                                    {/*<div className=" " onClick={() => handleDownloadClick()}>{postItem.fileName}</div>*/}
+                                    <Link onClick={handleDownloadClick}
+                                           style={{
+                                               textDecoration: 'underline',
+                                               fontSize: '16px',
+                                           }}
+                                     >
+                                        {postItem.fileName}
+                                     </Link>
+                                    <div className="post_content" dangerouslySetInnerHTML={{ __html: postItem.content.replace(/\n/g, '<br>') }} />
+                                </div>
                             )}
 
                             <div className="btn">
