@@ -6,7 +6,7 @@ import Comment from "../../components/comment/Comment";
 import React, {useState, useEffect} from "react";
 import LikeButton from "../../components/repeat_etc/LikeButton";
 import axios from "axios";
-import PostEdit from "../../components/community/PostEdit";
+import PostEdit from "../../components/teamcommunity/TeamPostEdit";
 import Report from "../../components/report/Report";
 
 const StudyPostDetail = ( ) => {
@@ -107,44 +107,47 @@ const StudyPostDetail = ( ) => {
     };
 
     const handleEditClick = () => {
-//        setEditing(true);
+        setEditing(true);
     }
 
     const handleCancelEdit = () => {
-//        setEditing(false);
+        setEditing(false);
     }
 
     const handlePostUpdate = (updatedPost) => {
-//        setEditing(false);
-//
-//        console.log("수정 예정 : " + updatedPost.id + ", " + updatedPost.title + ", " + updatedPost.content
-//            + ", " + updatedPost.category);
-//
-//        axios.post(`http://localhost:8080/com/${id}`, {
-//            title: updatedPost.title,
-//            content: updatedPost.content,
-//        }, {
-//            params: { id: updatedPost.id },
-//            withCredentials: true,
-//            headers: {
-//                'Authorization': `Bearer ${accessToken}`
-//            }
-//        })
-//            .then(response => {
-//                console.log("커뮤니티 게시글 수정 성공");
-//                alert("게시글이 수정되었습니다.");
-//
-//                setPostDetail(response.data);
-//                const updatedPosts = posts.map(post =>
-//                    post.id === updatedPost.id ? updatedPost : post
-//                );
-//                setPosts(updatedPosts);
-//            })
-//            .catch(error => {
-//                console.error("Error:", error);
-//                console.log("커뮤니티 게시글 수정 실패");
-//                alert("수정에 실패했습니다.");
-//            });
+        setEditing(false);
+
+        console.log("수정 예정 : " + updatedPost.id + ", " + updatedPost.title + ", " + updatedPost.content);
+
+        const postData = new FormData();
+        postData.append('title', updatedPost.title);
+        postData.append('content', updatedPost.content);
+        if (updatedPost.file) {
+            postData.append('file', updatedPost.file);
+        }
+
+        axios.post(`http://localhost:8080/study/post/${postid}`, postData, {
+            params: { postid: updatedPost.id },
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+            .then(response => {
+                console.log("팀블로그 커뮤니티 게시글 수정 성공");
+                alert("게시글이 수정되었습니다.");
+
+                setPostDetail(response.data);
+                const updatedPosts = posts.map(post =>
+                    post.id === updatedPost.id ? updatedPost : post
+                );
+                setPosts(updatedPosts);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                console.log("팀블로그 커뮤니티 게시글 수정 실패");
+                alert("수정에 실패했습니다.");
+            });
     }
 
     const handlePostDelete = () => {
