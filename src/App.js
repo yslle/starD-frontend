@@ -40,6 +40,7 @@ import FindedID from "./pages/userpage/FindedID.js";
 import TeamToDoList from "./pages/TeamToDo/TeamToDoList";
 import TeamSchedule from "./pages/TeamSchedule/TeamSchedule";
 import TeamCommunity from "./pages/TeamCommunity/TeamCommunity";
+import TeamCommSearchResult from "./pages/TeamCommunity/TeamCommSearchResult";
 import StudyPostDetail from "./pages/TeamCommunity/StudyPostDetail";
 import FindPW from "./pages/userpage/FindPW";
 import NoticeDetail from "./pages/notice/NoticeDetail";
@@ -186,6 +187,13 @@ function App() {
                         path="/:id/teamblog/TeamCommunity/studypostdetail/:postid"
                         element={
                             <StudyPostDetail/>
+                        }
+                    />
+
+                    <Route
+                        path="/:id/teamblog/TeamCommunity/search"
+                        element={
+                            <TeamCommSearchResult/>
                         }
                     />
 

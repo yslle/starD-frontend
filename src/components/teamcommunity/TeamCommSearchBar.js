@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import searchicon from "../../images/search.png";
 import axios from "axios";
 
-const TeamCommSearchBar = () => {
+const TeamCommSearchBar = ( {studyId} ) => {
 
 	const [search, setSearch] = useState("");
 	const [selectOption, setSelectOption] = useState("제목");
@@ -28,7 +28,11 @@ const TeamCommSearchBar = () => {
 	const searchItem = (item)=>{
 		setSearch(item);
 		const queryParams = `?q=${encodeURIComponent(item)}&select=${encodeURIComponent(selectOption)}`;
-		navigate(`/comm/search${queryParams}`); // 경로 수정 필요
+		navigate(`/${studyId}/teamblog/TeamCommunity/search${queryParams}`, {
+            state: {
+                studyId: studyId,
+            }
+        })
 	}
 
 	return (
