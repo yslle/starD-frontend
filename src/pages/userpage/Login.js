@@ -115,7 +115,7 @@ const Login = () => {
                                       }}>
 
                         </MemoizedLink>
-                        <MemoizedLink to={"/login/findePW"}
+                        <MemoizedLink to={"/login/findPW"}
                                       children={<span id={"pw"}>&nbsp;비밀번호 찾기 / </span>}
                                       style={{
                                           textDecoration: "none",

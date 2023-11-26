@@ -49,6 +49,7 @@ import Qna from "./pages/qna/Qna";
 import QnaDetail from "./pages/qna/QnaDetail";
 import QnaSearchResult from "./pages/qna/QnaSearchResult";
 import Admin from "./pages/admin/Admin";
+import ResetPW from "./pages/userpage/ResetPW";
 
 function App() {
     return (
@@ -80,8 +81,12 @@ function App() {
                         element={<FindedID/>}
                     />
                     <Route
-                        path="/login/findePW"
+                        path="/login/findPW"
                         element={<FindPW/>}
+                    />
+                    <Route
+                        path="/login/findedPW"
+                        element={<ResetPW/>}
                     />
                     <Route
                         path="/mypage"
