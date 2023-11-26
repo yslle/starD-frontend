@@ -14,6 +14,7 @@ const Profile = () => {
     const [selfintro, setSelfIntro] = useState("");
     const [toggle, setToggle] = useState(false);
     const [profile, setProfile] =useState(null);
+    const [testimg, setTestImg]=useState('');
 
     //프로필 조회하기
     useEffect(() => {
@@ -28,9 +29,12 @@ const Profile = () => {
                 console.error("프로필 가져오기 성공:", res.data);
                 setProfile(res.data);
                 console.log("이미지:",res.data.imgUrl );
-                const fullImageUrl = `http://localhost:3030${res.data.imgUrl}`;
+                var str = res.data.imgUrl.substr(14);
+                var str_result = str.substr(1);
+                const fullImageUrl = `D:\\stard\\${str_result}`;
+                console.log("fullImageUrl:", fullImageUrl);
+                setUploadImgUrl(fullImageUrl);
                 setUploadImgUrl(res.data.imgUrl);
-                // setUploadImgUrl(res.data.imgUrl);
 
 
             })
@@ -38,7 +42,6 @@ const Profile = () => {
                 console.error("프로필 가져오기 실패:", error);
             });
     }, []);
-
 
     //프로필 사진 삭제
     const onchangeImageDelete = (e) => {
@@ -61,7 +64,7 @@ const Profile = () => {
                     <div className="sub_container">
                         <div className={"profile_content"}>
                             {profile?.imgUrl ? (
-                                <img className="profile-img" src={profile?.imgUrl} alt="프로필 없을때"/>
+                                <img className="profile-img" src={uploadImgUrl} alt="프로필 없을때"/>
                             ) : (
 
                                 <img className="profile-img" src={default_profile_img} alt="프로필사진"/>

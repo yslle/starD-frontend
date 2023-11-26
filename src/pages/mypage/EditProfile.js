@@ -13,7 +13,6 @@ const EditProfile = () => {
     const [selfintro, setSelfIntro] = useState("");
     const [profile, setProfile] =useState(null);
     const [imgfile, setImgFile] = useState(null);
-
     const navigate = useNavigate();
 
     //프로필 조회하기
@@ -26,7 +25,7 @@ const EditProfile = () => {
                 }
             })
             .then((res) => {
-                console.error("프로필 가져오기 성공:", res.data);
+                console.log("프로필 가져오기 성공:", res.data);
                 setProfile(res.data);
 
             })
@@ -42,9 +41,12 @@ const EditProfile = () => {
         if (file) {
             setImgFile(file);
             console.log("File details:", file);
-            const imageUrl = URL.createObjectURL(file);
+             const imageUrl = URL.createObjectURL(file);
+            console.log("imageUrl:", file);
             console.log("imageUrl:", imageUrl);
-            // const parsedimageUrl = imageUrl.toString();
+            localStorage.setItem("profileImage:",file);
+            const parsedimageUrl = imageUrl.toString();
+            console.log("imageUrl:", parsedimageUrl);
             setUploadImgUrl(imageUrl);
         } else {
             console.error("No file selected");
@@ -77,7 +79,7 @@ const EditProfile = () => {
                 },
             })
             .then((res) => {
-                console.error("프로필 수정 성공:", res.data);
+                console.log("프로필 수정 성공:", res.data);
                 setProfile(res.data);
                 alert("프로필 수정 완료");
                 navigate("/mypage/profile");
