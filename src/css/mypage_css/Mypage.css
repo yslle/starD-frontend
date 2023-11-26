@@ -194,10 +194,69 @@ li {
 	border-radius: 10px;
 	border: lightgray solid 1px;
 }
+.profile_content{
+	display: flex;
+	flex-direction: column;
+}
 
+.profile-img{
+	border-radius: 100%;
+	width: 150px;
+	height: 150px;
+}
+.custom-file-upload {
+	display: inline-block;
+	padding: 10px 20px;
+	cursor: pointer;
+	background-color: #4CAF50;
+	color: #fff;
+	border: 1px solid #4CAF50;
+	border-radius: 5px;
+}
+.image-upload {
+	width: 200px;
+	height: 30px;
+	border-radius: 10px;
+	border: none;
+	box-shadow: none;
+	padding-left: 20px;
+	padding-top: 20px;
+	color: #99A98F;
 
-
-
+}
+.image-delete,.save-profile{
+	width: 75px;
+	margin-left: 20px;
+	background-color: #99A98F;
+	border: 0px;
+	border-radius: 5px;
+	color: white;
+}
+.image-delete:hover , .save-profile:hover{
+	background-color: darkolivegreen;
+}
+.save-profile{
+	margin-top: 30px;
+	width: 150px;
+	height: 40px;
+}
+.One-line-self-introduction{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-left: 50px;
+}
+#self-intro-p{
+	font-size: 20px;
+}
+.save_profile_content{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+.self-intro-input{
+	margin-left: 0px;
+}
 
 
 @media (max-width: 1300px) {
@@ -306,4 +365,44 @@ li {
 	.category {
 		display: none;
 	}
+}
+
+
+
+/* myscore_css */
+.main_myscore_container{
+	width: 100%;
+	max-width: 1300px;
+}
+.main_myscore_container .sub_container{
+	width:90%;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+.sub_container .my_score{
+	font-size:25px;
+	margin-bottom:50px;
+}
+.my_parti_study_select{
+	display: flex;
+	justify-content: center;
+}
+.evaluate_table{
+	text-align: center;
+	font-size: 13px;
+	border-collapse: collapse;
+}
+.evaluate_table tr{
+	border-top:1px solid #d9d9d9;
+}
+.evaluate_table th{
+	background: #f0f0f0;
+}
+.evaluate_table .member_name,
+.evaluate_table .star_rating{
+	width:20%;
+}
+.evaluate_table .reason{
+	width:80%;
 }

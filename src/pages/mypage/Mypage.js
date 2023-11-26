@@ -204,7 +204,15 @@ const Mypage = ({sideheader}) => {
                         <div className="reliability">
                             <div className="tag">
                                 <p>개인 신뢰도</p>
-                                {/*<button id="more">전체보기</button>*/}
+                                <Link
+                                    to={"/MyPage/myscore"}
+                                    style={{
+                                        textDecoration: "none",
+                                        color: "inherit",
+                                    }}
+                                >
+                                    <button id="more">상세보기</button>
+                                </Link>
                             </div>
                             <div id="detail">당신의 신뢰도는 {credibility}입니다.</div>
                         </div>

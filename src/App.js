@@ -40,6 +40,7 @@ import FindedID from "./pages/userpage/FindedID.js";
 import TeamToDoList from "./pages/TeamToDo/TeamToDoList";
 import TeamSchedule from "./pages/TeamSchedule/TeamSchedule";
 import TeamCommunity from "./pages/TeamCommunity/TeamCommunity";
+import TeamCommSearchResult from "./pages/TeamCommunity/TeamCommSearchResult";
 import StudyPostDetail from "./pages/TeamCommunity/StudyPostDetail";
 import FindPW from "./pages/userpage/FindPW";
 import NoticeDetail from "./pages/notice/NoticeDetail";
@@ -50,6 +51,9 @@ import QnaDetail from "./pages/qna/QnaDetail";
 import QnaSearchResult from "./pages/qna/QnaSearchResult";
 import Admin from "./pages/admin/Admin";
 import ResetPW from "./pages/userpage/ResetPW";
+import MyScore from "./pages/mypage/MyScore";
+import Profile from "./pages/mypage/Profile";
+import EditProfile from "./pages/mypage/EditProfile";
 
 function App() {
     return (
@@ -92,7 +96,14 @@ function App() {
                         path="/mypage"
                         element={<Mypage/>}
                     />
-
+                    <Route
+                        path="/mypage/profile"
+                        element={<Profile/>}
+                    />
+                    <Route
+                        path="/mypage/profile/Editprofile"
+                        element={<EditProfile/>}
+                    />
                     <Route
                         path="/editinfo"
                         element={<Editinfo/>}
@@ -194,6 +205,13 @@ function App() {
                     />
 
                     <Route
+                        path="/:id/teamblog/TeamCommunity/search"
+                        element={
+                            <TeamCommSearchResult/>
+                        }
+                    />
+
+                    <Route
                         path="/community"
                         element={
                             <Community/>
@@ -264,6 +282,12 @@ function App() {
                         path="/admin"
                         element={
                             <Admin/>
+                        }
+                    />
+                    <Route
+                        path="/MyPage/myscore"
+                        element={
+                            <MyScore/>
                         }
                     />
                 </Routes>

@@ -21,6 +21,14 @@ const category = () => {
 					<nav>
 						<ul>
 							<Link
+								to={"/mypage/profile"}
+								style={{
+									textDecoration: "none",
+									color: "inherit",
+								}}
+							><li>프로필</li>
+							</Link>
+							<Link
 								to={"/editinfo"}
 								style={{
 									textDecoration: "none",
