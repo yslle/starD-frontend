@@ -42,12 +42,18 @@ const EditProfile = () => {
             setImgFile(file);
             console.log("File details:", file);
              const imageUrl = URL.createObjectURL(file);
-            console.log("imageUrl:", file);
-            console.log("imageUrl:", imageUrl);
-            localStorage.setItem("profileImage:",file);
-            const parsedimageUrl = imageUrl.toString();
-            console.log("imageUrl:", parsedimageUrl);
+            // localStorage.setItem("profileImage:",file);
+            // const parsedimageUrl = imageUrl.toString();
+            // console.log("imageUrl:", parsedimageUrl);
             setUploadImgUrl(imageUrl);
+            const reader = new FileReader();
+            reader.onload = () => {
+                if(reader.readyState === 2){
+                    setUploadImgUrl(reader.result)
+                }
+            }
+            reader.readAsDataURL(e.target.files[0])
+
         } else {
             console.error("No file selected");
             alert("이미지를 선택해주세요");

@@ -31,12 +31,9 @@ const Profile = () => {
                 console.log("이미지:",res.data.imgUrl );
                 var str = res.data.imgUrl.substr(14);
                 var str_result = str.substr(1);
-                const fullImageUrl = `D:\\stard\\${str_result}`;
+                const fullImageUrl = `C:\\stard\\${str_result}`;
                 console.log("fullImageUrl:", fullImageUrl);
                 setUploadImgUrl(fullImageUrl);
-                setUploadImgUrl(res.data.imgUrl);
-
-
             })
             .catch((error) => {
                 console.error("프로필 가져오기 실패:", error);
