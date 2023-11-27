@@ -278,6 +278,12 @@ const StudyPostDetail = ( ) => {
                                         <div className="left">
                                             <span className="post_nickname">{postItem.member.nickname}</span>
                                             <span className="post_created_date">{formatDatetime(postItem.createdAt)}</span>
+                                            {postItem.createdAt !== postItem.updatedAt && (
+                                              <>
+                                                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                <span>( 수정: {formatDatetime(postItem.updatedAt)} )</span>
+                                              </>
+                                            )}
                                             {isLoggedInUserId !== postItem.member.id && (
                                                 <>
                                                     <span>&nbsp;&nbsp; | &nbsp;&nbsp;</span>

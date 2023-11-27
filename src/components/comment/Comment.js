@@ -21,6 +21,11 @@ const Comment = () => {
   const {id} = useParams();
   targetId = id;
 
+  const {postid} = useParams(); // 팀블로그 커뮤니티의 postId
+  if (postid != null) {
+    targetId = postid;
+  }
+
   const [studyStatus, setStudyStatus] = useState("");
 
   useEffect(() => {
@@ -101,6 +106,8 @@ const Comment = () => {
       url = `http://localhost:8080/replies/post/${targetId}`;
     } else if (type === "STUDY") {
       url = `http://localhost:8080/replies/study/${targetId}`;
+    } else if (type == "STUDYPOST") {
+      url = `http://localhost:8080/replies/studypost/${targetId}`;
     }
 
     return axios
@@ -130,6 +137,8 @@ const Comment = () => {
       url = "http://localhost:8080/replies/post";
     } else if (type === "STUDY") {
       url = "http://localhost:8080/replies/study";
+    } else if (type === "STUDYPOST") {
+        url = "http://localhost:8080/replies/studypost";
     }
 
     axios

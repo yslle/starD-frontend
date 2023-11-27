@@ -45,6 +45,8 @@ const Report = ({ show, handleClose, onReportSubmit, targetId }) => {
             url = "http://localhost:8080/reports/studies";
         } else if (type === "REPLY") {
             url = "http://localhost:8080/reports/replies";
+        } else if (type === "STUDYPOST") {
+            url = "http://localhost:8080/reports/studyposts";
         }
 
         let reasonToSend = selectedReason;
