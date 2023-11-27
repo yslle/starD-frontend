@@ -67,6 +67,9 @@ const ReportManagement = () => {
         else if (report.tableType === "REPLY") {
             return "댓글";
         }
+        else if (report.tableType === "STUDYPOST") {
+            return "스터디 게시글";
+        }
     }
 
     const tableTypeID = (report) => {
@@ -80,6 +83,9 @@ const ReportManagement = () => {
         else if (report.tableType === "REPLY") {
             return report.reply.id;
         }
+        else if (report.tableType === "STUDYPOST") {
+            return report.studyPost.id;
+        }
     }
 
     const getTitleOrContent = (report) => {
@@ -92,6 +98,9 @@ const ReportManagement = () => {
         // 예시: 삭제할 대상이 댓글인 경우
         else if (report.tableType === "REPLY") {
             return report.reply.content;
+        }
+        else if (report.tableType === "STUDYPOST") {
+            return report.studyPost.title;
         }
     }
 
