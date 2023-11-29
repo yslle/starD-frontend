@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import "../../css/admin_css/Admin.css";
+import {Link, useNavigate} from "react-router-dom";
 
 const ReportManagement = () => {
     const [reports, setReports] = useState([]);
@@ -9,8 +10,10 @@ const ReportManagement = () => {
 
     const accessToken = localStorage.getItem('accessToken');
 
+    const [selectedReport, setSelectedReport] = useState(null);
+
     //TODO 신고목록 조회
-    // TODO 5회 이상 신고된 목록 가져오기 -> 백엔드에서 1회 이상인 것 가져오도록 잠시 변경
+    // TODO 5회 이상 신고된 목록 가져오기
     useEffect(() => {
         axios.get("http://localhost:8080/reports", {
             withCredentials: true,
@@ -58,7 +61,7 @@ const ReportManagement = () => {
 
     const tableType = (report) => {
         if (report.tableType === "COMM") {
-            return "게시글";
+            return "커뮤니티";
         }
         else if (report.tableType === "STUDY"){
             return "스터디";
@@ -96,41 +99,59 @@ const ReportManagement = () => {
     }
 
     //TODO 신고승인
-    const handleReportAccept = ({report}) => {
-        axios.post(`http://localhost:8080/reports/accept/${report.id}`, {
-            withCredentials: true,
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        })
-            .then((res) => {
-                console.log("전송 성공");
-                console.log(res.data);
+    const handleReportAccept = (report) => {
+        console.log("**** ", report.id);
+        const confirmReject = window.confirm("신고를 승인하시겠습니까?");
 
-                setReports(res.data);
+        if (confirmReject) {
+            axios.post(`http://localhost:8080/reports/accept/${report.id}`, null, {
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
             })
-            .catch((error) => {
-                console.error('신고 이유를 가져오는 중 오류 발생: ', error);
-            });
+                .then((res) => {
+                    console.log("신고 승인 성공");
+                    alert("신고가 승인되었습니다.");
+
+                    // 리포트 삭제 또는 갱신 로직 추가
+                    setReports((prevReports) => {
+                        return prevReports.filter((prevReport) => prevReport.id !== report.id);
+                    });
+                })
+                .catch((error) => {
+                    console.error('신고 승인 중 오류 발생: ', error);
+                    alert("신고 승인에 실패하였습니다.");
+                });
+        }
     }
 
     //TODO 신고반려
-    const handleReportReject = ({report}) => {
-        axios.delete(`http://localhost:8080/reports/${report.id}`, {
-            withCredentials: true,
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        })
-            .then((res) => {
-                console.log("전송 성공");
-                console.log(res.data);
+    const handleReportReject = (report) => {
+        const confirmReject = window.confirm("신고를 반려하시겠습니까?");
 
-                setReports(res.data);
+        if (confirmReject) {
+            axios.delete(`http://localhost:8080/reports/${report.id}`, {
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
             })
-            .catch((error) => {
-                console.error('신고 이유를 가져오는 중 오류 발생: ', error);
-            });
+                .then((res) => {
+                    console.log("신고 반려 성공");
+                    alert("신고가 반려되었습니다.");
+
+                    // 리포트 삭제 또는 갱신 로직 추가
+                    setReports((prevReports) => {
+                        return prevReports.filter((prevReport) => prevReport.id !== report.id);
+                    });
+                })
+                .catch((error) => {
+                    console.error('신고 반려 중 오류 발생: ', error);
+                    alert("신고 반려에 실패하였습니다.");
+
+                });
+        }
     }
 
     const getTranslatedReason = (reason) => {
@@ -182,6 +203,24 @@ const ReportManagement = () => {
         });
     }, [reports, accessToken]);
 
+    // TODO 제목 클릭 시 해당 게시글 팝업 창 띄우기
+    const openPopup = (report) => {
+        // setSelectedReport(report);
+        let id = tableTypeID(report);
+        let popupUrl;
+        if (report.tableType === 'COMM') {
+            popupUrl = `/postdetail/${tableTypeID(report)}`;
+        }
+        else if (report.tableType === 'STUDY') {
+            popupUrl = `/studydetail/${tableTypeID(report)}`;
+        }
+        else if (report.tableType === 'REPLY') {
+            // TODO 해당 댓글의 게시글로 이동하도록 변경!!
+            // popupUrl = `/postdetail/${tableTypeID(report)}`;
+        }
+        window.open(popupUrl, '_blank', 'width=800,height=600');
+    };
+
     return (
         <div className="admin_sub_container">
             <h2 className="admin_title">신고 관리</h2>
@@ -190,7 +229,7 @@ const ReportManagement = () => {
                     <thead>
                     <tr>
                         <th>구분</th>
-                        <th>게시글 / 댓글 ID</th>
+                        {/*<th>게시글 / 댓글 ID</th>*/}
                         <th>게시글 제목 / 댓글 내용</th>
                         <th>신고 횟수</th>
                         <th>신고 사유</th>
@@ -202,15 +241,17 @@ const ReportManagement = () => {
                     {reports.map((report, index) => (
                         <tr key={report.id}>
                             <td>{tableType(report)}</td>
-                            <td>{tableTypeID(report)}</td>
-                            <td>{getTitleOrContent(report)}</td>
-                            <td>{reportCounts[index]}</td> {/* 신고 횟수 아직 못함.. */}
+                            {/*<td>{tableTypeID(report)}</td>*/}
+                            <td>
+                                <div className="report_title" onClick={() => openPopup(report)}>{getTitleOrContent(report)}</div>
+                            </td>
+                            <td>{reportCounts[index]}</td>
                             <td>
                                 <button className="reason_btn" onClick={() => openReasonModal(report)}>신고 사유</button>
 
                             </td>
                             <td>
-                                <button className="remove_btn" onClick={() => handleReportAccept(report)}>신고 승인(삭제)</button>
+                                <button className="remove_btn" onClick={() => handleReportAccept(report)}>신고 승인</button>
                             </td>
                             <td>
                                 <button className="reject_btn" onClick={() => handleReportReject(report)}>신고 반려</button>
