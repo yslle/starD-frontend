@@ -20,7 +20,7 @@ const NoticeListItem = ({posts, setPosts}) => {
                       textDecoration: "none",
                       color: "inherit",
                   }}>
-                <td className="notice_title">{posts.title}</td>
+                <td className="community_title">{posts.title}</td>
             </Link>
             <td className="community_nickname">관리자</td>
             <td className="community_datetime">{formatDatetime(posts.createdAt)}</td>
