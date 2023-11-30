@@ -10,8 +10,6 @@ const ReportManagement = () => {
 
     const accessToken = localStorage.getItem('accessToken');
 
-    const [selectedReport, setSelectedReport] = useState(null);
-
     //TODO 신고목록 조회
     // TODO 5회 이상 신고된 목록 가져오기
     useEffect(() => {
@@ -214,20 +212,36 @@ const ReportManagement = () => {
 
     // TODO 제목 클릭 시 해당 게시글 팝업 창 띄우기
     const openPopup = (report) => {
-        // setSelectedReport(report);
-        let id = tableTypeID(report);
         let popupUrl;
         if (report.tableType === 'COMM') {
             popupUrl = `/postdetail/${tableTypeID(report)}`;
+            window.open(popupUrl, '_blank', 'width=800,height=600');
         }
         else if (report.tableType === 'STUDY') {
             popupUrl = `/studydetail/${tableTypeID(report)}`;
+            window.open(popupUrl, '_blank', 'width=800,height=600');
         }
         else if (report.tableType === 'REPLY') {
-            // TODO 해당 댓글의 게시글로 이동하도록 변경!!
-            // popupUrl = `/postdetail/${tableTypeID(report)}`;
+            // TODO 댓글 id로 댓글 객체 가져오기
+            axios.get(`http://localhost:8080/replies/${report.reply.id}`, {
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+                .then((res) => {
+                    if (res.data.type === "STUDY") {
+                        popupUrl = `/studydetail/${res.data.study.id}`;
+                    } else if (res.data.type === "COMM") {
+                        popupUrl = `/postdetail/${res.data.post.id}`;
+                    }
+
+                    window.open(popupUrl, '_blank', 'width=800,height=600');
+                })
+                .catch((error) => {
+                    console.error('댓글 객체를 가져오는 중 오류 발생: ', error);
+                });
         }
-        window.open(popupUrl, '_blank', 'width=800,height=600');
     };
 
     return (
