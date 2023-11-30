@@ -4,6 +4,7 @@ import Category from "../../components/repeat_etc/Category";
 import Backarrow from "../../components/repeat_etc/Backarrow"
 import Header from "../../components/repeat_etc/Header";
 import default_profile_img from "../../images/default_profile_img.png";
+import ImageComponent from "../../components/image/imageComponent";
 import axios from "axios";
 
 const EditProfile = () => {
@@ -14,6 +15,7 @@ const EditProfile = () => {
     const [profile, setProfile] =useState(null);
     const [imgfile, setImgFile] = useState(null);
     const navigate = useNavigate();
+    const [imageSrc, setImageSrc] = useState(null);
 
     //프로필 조회하기
     useEffect(() => {
@@ -27,7 +29,14 @@ const EditProfile = () => {
             .then((res) => {
                 console.log("프로필 가져오기 성공:", res.data);
                 setProfile(res.data);
+                console.log("이미지:",res.data.imgUrl );
+                var str = res.data.imgUrl.substr(14);
+                var str_result = str.substr(1);
+                const fullImageUrl = `C:\\stard\\${str_result}`;
+                console.log("fullImageUrl:", fullImageUrl);
 
+                // TODO 2023-11-28 uploadImgUrl을 서버에 저장된 이미지 파일명으로 설정
+                setUploadImgUrl(res.data.imgUrl);
             })
             .catch((error) => {
                 console.error("프로필 가져오기 실패:", error);
@@ -36,16 +45,16 @@ const EditProfile = () => {
 
     //프로필 사진 업로드
     const onchangeImageUpload = (e) => {
+        setUploadImgUrl("");
+        setImgFile(null);
         console.log("사진", e.target.files);
         const file = e.target.files[0];
         if (file) {
             setImgFile(file);
             console.log("File details:", file);
              const imageUrl = URL.createObjectURL(file);
-            // localStorage.setItem("profileImage:",file);
-            // const parsedimageUrl = imageUrl.toString();
-            // console.log("imageUrl:", parsedimageUrl);
             setUploadImgUrl(imageUrl);
+            setImageSrc(uploadImgUrl);
             const reader = new FileReader();
             reader.onload = () => {
                 if(reader.readyState === 2){
@@ -60,6 +69,8 @@ const EditProfile = () => {
             return;
         }
     }
+
+
 
     //프로필 사진 삭제
     const onchangeImageDelete = (e) => {
@@ -106,12 +117,7 @@ const EditProfile = () => {
                     <Backarrow subname={"프로필 수정"}/>
                     <div className="sub_container">
                         <div className={"profile_content"}>
-                            {uploadImgUrl ? (
-                                <img className="profile-img" src={uploadImgUrl} alt="프로필 없을때"/>
-                            ) : (
-
-                                <img className="profile-img" src={default_profile_img} alt="프로필사진"/>
-                            )}
+                            <ImageComponent getImgName = {uploadImgUrl} imgsrc={imageSrc} />
                             <input className="image-upload" type="file" accept="image/*"
                                    onChange={onchangeImageUpload}/>
                             <button className="image-delete" onClick={onchangeImageDelete}>삭제</button>

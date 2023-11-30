@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-
-const ImageComponent = (getImgName) => {
+import default_profile_img from "../../images/default_profile_img.png";
+const ImageComponent = (getImgName, imgsrc) => {
 
     let accessToken = localStorage.getItem('accessToken');
     const [imageSrc, setImageSrc] = useState(null);
     const imgName = getImgName;
 
     useEffect(() => {
-        const imageUrl = `http://localhost:8080/user/mypage/profile/image/${imgName.getImgName}`;
-
+        const imageUrl = imageSrc || `http://localhost:8080/user/mypage/profile/image/${imgName.getImgName}`;
         axios
             .get(imageUrl, {
                 withCredentials: true,
@@ -27,14 +26,14 @@ const ImageComponent = (getImgName) => {
             .catch(error => {
                 console.error('이미지 불러오기 실패: ', error);
             });
-    }, [imgName]);
+    }, [imgName, imgsrc, accessToken]);
 
     return (
-        <div>
+        <div className={"profile_content"}>
             {imageSrc ? (
-                <img src={imageSrc} alt="Example" />
+                <img className="profile-img" src={imageSrc} alt="프로필 불러오기 실패"/>
             ) : (
-                <p>Loading image...</p>
+                <img className="profile-img" src={default_profile_img} alt="기본 프로필" />
             )}
         </div>
     );
