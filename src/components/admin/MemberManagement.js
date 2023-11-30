@@ -26,10 +26,16 @@ const MemberManagement = () => {
     }, []);
 
     //TODO 강제탈퇴
-    const handleWithdraw = useCallback(({member}) => {
-        const confirmWithdraw = window.confirm("정말로 강제탈퇴 시키겠습니까?");
+    const handleWithdraw = useCallback((member) => {
+        if (member.reportCount < 10) {
+            alert("누적 신고 수가 10회 이상인 경우만 강제 탈퇴 처리가 가능합니다.");
+            return;
+        }
+
+        const confirmWithdraw = window.confirm("정말로 강제 탈퇴 시키겠습니까?");
+
         if (confirmWithdraw) {
-            axios.delete(`http://localhost:8080/reports/members/${member.id}`,
+            axios.post(`http://localhost:8080/reports/members/${member.id}`, null,
                 {
                     withCredentials: true,
                     headers: {
@@ -37,10 +43,16 @@ const MemberManagement = () => {
                     },
                 }).then((res) => {
                 console.log("API Response:", res.data);
-                console.log("강제 탈퇴 성공");
-                setMembers(res.data);
+                alert("탈퇴 처리되었습니다.");
+
+                // 탈퇴 후 회원 목록 갱신 로직 추가
+                setMembers((prevMembers) => {
+                    return prevMembers.filter((prevMember) => prevMember.id !== member.id);
+                });
+
             }).catch((error) => {
                 console.log(error);
+                alert("탈퇴 처리에 실패하였습니다.");
             })
         }
     }, []);
@@ -49,6 +61,7 @@ const MemberManagement = () => {
         <div className="admin_sub_container">
             <h2 className="admin_title">회원 관리</h2>
             <div className="admin_table_wrapper">
+                <h3>* 누적 신고 수가 10회 이상이면 강제 탈퇴 처리가 가능합니다.</h3>
                 <table className="member_admin_table">
                     <thead>
                     <tr>
