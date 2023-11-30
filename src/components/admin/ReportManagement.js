@@ -248,6 +248,7 @@ const ReportManagement = () => {
         <div className="admin_sub_container">
             <h2 className="admin_title">신고 관리</h2>
             <div className="admin_table_wrapper">
+                <h3>&nbsp;</h3>
                 <table className="report_admin_table">
                     <thead>
                     <tr>
