@@ -15,6 +15,7 @@ import Category from "../../components/repeat_etc/Category";
 import Chat from "../../components/chat/Chat";
 import TeamSchedule from "../TeamSchedule/TeamSchedule";
 import TeamCommunity from "../TeamCommunity/TeamCommunity";
+import TeamMember from "../TeamMember/TeamMember"
 import Backarrow from "../../components/repeat_etc/Backarrow";
 
 
@@ -68,6 +69,15 @@ const TeamBlog = () => {
         navigate(`/${studyIdAsNumber}/teamblog/TeamCommunity`, {
             state: {
                 studyId: studyId,
+            }
+        })
+    }
+
+    const showTeamMember = () => {
+        navigate(`/${studyIdAsNumber}/teamblog/TeamMember`, {
+            state: {
+                studyId: studyId,
+                Member: Member,
             }
         })
     }
@@ -191,6 +201,7 @@ const TeamBlog = () => {
                             <li onClick={ShowAllToDo}>TODO</li>
                             <li onClick={ShowAllSchedule}>일정</li>
                             <li onClick={showTeamCommunity}>팀 커뮤니티</li>
+                            <li onClick={showTeamMember}>스터디원</li>
                         </ul>
                     </div>
                     <div className="content">
