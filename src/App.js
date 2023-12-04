@@ -42,6 +42,7 @@ import TeamSchedule from "./pages/TeamSchedule/TeamSchedule";
 import TeamCommunity from "./pages/TeamCommunity/TeamCommunity";
 import TeamCommSearchResult from "./pages/TeamCommunity/TeamCommSearchResult";
 import StudyPostDetail from "./pages/TeamCommunity/StudyPostDetail";
+import TeamMember from "./pages/TeamMember/TeamMember";
 import FindPW from "./pages/userpage/FindPW";
 import NoticeDetail from "./pages/notice/NoticeDetail";
 import NoticeSearchResult from "./pages/notice/NoticeSearchResult";
@@ -191,6 +192,9 @@ function App() {
 
                     <Route path="/:id/teamblog/TeamCommunity"
                            element={<TeamCommunity/>} />
+
+                    <Route path="/:id/teamblog/TeamMember"
+                           element={<TeamMember/>} />
 
                     <Route
                         path="/:id/teamblog/TeamCommunity/studypostdetail/:postid"
