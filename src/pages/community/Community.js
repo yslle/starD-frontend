@@ -59,7 +59,7 @@ const Community = () => {
                                     <thead>
                                         <tr>
                                             <th>카테고리</th>
-                                            <th>제목</th>
+                                            <th style={{width:"30%"}}>제목</th>
                                             <th>닉네임</th>
                                             <th>날짜</th>
                                             <th>조회수</th>

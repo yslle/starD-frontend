@@ -58,12 +58,12 @@ const TeamCommunity = () => {
                                     새 글 작성
                                 </button>
                             </div>
-                            <div className="community">
+                            <div className="community" style={{marginRight:"130px"}}>
                                 <div className={"community-content"}>
                                     <table className="post_table">
                                         <thead>
                                             <tr>
-                                                <th>제목</th>
+                                                <th style={{width:"40%"}}>제목</th>
                                                 <th>닉네임</th>
                                                 <th>날짜</th>
                                                 <th>조회수</th>

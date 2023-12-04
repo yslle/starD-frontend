@@ -8,6 +8,8 @@ import LikeButton from "../../components/repeat_etc/LikeButton";
 import axios from "axios";
 import PostEdit from "../../components/teamcommunity/TeamPostEdit";
 import Report from "../../components/report/Report";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 const StudyPostDetail = ( ) => {
     const navigate = useNavigate();
@@ -250,7 +252,7 @@ const StudyPostDetail = ( ) => {
             <Header showSideCenter={true}/>
             <div className="container">
                 <Category/>
-                <div className="community_container">
+                <div className="main_schedule_container">
                     <p id={"entry-path"}> 스터디 참여내역 > 팀블로그 > 팀 커뮤니티</p>
                     <Backarrow subname={"TEAM COMMUNITY LIST"}/>
                     {editing ? (
@@ -307,21 +309,19 @@ const StudyPostDetail = ( ) => {
                             )}
                             {postItem && (
                                 <div>
-                                    {/*<div className=" " onClick={() => handleDownloadClick()}>{postItem.fileName}</div>*/}
-                                    <Link onClick={handleDownloadClick}
-                                           style={{
-                                               textDecoration: 'underline',
-                                               fontSize: '16px',
-                                           }}
-                                     >
-                                        {postItem.fileName}
-                                     </Link>
                                     <div className="post_content" dangerouslySetInnerHTML={{ __html: postItem.content.replace(/\n/g, '<br>') }} />
+                                    <div className="download_box">
+                                        {postItem.fileName}
+                                        <FontAwesomeIcon icon={faArrowDown} onClick={handleDownloadClick} className="download_btn"/>
+                                    </div>
                                 </div>
                             )}
 
                             <div className="btn">
-                                <Link onClick={showTeamCommunity}
+                                <Link
+                                    to={`/${id}/teamblog/TeamCommunity`}
+                                    // onClick={showTeamCommunity}
+                                    state={{studyId: id}}
                                       style={{
                                           textDecoration: "none",
                                           color: "inherit",
@@ -333,9 +333,11 @@ const StudyPostDetail = ( ) => {
                         </div>
                     )}
 
-                    <div className="comment_container">
-                        <Comment/>
-                    </div>
+                    {!editing && (
+                        <div className="comment_container" style={{width:"90%"}}>
+                            <Comment />
+                        </div>
+                    )}
                 </div>
 
             </div>

@@ -3,23 +3,31 @@ input{
 }
 .community_container {
     width: 70%;
-    margin: 0 auto;
+    margin: 25px auto 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: relative;
     font-family: 'Pretendard-Regular';
-    margin-top: 25px;
 }
 .community_container h1 {
     font-size: 27px;
     text-align: center;
     margin-bottom: 40px;
 }
+.main_schedule_container .comment_form{
+    width:70%;
+}
+.main_schedule_container .comment_form > div{
+    width:100%;
+}
 
 .community_header{
     display: flex;
     justify-content: center;
+}
+.main_schedule_container .community_header{
+    margin-right:130px;
 }
 /*.community-content{*/
 /*    max-height: 1000px;*/
@@ -40,7 +48,7 @@ input{
     font-size:15px;
 }
 .post_table{
-    width: 90%;
+    width: 100%;
     border-top:1px solid #d9d9d9;
     border-bottom:1px solid #d9d9d9;
     margin: 0 auto 30px;
@@ -66,7 +74,6 @@ input{
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin:0 220px;
 }
 .new_post_form div{
     margin-bottom: 30px;
@@ -83,6 +90,7 @@ input{
     height:35px;
     margin-bottom: 0;
     box-shadow: none;
+    line-height: 35px;
 }
 .new_post_form select{
     height:35px;
@@ -97,7 +105,7 @@ input{
     padding:10px;
     border-radius: 10px;
     border: 1px solid #d9d9d9;
-    margin-bottom: 20px;
+    font-family: "Pretendard-Regular";
 }
 .btn{
     margin:0 auto;
@@ -114,15 +122,18 @@ input{
     border-radius: 50px;
     font-family: 'Pretendard-Regular';
     cursor: pointer;
-    margin-right: 10px;
 }
 
 
 
 /* post_detail */
 .community_detail{
-    width:70%;
+    width:90%;
     margin:40px auto 60px;
+}
+.main_schedule_container .community_detail{
+    width:80%;
+    margin:40px 50px 60px;
 }
 .community_detail .post_header{
     font-size:13px;
@@ -188,4 +199,22 @@ input{
     border-radius: 50px;
     font-family: 'Pretendard-Regular';
     cursor: pointer;
+}
+
+.download_box{
+    font-size: 16px;
+    border: 1px solid #dbdbdb;
+    border-radius:10px;
+    padding:10px 20px;
+    width:200px;
+    text-align: center;
+    margin:0 auto 70px;
+    display: flex;
+    justify-content: space-between;
+}
+.download_box .download_btn{
+    cursor: pointer;
+}
+.download_box .download_btn:hover {
+    color: #99A98F;
 }
