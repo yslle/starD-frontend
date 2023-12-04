@@ -90,17 +90,17 @@ const TeamPostInsert = ( {studyId} ) => {
     }, [formData])
 
     return (
-        <form className="new_post_form" onSubmit={handleSubmit}>
-            <div style={{display:"flex"}}>
-                <span style={{paddingLeft: "10px",marginTop:"25px"}}>제목</span>
+        <form className="new_post_form" onSubmit={handleSubmit} style={{marginRight:"200px"}}>
+            <div style={{display:"flex", alignItems:"center"}}>
+                <span style={{paddingLeft: "10px"}}>제목</span>
                 <input type="text" name="title" value={formData.title} onChange={handleInputChange}/>
             </div>
             <div style={{display:"flex"}}>
                 <span style={{paddingLeft: "10px",marginTop:"5px"}}>상세 내용</span>
                 <textarea name="content" value={formData.content} onChange={handleInputChange}/>
             </div>
-            <div style={{display:"flex"}}>
-                <span style={{ paddingLeft: "10px", marginTop: "5px" }}>파일 등록</span>
+            <div style={{display:"flex", alignItems:"center"}}>
+                <span style={{ paddingLeft: "10px"}}>파일 등록</span>
                 <input type="file" name="file" onChange={handleFileChange}/>
             </div>
             <div className="btn">
