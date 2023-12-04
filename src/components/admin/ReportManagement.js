@@ -234,12 +234,31 @@ const ReportManagement = () => {
                         popupUrl = `/studydetail/${res.data.study.id}`;
                     } else if (res.data.type === "COMM") {
                         popupUrl = `/postdetail/${res.data.post.id}`;
+                    } else if (res.data.type === "STUDYPOST") {
+                        popupUrl = `/${res.data.study.id}/teamblog/TeamCommunity/studypostdetail/${res.data.studyPost.id}`;
                     }
 
                     window.open(popupUrl, '_blank', 'width=800,height=600');
                 })
                 .catch((error) => {
                     console.error('댓글 객체를 가져오는 중 오류 발생: ', error);
+                });
+        }
+        else if (report.tableType === 'STUDYPOST') {
+            // TODO studypost id로 study id 알아오기
+            axios.get(`http://localhost:8080/study/post/${report.studyPost.id}`, {
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+                .then((res) => {
+                    let studyId = res.data.study.id;
+                    popupUrl = `/${studyId}/teamblog/TeamCommunity/studypostdetail/${tableTypeID(report)}`;
+                    window.open(popupUrl, '_blank', 'width=800,height=600');
+                })
+                .catch((error) => {
+                    console.error('스터디 id를 가져오는 중 오류 발생: ', error);
                 });
         }
     };
