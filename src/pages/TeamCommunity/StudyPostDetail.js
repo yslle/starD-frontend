@@ -125,9 +125,6 @@ const StudyPostDetail = ( ) => {
         postData.append('title', updatedPost.title);
         postData.append('content', updatedPost.content);
         if (updatedPost.fileChanged === true) {
-            if (updatedPost.file) {
-                console.log(updatedPost.file.name);
-            }
             postData.append('file', updatedPost.file);
             postData.append('fileUpdateStatus', true);
         } else {
