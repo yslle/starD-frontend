@@ -124,8 +124,14 @@ const StudyPostDetail = ( ) => {
         const postData = new FormData();
         postData.append('title', updatedPost.title);
         postData.append('content', updatedPost.content);
-        if (updatedPost.file) {
+        if (updatedPost.fileChanged === true) {
+            if (updatedPost.file) {
+                console.log(updatedPost.file.name);
+            }
             postData.append('file', updatedPost.file);
+            postData.append('fileUpdateStatus', true);
+        } else {
+            postData.append('fileUpdateStatus', false);
         }
 
         axios.post(`http://localhost:8080/study/post/${postid}`, postData, {
@@ -310,10 +316,12 @@ const StudyPostDetail = ( ) => {
                             {postItem && (
                                 <div>
                                     <div className="post_content" dangerouslySetInnerHTML={{ __html: postItem.content.replace(/\n/g, '<br>') }} />
-                                    <div className="download_box">
-                                        {postItem.fileName}
-                                        <FontAwesomeIcon icon={faArrowDown} onClick={handleDownloadClick} className="download_btn"/>
-                                    </div>
+                                    {postItem.fileName && (
+                                        <div className="download_box">
+                                            {postItem.fileName}
+                                            <FontAwesomeIcon icon={faArrowDown} onClick={handleDownloadClick} className="download_btn"/>
+                                        </div>
+                                    )}
                                 </div>
                             )}
 

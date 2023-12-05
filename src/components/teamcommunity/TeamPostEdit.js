@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const TeamPostEdit = ({ post, onUpdatePost, onCancel }) => {
     const [updatedPost, setUpdatedPost] = useState(post);
+    const [fileEditing, setFileEditing] = useState(!post.fileName);
 
     useEffect(() => {
         // 게시물 속성이 변경될 때 컴포넌트를 업데이트
@@ -16,6 +17,15 @@ const TeamPostEdit = ({ post, onUpdatePost, onCancel }) => {
         }));
     };
 
+    const handleFileCancelClick = () => {
+        setFileEditing(true);
+        setUpdatedPost((prevData) => ({
+            ...prevData,
+            file: null,
+            fileChanged: true,
+        }));
+   }
+
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
 
@@ -24,7 +34,6 @@ const TeamPostEdit = ({ post, onUpdatePost, onCancel }) => {
             setUpdatedPost((prevData) => ({
                 ...prevData,
                 file: selectedFile,
-                fileName: selectedFile.name,
                 fileChanged: true,
             }));
         }
@@ -56,15 +65,19 @@ const TeamPostEdit = ({ post, onUpdatePost, onCancel }) => {
             <div>
                 <div style={{ display: "flex", alignItems: "center", marginBottom:"15px"}}>
                     <span style={{ paddingLeft: "10px", marginTop: "5px" }}>파일 등록</span>
-                    <input
-                        type="file"
-                        name="file"
-                        onChange={handleFileChange}
-                    />
+                    {fileEditing ? (
+                        <input
+                            type="file"
+                            name="file"
+                            onChange={handleFileChange}
+                        />
+                    ) : (
+                        <>
+                            <span style={{ width:"auto" }}>{updatedPost.fileName}</span>
+                            <span style={{ width: "auto", cursor: "pointer" }} onClick={handleFileCancelClick}>X</span>
+                        </>
+                    )}
                 </div>
-                {updatedPost.fileName && (
-                    <span style={{ paddingLeft: "95px", width:"auto" }}>{updatedPost.fileName}</span>
-                )}
             </div>
             <div className="btn">
                 <button onClick={handleUpdateClick} className="register_btn">
