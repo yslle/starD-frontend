@@ -1,4 +1,5 @@
 import {Link} from "react-router-dom";
+import attachments from "../../images/attachments.png";
 
 const TeamPostListItem = ({posts, setPosts}) => {
     const formatDatetime = (datetime) => {
@@ -19,7 +20,10 @@ const TeamPostListItem = ({posts, setPosts}) => {
                       textDecoration: "none",
                       color: "inherit",
                   }}>
-                <td className="community_title">{posts.title}</td>
+                <td className="community_title">
+                    {posts.title}
+                    {posts.fileName && (<img src={attachments} style={{ paddingLeft: "10px", width: "15px" }}/>)}
+                </td>
             </Link>
             <td className="community_nickname">{posts.member.nickname}</td>
             <td className="community_datetime">{formatDatetime(posts.createdAt)}</td>
