@@ -26,8 +26,8 @@ const PostEdit = ({post, onUpdatePost, onCancel}) => {
 
     return (
         <form className="new_post_form">
-            <div>
-                <span>제목</span>
+            <div style={{display:"flex", alignItems:"center"}}>
+                <span style={{paddingLeft:"10px"}}>제목</span>
                 <input type="text" name="title" value={updatedPost.title} onChange={handleInputChange}/>
             </div>
             <div>

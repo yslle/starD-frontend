@@ -387,9 +387,6 @@ button#todo_more{
 	color: black;
 	background-color: #F6FFDE;
 	cursor: pointer;
-	margin-left: 9vw;
-	position: relative;
-	bottom: 10px;
 }
 .dashboard_detail{
 	width: 45%;
