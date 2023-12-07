@@ -283,7 +283,7 @@ const HomeDashBoard = () => {
                                 마감일 | {d.study.recruitmentDeadline} / 팀장: {d.study.recruiter.nickname}
                             </div>
                             <div className={"dashboardsubdetail"}>
-                            <div className="list_tag">{d.study.field}</div>
+                            <div className="list_tag" style={{marginRight:"5px"}}>{d.study.field}</div>
                             <div className="list_onoff">{d.study.onOff}</div>
                             <div className="stroke"></div>
                             <div className="list_founder"></div>
