@@ -29,7 +29,7 @@ const Notice = () => {
     };
 
     useEffect(() => {
-        let base_url = "http://localhost:8080/com/search";
+        let base_url = "http://localhost:8080/notice/search";
         let params = {
             searchType: selectOption,
             searchWord: searchQuery
@@ -41,7 +41,7 @@ const Notice = () => {
             .catch((error) => {
                 console.error("데이터 가져오기 실패:", error);
             });
-    }, []);
+    }, [searchQuery, selectOption]);
 
     return (
         <div className={"main_wrap"} id={"community"}>
