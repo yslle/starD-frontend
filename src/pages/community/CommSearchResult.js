@@ -55,7 +55,7 @@ const Community = () => {
             .catch((error) => {
                 console.error("데이터 가져오기 실패:", error);
             });
-    }, []);
+    }, [searchQuery, selectOption]);
 
     return (
         <div className={"main_wrap"} id={"community"}>
