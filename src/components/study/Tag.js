@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import '../../css/tag_css/Tag.css';
 
-const Tag = ({ onTagChange, tags }) => {
+const Tag = React.memo(({ onTagChange, tags }) => {
     const [hashtag, setHashtag] = useState('');
     const [tagString, setTagString] = useState(tags);
 
@@ -78,7 +78,7 @@ const Tag = ({ onTagChange, tags }) => {
             />
         </div>
     );
-};
+});
 
 export default Tag;
 

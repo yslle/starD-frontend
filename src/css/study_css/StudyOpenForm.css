@@ -21,10 +21,8 @@ html {
     text-align: left;
     font-size: 50px;
     color: #898989;
-    cursor: pointer;
 }
 .interest,.deadline,.onoffline{
-    width: fit-content;
     margin-left: 60px;
 }
 #inter{
@@ -32,9 +30,9 @@ html {
 }
 .study_open_form {
     font-family: 'Pretendard-Regular';
-    width: 120%;
-    position: relative;
-    right: 80px;
+    /*width: 120%;*/
+    /*position: relative;*/
+    /*right: 80px;*/
 }
 .study_open_form > div:nth-of-type(1){
     display: flex;
@@ -71,7 +69,6 @@ html {
 .study_open_form .right .onoff {
     display: inline-block;
     width:300px;
-    height:50px;
     text-align: left;
     font-size: 15px;
 }
@@ -90,7 +87,7 @@ html {
     position: inherit;
 }
 .study_open_form .right .field_wrapper{
-    width:300px;
+    width:320px;
     display: inline-block;
     text-align: left;
     margin-left:8px;
@@ -104,10 +101,9 @@ html {
 
 .study_open_detail{
     display: flex;
-    width: 90%;
-    justify-content: center;
-    position: relative;
-    left: 8%;
+    width: 110%;
+    margin-left: 30px;
+    margin-top: 20px;
 }
 .study_open_detail span{
     margin-left: 10px;
@@ -127,7 +123,7 @@ html {
 .study_tag{
     display: flex;
     align-items: center;
-    margin-left: 190px;
+    margin-left: 30px;
     margin-bottom: 100px;
 }
 .study_tag span{
@@ -211,7 +207,7 @@ html {
 
     .study_open_form .left > div, .study_open_form .right > div {
         margin-right: 0px;
-        margin-bottom: 25px;
+        margin-bottom: 15px;
         width: 200px;
     }
     .study_open_form .right > div {
@@ -251,7 +247,7 @@ html {
 
     .study_open_form .left > div, .study_open_form .right > div {
         margin-right: 0px;
-        margin-bottom: 25px;
+        margin-bottom: 15px;
         width: 200px;
     }
     .study_open_form .right > div {

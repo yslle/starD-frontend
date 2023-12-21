@@ -168,16 +168,17 @@ html {
 .study_list .list_tag {
 	width: fit-content;
 	background-color: #ffffff;
-	border: 0.275px solid #FFC947;
+	border: 0.275px solid #99A98F;
 	padding: 7px 10px;
 	border-radius: 50px;
 }
 .study_list .list_onoff {
 	width: fit-content;
-	background-color: #FFC947;
-	border: 0.275px solid #FFC947;
+	background-color: #99A98F;
+	border: 0.275px solid #99A98F;
 	padding: 7px 10px;
 	border-radius: 50px;
+	color:#fff;
 }
 .study_list .stroke {
 	border-bottom: 1px solid #c6c6c6;

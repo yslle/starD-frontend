@@ -335,7 +335,7 @@ const Terms_of_service=({onClose, CheckImg, onCheckImgs})=>{
             </li>
             </ul>
             <div className="ok_term">
-                <button type="button" id="agreebtn" onClick={onClose}>뒤로가기</button>
+                <button type="button" id="agreebtn" onClick={onClose} style={{marginRight:"10px"}}>뒤로가기</button>
                 <button type="button" id="agreebtn" onClick={HandleAgree}>동의하기</button>
             </div>
         </div>
