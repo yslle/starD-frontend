@@ -64,7 +64,7 @@ html {
 }
 .study_open_form .left > div,
 .study_open_form .right > div{
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 .study_open_form .right .onoff {
     display: inline-block;
