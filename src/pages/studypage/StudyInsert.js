@@ -169,9 +169,9 @@ const StudyInsert = () => {
 
     }, [studies, dataId]);
 
-    const handleTagChange = (selectedTag) => {
+    const handleTagChange = useCallback((selectedTag) => {
         setTags(selectedTag); // 변경된 부분: 태그 정보를 배열로 변환하여 설정
-    };
+    },[]);
 
 
     useEffect(() => {
