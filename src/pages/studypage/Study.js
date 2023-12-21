@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Link, useNavigate, useParams, useLocation} from "react-router-dom";
 
 import Backarrow from "../../components/repeat_etc/Backarrow";
@@ -51,7 +51,7 @@ const Study = () => {
         setShowStudyInsert(false);
     };
 
-    const toggleScrap = (index) => {
+    const toggleScrap = useCallback((index) => {
         if (!(accessToken && isLoggedInUserId)) {
             alert("로그인 해주세요");
             navigate("/login");
@@ -95,9 +95,9 @@ const Study = () => {
             setStudiesChanged(true);
             return newStudies;
         });
-    };
+    },[accessToken, isLoggedInUserId, studies]);
 
-    const toggleLike = (index) => {
+    const toggleLike = useCallback((index) => {
         if (!(accessToken && isLoggedInUserId)) {
             alert("로그인 해주세요");
             navigate("/login");
@@ -141,7 +141,7 @@ const Study = () => {
             setStudiesChanged(true);
             return newStudies;
         });
-    };
+    },[accessToken, isLoggedInUserId, studies]);
 
     const handlePageChange = (selectedPage) => {
         setPage(selectedPage);

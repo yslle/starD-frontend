@@ -41,8 +41,7 @@
     margin-top: 20px;
     border-radius: 10px;
     border: lightgray solid 1px;
-
-
+    margin-bottom: 30px;
 }
 
 .select_estates{
@@ -76,7 +75,7 @@
     justify-content: center;
 }
 #next{
-    background-color: #395b64;
+    background-color: #BBDF9F;
     color: white;
     width: 100px;
     height: 40px;
