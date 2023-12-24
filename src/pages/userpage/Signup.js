@@ -263,6 +263,12 @@ const Signup = () => {
             return;
         }
 
+        if (nickname === "관리자") {
+            inputNicname.current.focus();
+            alert("닉네임으로 '관리자'는 사용할 수 없습니다. 다른 닉네임을 입력해주세요.");
+            return;
+        }
+
         if (nicknameRef.current) {
             nicknameRef.current.remove();
         }
