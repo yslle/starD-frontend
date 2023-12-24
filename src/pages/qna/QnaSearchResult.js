@@ -3,9 +3,9 @@ import React, {useEffect, useState} from "react";
 import {Link, useNavigate, useLocation} from "react-router-dom";
 
 import "../../css/community_css/Community.css";
-import NoticeSearchBar from "../../components/notice/NoticeSearchBar";
-import NoticeInsert from "../../components/notice/NoticeInsert";
-import NoticeListItem from "../../components/notice/NoticeListItem";
+import QnaSearchBar from "../../components/qna/QnaSearchBar";
+import QnaInsert from "../../components/qna/QnaInsert";
+import QnaListItem from "../../components/qna/QnaListItem";
 import axios from "axios";
 
 const QnaSearchResult = () => {
@@ -33,14 +33,14 @@ const QnaSearchResult = () => {
         let base_url = "";
         let params = {};
         if (categoryOption === "전체") {
-            base_url = "http://localhost:8080/com/search";
+            base_url = "http://localhost:8080/qna/search";
             params = {
                 searchType: selectOption,
                 searchWord: searchQuery
             };
         }
         else {
-            base_url = "http://localhost:8080/com/search/category";
+            base_url = "http://localhost:8080/qna/search/category";
             params = {
                 searchType: selectOption,
                 category: categoryOption,
@@ -55,29 +55,20 @@ const QnaSearchResult = () => {
             .catch((error) => {
                 console.error("데이터 가져오기 실패:", error);
             });
-    }, []);
+    }, [searchQuery, selectOption]);
 
     return (
-        <div>
-            <button className="select_btn">
-                전체
-            </button>
-            <button className="select_btn">
-                공지
-            </button>
-            <button className="select_btn">
-                FAQ
-            </button>
+        <div className={"main_wrap"} id={"community"}>
             <Header showSideCenter={true}/>
             <div className="community_container">
-                <h1>NOTICE LIST</h1>
+                <h1>QNA LIST</h1>
                 {showPostInsert && (
-                    <NoticeInsert />
+                    <QnaInsert />
                 )}
                 {!showPostInsert && (
                     <div>
                         <div className="community_header">
-                            <NoticeSearchBar/>
+                            <QnaSearchBar/>
                             <button onClick={handleMoveToStudyInsert} className="new_post_btn">
                                 새 글 작성
                             </button>
@@ -94,7 +85,7 @@ const QnaSearchResult = () => {
                                         <th>조회수</th>
                                         <th>공감수</th>
                                         {posts.map((d, index) => (
-                                            <NoticeListItem setPosts={setPosts} posts={d} d={d}
+                                            <QnaListItem setPosts={setPosts} posts={d} d={d}
                                                           index={index} key={d.id}/>
                                         ))}
                                     </table>
