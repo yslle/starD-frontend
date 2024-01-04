@@ -126,7 +126,15 @@ const category = () => {
 							>
 								<li>스크랩한 스터디</li>
 							</Link>
+							<Link
+								to={"/myScrapcommunitypost"}
+								style={{
+									textDecoration: "none",
+									color: "inherit",
+								}}
+							>
 							<li>스크랩한 게시글</li>
+							</Link>
 						</ul>
 					</nav>
 				</div>
