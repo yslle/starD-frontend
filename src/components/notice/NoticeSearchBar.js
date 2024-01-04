@@ -22,13 +22,14 @@ const NoticeSearchBar = () => {
 	}
 
 	const onHandleselect = (e)=>{
+		setSelectOption(e.target.value);
 		console.log(`value = ${e.target.value}`)
 	}
 
 	const searchItem = (item)=>{
 		setSearch(item);
 		const queryParams = `?q=${encodeURIComponent(item)}&select=${encodeURIComponent(selectOption)}`;
-		navigate(`/comm/search${queryParams}`);
+		navigate(`/notice/search${queryParams}`);
 	}
 
 	return (

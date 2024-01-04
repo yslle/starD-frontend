@@ -214,6 +214,7 @@ const PostDetail = () => {
                     post.id === updatedPost.id ? updatedPost : post
                 );
                 setPosts(updatedPosts);
+                setPostItem(response.data);
             })
             .catch(error => {
                 console.error("Error:", error);

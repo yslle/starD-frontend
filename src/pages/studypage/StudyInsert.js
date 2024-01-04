@@ -73,13 +73,13 @@ const StudyInsert = () => {
     ];
 
 
-    const handleInputChange = (e) => {
+    const handleInputChange = useCallback((e) => {
         const {name, value} = e.target;
         setFormData({
             ...formData,
             [name]: value,
         });
-    };
+    }, [formData]);
 
     const handleRegionCityChange = (newCity) => {
         setCity(newCity);
@@ -169,9 +169,9 @@ const StudyInsert = () => {
 
     }, [studies, dataId]);
 
-    const handleTagChange = (selectedTag) => {
+    const handleTagChange = useCallback((selectedTag) => {
         setTags(selectedTag); // 변경된 부분: 태그 정보를 배열로 변환하여 설정
-    };
+    },[]);
 
 
     useEffect(() => {

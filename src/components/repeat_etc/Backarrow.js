@@ -1,6 +1,7 @@
 //뒤로가기 컴포넌트
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Arrow } from "../../images/Arrow.svg";
+import React from "react";
 
 const Backarrow=({subname})=>{
     const navigate = useNavigate();
@@ -20,4 +21,4 @@ const Backarrow=({subname})=>{
         </div>
     )
 };
-export default Backarrow;
+export default React.memo(Backarrow);
