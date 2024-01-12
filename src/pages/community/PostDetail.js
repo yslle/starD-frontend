@@ -254,9 +254,15 @@ const PostDetail = () => {
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportPostId, setReportPostId] = useState(null);
 
-    const handleOpenReportModal = (postId) => {
-        setReportPostId(postId);
-        setShowReportModal(true);
+    const handleOpenReportModal = (postId, e) => {
+        if (accessToken && isLoggedInUserId) {
+            e.preventDefault();
+            setReportPostId(postId);
+            setShowReportModal(true);
+        } else {
+            alert("로그인 해주세요");
+            navigate("/login");
+        }
     };
 
     const handleCloseReportModal = () => {
