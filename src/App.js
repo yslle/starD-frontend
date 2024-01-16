@@ -211,19 +211,19 @@ function App() {
                     />
 
                     <Route
-                        path="/community"
+                        path="/community/:page"
                         element={
                             <Community/>
                         }
                     />
                     <Route
-                        path="/notice"
+                        path="/notice/:page"
                         element={
                             <Notice/>
                         }
                     />
                     <Route
-                        path="/qna"
+                        path="/qna/:page"
                         element={
                             <Qna/>
                         }

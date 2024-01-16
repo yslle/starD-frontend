@@ -189,20 +189,32 @@ const Header = ({showSideCenter}) => {
                                       children={(<li>스터디</li>)}
                                       style={{textDecoration: "none", color: "inherit"}}>
                         </MemoizedLink>
-                        <MemoizedLink
-                            to={"/community"}
+                        <MemoizedLink to={{
+                            pathname: `/community/page=${page}`,
+                            state: {
+                                page: page,
+                            }
+                        }}
                             children={(<li>커뮤니티</li>)}
                             style={{textDecoration: "none", color: "inherit"}}
                         >
                         </MemoizedLink>
-                        <MemoizedLink
-                            to={"/notice"}
+                        <MemoizedLink to={{
+                            pathname: `/notice/page=${page}`,
+                            state: {
+                                page: page,
+                            }
+                        }}
                             children={(<li>공지사항</li>)}
                             style={{textDecoration: "none", color: "inherit"}}
                         >
                         </MemoizedLink>
-                        <MemoizedLink
-                            to={"/qna"}
+                        <MemoizedLink to={{
+                            pathname: `/qna/page=${page}`,
+                            state: {
+                                page: page,
+                            }
+                        }}
                             children={(<li>QNA</li>)}
                             style={{textDecoration: "none", color: "inherit"}}
                         >
