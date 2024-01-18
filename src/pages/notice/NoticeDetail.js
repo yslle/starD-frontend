@@ -200,7 +200,7 @@ const NoticeDetail = () => {
                     alert("게시글이 삭제되었습니다.");
                     const updatedPosts = posts.filter(post => post.id !== postDetail[0].id);
                     setPosts(updatedPosts);
-                    navigate("/notice");
+                    navigate("/notice/page=1");
                 })
                 .catch(error => {
                     console.error("Error:", error);
@@ -275,7 +275,7 @@ const NoticeDetail = () => {
                         )}
 
                         <div className="btn">
-                            <Link to={"/notice"}
+                            <Link to={"/notice/page=1"}
                                   style={{
                                       textDecoration: "none",
                                       color: "inherit",

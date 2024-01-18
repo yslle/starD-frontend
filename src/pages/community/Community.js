@@ -1,6 +1,6 @@
 import Header from "../../components/repeat_etc/Header";
 import React, {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 
 import "../../css/community_css/Community.css";
 import SearchBar from "../../components/community/CommSearchBar";
@@ -8,6 +8,7 @@ import PostInsert from "../../components/community/PostInsert";
 import PostListItem from "../../components/community/PostListItem";
 import axios from "axios";
 import Backarrow from "../../components/repeat_etc/Backarrow";
+import Paging from "../../components/repeat_etc/Paging";
 
 const Community = () => {
     const navigate = useNavigate();
@@ -15,6 +16,13 @@ const Community = () => {
     const [showPostInsert, setShowPostInsert] = useState(false);
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
+
+    const location = useLocation();
+    const pageparams = location.state ? location.state.page : 1;
+    const [page, setPage] = useState(pageparams);
+    const [count, setCount] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const insertPage = location.state && location.state.page;
 
     const handleMoveToStudyInsert = (e) => {
         if (accessToken && isLoggedInUserId) {
@@ -26,15 +34,44 @@ const Community = () => {
         }
     };
 
-    useEffect(() => {
-        axios.get("http://localhost:8080/com")
+    const fetchCommunities = (pageNumber) => {
+        axios.get("http://localhost:8080/com", {
+            params: {
+                page: pageNumber,
+            },
+        })
             .then((res) => {
-                setPosts(res.data);
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
+            }).catch((error) => {
+            console.error("데이터 가져오기 실패:", error);
+        });
+    };
+
+    useEffect(() => {
+        fetchCommunities(page);
+    }, [page]);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/com", {
+            params: {
+                page: 1,
+            }
+        }).then((res) => {
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
             })
             .catch((error) => {
                 console.error("데이터 가져오기 실패:", error);
             });
-    }, []);
+    }, [insertPage]);
+
+    const handlePageChange = (selectedPage) => {
+        setPage(selectedPage);
+        navigate(`/community/page=${selectedPage}`);
+    };
 
     return (
         <div className={"main_wrap"} id={"community"}>
@@ -79,6 +116,10 @@ const Community = () => {
                         </div>
                     </div>
                 )}
+            </div>
+            <div className={"paging"}>
+                <Paging page={page} totalItemCount={count} itemsPerPage={itemsPerPage}
+                        handlePageChange={handlePageChange}/>
             </div>
         </div>
     );
