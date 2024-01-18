@@ -51,11 +51,11 @@ const TeamToDoInsert = ({onInsert, dueDate, Inserttodostudyid, studyidasnumber, 
                 const ParticipatedStudiesMem = studyList.map(item => item.member.id);
                 // setStudyMems(Assignees.toString());
 
-                console.log("참여 스터디 아이디", studiesIds);
-                console.log("참여 스터디 제목", studiesTitle);
-                console.log("참여중인 스터디", studyList);
-                console.log("참여멤버", ParticipatedStudiesMem);
-                console.log('날짜', dueDate);
+                // console.log("참여 스터디 아이디", studiesIds);
+                // console.log("참여 스터디 제목", studiesTitle);
+                // console.log("참여중인 스터디", studyList);
+                // console.log("참여멤버", ParticipatedStudiesMem);
+                // console.log('날짜', dueDate);
 
 
             })
@@ -75,6 +75,8 @@ const TeamToDoInsert = ({onInsert, dueDate, Inserttodostudyid, studyidasnumber, 
     const onChange = useCallback(e => {
         setTaskValue(e.target.value);
     }, [])
+
+
     //할 일 추가 버튼 함수
     const onSubmit = useCallback(
         async (e) => {
@@ -90,74 +92,22 @@ const TeamToDoInsert = ({onInsert, dueDate, Inserttodostudyid, studyidasnumber, 
 
             e.preventDefault();
 
-            // try {
-            //     // Step 1: 먼저 필요한 데이터를 서버에서 가져옵니다.
-            //     const fetchDataResponse = await axios.get(`http://localhost:8080/todo/${studyIdAsNumber}`, {
-            //         params: {
-            //             year: year,
-            //             month: month,
-            //         },
-            //         headers: {
-            //             Authorization: `Bearer ${accessToken}`,
-            //         },
-            //     });
-            //
-            //     console.log('가져오기 성공:', fetchDataResponse.data);
-            //     setResponseData(fetchDataResponse.data);
-            //     console.log("studyIdAsNumber:", studyIdAsNumber);
-            //
-            //     const studyId = studyIdAsNumber;
-            //     const assigneeStr = StringAssignees;
-            //     const task = TaskValue;
-            //     // const study = InsertToDoStudy;
-            //
-            //     const todoData = {
-            //         task: task,
-            //         dueDate: formattedDate,
-            //     };
-            //
-            //     const postDataResponse = await axios.post(`http://localhost:8080/todo`, todoData, {
-            //         params: {
-            //             studyId: studyId,
-            //             assigneeStr: assigneeStr,
-            //         },
-            //         withCredentials: true,
-            //         headers: {
-            //             'Authorization': `Bearer ${accessToken}`
-            //         }
-            //     });
-            //
-            //     console.log("전송 성공:", postDataResponse); //담당자 잘 전송되는 듯
-            //
-            //     setTaskValue("");
-            // } catch (error) {
-            //     console.error("에러:", error);
-            // }
-
         },
         [TaskValue, Inserttodostudyid, dueDate, accessToken, onInsert]
     );
 
     useEffect(() => {
-
         console.log('투두리스트:', responseData);
         console.log('담당자:', Assignees.toString()); //배열형태로 잘 옴
     }, [responseData]);
 
-
-    useEffect(() => {
-        console.log("선택된 스터디 아이디:", InsertToDoStudyId);
-    }, [InsertToDoStudyId]);
+    //
+    // useEffect(() => {
+    //     console.log("선택된 스터디 아이디:", InsertToDoStudyId);
+    // }, [InsertToDoStudyId]);
 
     return (
         <form className="TodoInsert" onSubmit={onSubmit}>
-            {/*<select id="todo-select" onChange={selectStudy} value={InsertToDoTitle}>*/}
-            {/*    <option value="전체">전체</option>*/}
-            {/*    {studyTitles.map((item, index) => (*/}
-            {/*        <option key={index} value={item}>{item}</option>*/}
-
-            {/*    ))}*/}
-            {/*</select>*/}
             <input id={"insert-input"} onChange={onChange}
                    value={TaskValue}
                    placeholder="할 일을 입력하세요"/>

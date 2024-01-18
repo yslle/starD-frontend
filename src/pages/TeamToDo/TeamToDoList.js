@@ -90,11 +90,12 @@ const TeamToDoList = () => {
 
     //할 일 추가
     const onInsert = useCallback(async (task, studyId, formattedDate, StringAssignees) => {
-
+        console.log("StringAssignees:", StringAssignees);
         const todoData = {
             task: task,
             dueDate: formattedDate,
         };
+
         if (StringAssignees) {
             const postDataResponse = await axios.post(`http://localhost:8080/todo`, todoData, {
                 params: {
@@ -107,6 +108,7 @@ const TeamToDoList = () => {
                 }
             });
             console.log("전송 성공:", postDataResponse);
+            setAssignees([]);
             setTodoswithAssignee((prevTodos) => ({
                 ...prevTodos, [dateKey]: [...(prevTodos[dateKey] || []), postDataResponse.data],
             }));
@@ -266,6 +268,10 @@ const TeamToDoList = () => {
         })
     }, [studyIdAsNumber, currentMonth]);
 
+    useEffect(() => {
+        console.log("todoswithAssignee: ",todoswithAssignee);
+        console.log("filteredTodos:",filteredTodos);
+    }, [todoswithAssignee,filteredTodos]);
 
     return (<div>
         <Header showSideCenter={true}/>
@@ -325,6 +331,7 @@ const TeamToDoList = () => {
                                         onInsertToggle={onInsertToggle}
                                         selectedDate={selectedDate}
                                         Assignees={Assignees}
+                                        Member = {Member}
                                         onClose={() => {
                                             setInsertToggle((prev) => !prev);
                                         }}

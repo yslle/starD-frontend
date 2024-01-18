@@ -1,6 +1,6 @@
 import Header from "../../components/repeat_etc/Header";
 import React, {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 
 import "../../css/community_css/Community.css";
 import "../../css/notice_css/Notice.css";
@@ -9,6 +9,7 @@ import QnaListItem from "../../components/qna/QnaListItem";
 import axios from "axios";
 import Backarrow from "../../components/repeat_etc/Backarrow";
 import QnaInsert from "../../components/qna/QnaInsert";
+import Paging from "../../components/repeat_etc/Paging";
 
 const Qna = () => {
     const navigate = useNavigate();
@@ -19,6 +20,13 @@ const Qna = () => {
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
     const [userIsAdmin, setUserIsAdmin] = useState(false);
     const [postType, setPostType] = useState(null);
+
+    const location = useLocation();
+    const pageparams = location.state ? location.state.page : 1;
+    const [page, setPage] = useState(pageparams);
+    const [count, setCount] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const insertPage = location.state && location.state.page;
 
     const handleMoveToStudyInsert = (e, type) => {
         if (accessToken && isLoggedInUserId) {
@@ -63,15 +71,44 @@ const Qna = () => {
             });
     }, [accessToken]);
 
-    useEffect(() => {
-        axios.get("http://localhost:8080/qna/all")
+    const fetchQnaAndFaq = (pageNumber) => {
+        axios.get("http://localhost:8080/qna/all", {
+            params: {
+                page: pageNumber,
+            },
+        })
             .then((res) => {
-                setPosts(res.data);
-            })
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
+            }).catch((error) => {
+            console.error("데이터 가져오기 실패:", error);
+        });
+    };
+
+    useEffect(() => {
+        fetchQnaAndFaq(page);
+    }, [page]);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/qna/all", {
+            params: {
+                page: 1,
+            }
+        }).then((res) => {
+            setPosts(res.data.content);
+            setItemsPerPage(res.data.pageable.pageSize);
+            setCount(res.data.totalElements);
+        })
             .catch((error) => {
                 console.error("데이터 가져오기 실패:", error);
             });
-    }, []);
+    }, [insertPage]);
+
+    const handlePageChange = (selectedPage) => {
+        setPage(selectedPage);
+        navigate(`/qna/page=${selectedPage}`);
+    };
 
     return (
         <div className={"main_wrap"} id={"community"}>
@@ -112,13 +149,17 @@ const Qna = () => {
                                     <th>공감수</th>
                                     {posts.map((d, index) => (
                                         <QnaListItem setPosts={setPosts} posts={d} d={d}
-                                                        index={index} key={d.id}/>
+                                                     index={index} key={d.id}/>
                                     ))}
                                 </table>
                             </div>
                         </div>
                     </div>
                 )}
+            </div>
+            <div className={"paging"}>
+                <Paging page={page} totalItemCount={count} itemsPerPage={itemsPerPage}
+                        handlePageChange={handlePageChange}/>
             </div>
         </div>
     );

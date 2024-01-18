@@ -5,18 +5,23 @@ import uncheckbox from "../../images/unchecked.png";
 import editicon from "../../images/edit.png";
 import removeicon from "../../images/remove.png";
 import ToDoListItems from "../../css/todo_css/ToDoListItem.css";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 
 //할 일 보여주는 컴포넌트
-const TeamToDoListItem = ({todo,todos, onRemove, onToggle, onChangeSelectedTodo, onInsertToggle, selectedDate, Assignees}) => {
+const TeamToDoListItem = ({todo,todos, onRemove, onToggle, onChangeSelectedTodo, onInsertToggle, selectedDate, Assignees,Member}) => {
     console.log('todo:', todo);
     console.log('todos:', todos);
     // const todosString = "eeee,dddd";
     // const todosArray = todosString.split(',');
     const Assignee = todo.assignees.map((item) => item.member.name);
     const TODO = todos[0];
+    const [selectedTodo, setSelectedTodo] = useState(null);
 
-    // console.log('TODO:', TODO);
+    // const onChangeSelectedTodo = (todo) => {
+    //     setSelectedTodo(todo);
+    // };
+    
+     console.log('TODO:', TODO.toDo.id);
     console.log("넘어온 담당자 이름들", Assignee);
     return (<li key={todo.id} className="TodoListItem">
             {Assignee.map((assignee, index) => (<p key={index}>{assignee}</p>))}

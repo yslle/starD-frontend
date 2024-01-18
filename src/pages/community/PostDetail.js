@@ -240,7 +240,7 @@ const PostDetail = () => {
 
                     const updatedPosts = posts.filter(post => post.id !== postDetail[0].id);
                     setPosts(updatedPosts);
-                    navigate("/community");
+                    navigate("/community/page=1");
                 })
                 .catch(error => {
                     console.error("Error:", error);
@@ -254,9 +254,15 @@ const PostDetail = () => {
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportPostId, setReportPostId] = useState(null);
 
-    const handleOpenReportModal = (postId) => {
-        setReportPostId(postId);
-        setShowReportModal(true);
+    const handleOpenReportModal = (postId, e) => {
+        if (accessToken && isLoggedInUserId) {
+            e.preventDefault();
+            setReportPostId(postId);
+            setShowReportModal(true);
+        } else {
+            alert("로그인 해주세요");
+            navigate("/login");
+        }
     };
 
     const handleCloseReportModal = () => {
@@ -347,7 +353,7 @@ const PostDetail = () => {
                         )}
 
                         <div className="btn">
-                            <Link to={"/community"}
+                            <Link to={"/community/page=1"}
                                   style={{
                                       textDecoration: "none",
                                       color: "inherit",

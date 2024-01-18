@@ -21,7 +21,7 @@ const PostEdit = ({post, onUpdatePost, onCancel}) => {
     }
 
     const handleUpdateClick = () => {
-        onUpdatePost(updatedPost);
+        onUpdatePost({ ...updatedPost, category: selectedCategory });
     }
 
     return (

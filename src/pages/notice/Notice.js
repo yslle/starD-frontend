@@ -1,6 +1,6 @@
 import Header from "../../components/repeat_etc/Header";
 import React, {useEffect, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 
 import "../../css/community_css/Community.css";
 import "../../css/notice_css/Notice.css";
@@ -9,6 +9,7 @@ import NoticeListItem from "../../components/notice/NoticeListItem";
 import axios from "axios";
 import Backarrow from "../../components/repeat_etc/Backarrow";
 import NoticeInsert from "../../components/notice/NoticeInsert";
+import Paging from "../../components/repeat_etc/Paging";
 
 const Notice = () => {
     const navigate = useNavigate();
@@ -17,6 +18,13 @@ const Notice = () => {
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
     const [userIsAdmin, setUserIsAdmin] = useState(false);
+
+    const location = useLocation();
+    const pageparams = location.state ? location.state.page : 1;
+    const [page, setPage] = useState(pageparams);
+    const [count, setCount] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const insertPage = location.state && location.state.page;
 
     const handleMoveToStudyInsert = (e) => {
         if (accessToken && isLoggedInUserId) {
@@ -54,15 +62,44 @@ const Notice = () => {
             });
     }, [accessToken]);
 
-    useEffect(() => {
-        axios.get("http://localhost:8080/notice")
+    const fetchNotices = (pageNumber) => {
+        axios.get("http://localhost:8080/notice", {
+            params: {
+                page: pageNumber,
+            },
+        })
             .then((res) => {
-                setPosts(res.data);
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
+            }).catch((error) => {
+            console.error("데이터 가져오기 실패:", error);
+        });
+    };
+
+    useEffect(() => {
+        fetchNotices(page);
+    }, [page]);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/notice", {
+            params: {
+                page: 1,
+            }
+        }).then((res) => {
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
             })
             .catch((error) => {
                 console.error("데이터 가져오기 실패:", error);
             });
-    }, []);
+    }, [insertPage]);
+
+    const handlePageChange = (selectedPage) => {
+        setPage(selectedPage);
+        navigate(`/notice/page=${selectedPage}`);
+    };
 
     return (
         <div className={"main_wrap"} id={"community"}>
@@ -101,6 +138,10 @@ const Notice = () => {
                         </div>
                     </div>
                 )}
+            </div>
+            <div className={"paging"}>
+                <Paging page={page} totalItemCount={count} itemsPerPage={itemsPerPage}
+                        handlePageChange={handlePageChange}/>
             </div>
         </div>
     );

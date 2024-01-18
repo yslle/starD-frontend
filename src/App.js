@@ -217,7 +217,7 @@ function App() {
                     />
 
                     <Route
-                        path="/community"
+                        path="/community/:page"
                         element={
                             <Community/>
                         }
@@ -229,13 +229,13 @@ function App() {
                         }
                     />
                     <Route
-                        path="/notice"
+                        path="/notice/:page"
                         element={
                             <Notice/>
                         }
                     />
                     <Route
-                        path="/qna"
+                        path="/qna/:page"
                         element={
                             <Qna/>
                         }

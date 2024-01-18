@@ -230,7 +230,7 @@ const QnaDetail = () => {
                     alert("게시글이 삭제되었습니다.");
                     const updatedPosts = posts.filter(post => post.id !== postDetail[0].id);
                     setPosts(updatedPosts);
-                    navigate("/qna");
+                    navigate("/qna/page=1");
                 })
                 .catch(error => {
                     console.error("Error:", error);
@@ -316,7 +316,7 @@ const QnaDetail = () => {
                         )}
 
                         <div className="btn">
-                            <Link to={"/qna"}
+                            <Link to={"/qna/page=1"}
                                   style={{
                                       textDecoration: "none",
                                       color: "inherit",
