@@ -149,6 +149,8 @@ const TeamBlog = () => {
         }
     }, [parsedTodos]);
 
+
+
     useEffect(() => {
         axios.get(`http://localhost:8080/schedule/${studyIdAsNumber}`, {
             params: {
@@ -226,7 +228,10 @@ const TeamBlog = () => {
                                                 <ul id="todocontent">
                                                     {filteredToDo.map((todo) => (
                                                         <li key={todo.id}>
-                                                            <div id="todotext">{todo.study.title} |</div>
+                                                            {todo.assignees.map((assign)=>(
+                                                                <div id="todotext">{assign.member.name}  </div>
+                                                            ))}
+                                                            <div id="todotext"> | </div>
                                                             <div id="todotext">{todo.task}</div>
                                                         </li>
                                                     ))}

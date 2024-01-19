@@ -177,19 +177,24 @@ const ToDoList = ({sideheader}) => {
             console.log("id", id);
             alert("삭제하시겠습니까?");
 
-            const deleteDataResponse = await axios.delete(`http://localhost:8080/todo/${id}`, {
-                withCredentials: true, headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-            console.log("삭제 성공:", deleteDataResponse.data);
-            setTodoswithAssignee((prevTodos) => {
-                const updatedTodos = {...prevTodos};
-                Object.keys(updatedTodos).forEach((dateKey) => {
-                    updatedTodos[dateKey] = updatedTodos[dateKey].filter((todo) => todo.toDo.id !== id);
+            try {
+                const deleteDataResponse = await axios.delete(`http://localhost:8080/todo/${id}`, {
+                    withCredentials: true, headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
                 });
-                return updatedTodos;
-            });
+                console.log("삭제 성공:", deleteDataResponse.data);
+                setTodoswithAssignee((prevTodos) => {
+                    const updatedTodos = {...prevTodos};
+                    Object.keys(updatedTodos).forEach((dateKey) => {
+                        updatedTodos[dateKey] = updatedTodos[dateKey].filter((todo) => todo.toDo.id !== id);
+                    });
+                    return updatedTodos;
+                });
+            } catch (error) {
+                console.error("삭제 실패:", error);
+                // Handle the error appropriately (e.g., show an error message to the user)
+            }
         }, []);
 
     const onUpdate = async (UpdatedToDo) => {
