@@ -110,6 +110,10 @@ const StudyInfo = ({study, isRecruiter}) => {
                             onReportSubmit={handleReportSubmit}
                             targetId={reportStudyId}
                         />
+                        <>
+                            <p>&nbsp;&nbsp; | &nbsp;&nbsp;</p>
+                            <p>조회수 : {study.viewCount}</p>
+                        </>
                     </div>
                     {isRecruiter && (
                         <div className="study_detail_btn">
