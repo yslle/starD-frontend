@@ -4,7 +4,7 @@ import axios from "axios";
 import Category from "../../components/repeat_etc/Category";
 import Backarrow from "../../components/repeat_etc/Backarrow"
 import Header from "../../components/repeat_etc/Header";
-import default_profile_img from "../../images/default_profile_img.png";
+import ImageComponent from "../../components/image/imageComponent";
 
 
 const Profile = () => {
@@ -33,7 +33,8 @@ const Profile = () => {
                 var str_result = str.substr(1);
                 const fullImageUrl = `C:\\stard\\${str_result}`;
                 console.log("fullImageUrl:", fullImageUrl);
-                setUploadImgUrl(fullImageUrl);
+                // TODO 2023-11-28 uploadImgUrl을 서버에 저장된 이미지 파일명으로 설정
+                setUploadImgUrl(res.data.imgUrl);
             })
             .catch((error) => {
                 console.error("프로필 가져오기 실패:", error);
@@ -46,10 +47,6 @@ const Profile = () => {
         return;
     }
 
-    const onchangeselfIntroduce=(e)=>{
-        setSelfIntro(e.target.value);
-    }
-
     return (
         <div>
             <Header showSideCenter={true}/>
@@ -59,14 +56,7 @@ const Profile = () => {
                     <p id={"entry-path"}> 홈 > 마이페이지 > 프로필 </p>
                     <Backarrow subname={"프로필"}/>
                     <div className="sub_container">
-                        <div className={"profile_content"}>
-                            {profile?.imgUrl ? (
-                                <img className="profile-img" src={uploadImgUrl} alt="프로필 없을때"/>
-                            ) : (
-
-                                <img className="profile-img" src={default_profile_img} alt="프로필사진"/>
-                            )}
-                        </div>
+                        <ImageComponent getImgName = {uploadImgUrl} imageSrc={""} />
                         <div className={"One-line-self-introduction"}>
                             <p id={"self-intro-p"}>한줄 자기소개</p>
                             <div>

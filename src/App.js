@@ -54,6 +54,8 @@ import Admin from "./pages/admin/Admin";
 import MyScore from "./pages/mypage/MyScore";
 import Profile from "./pages/mypage/Profile";
 import EditProfile from "./pages/mypage/EditProfile";
+import MyScrapStudy from "./pages/mypage/MyScrapStudy";
+import MyScrapCommunityPost from "./pages/mypage/MyScrapCommunityPost";
 
 function App() {
     return (
@@ -119,6 +121,10 @@ function App() {
                     <Route
                         path="/myopenstudy"
                         element={<MyOpenStudy/>}
+                    />
+                    <Route
+                        path="/myscrapstudy"
+                        element={<MyScrapStudy/>}
                     />
                     <Route
                         path="/studydetail/:id"
@@ -214,6 +220,12 @@ function App() {
                         path="/community/:page"
                         element={
                             <Community/>
+                        }
+                    />
+                    <Route
+                        path="/myScrapcommunitypost"
+                        element={
+                            <MyScrapCommunityPost/>
                         }
                     />
                     <Route

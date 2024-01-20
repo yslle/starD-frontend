@@ -46,32 +46,56 @@ const TeamToDoList = () => {
     const dateKey = selectedDate.toDateString();
     ;
 
+    //담당자 추가 핸들러
     const handleAddAssignees = (e) => {
         const assignName = e.target.getAttribute('data-assign-name');
+        console.log("assignName : ", assignName);
         const updatedAssignees = [...Assignees, assignName];
+        console.log("updatedAssignees : ", updatedAssignees);
         setAssignees(updatedAssignees);
-        const updatedMember = Member.filter((item) => item.member.name !== assignName);
+
+        const updatedMember = member.filter((item) => item.member.nickname !== assignName); //지정된 멤버 제외 남은 멤버
+        console.log("updatedMember : ", updatedMember);
         setMember(updatedMember);
     };
 
-    const handleRemoveAssignees = (e) => {
-        const removeAssignName = Assignees.filter((item) => item !== e.target.value);
-        setAssignees(removeAssignName);
-        console.log("삭제 완료: ", Assignees);
-        const assigneeToAddBack = Member.find((item) => item.member.name === removeAssignName);
-        if (assigneeToAddBack) {
-            const updatedMember = [...Member, assigneeToAddBack];
-            setMember(updatedMember);
+    //담당자 삭제 핸들러
+    const handleRemoveAssignees = async (e) => {
+        try {
+            const removedAssignName = e.target.value;
+
+            //해당 닉네임을 가진 담당자를 선택에서 해제
+            const updatedAssignees = Assignees.filter((item) => item !== removedAssignName);
+            await setAssignees(updatedAssignees);
+
+            console.log("삭제한 후 담당자 상태: ", updatedAssignees);
+
+            //되돌릴 멤버
+            const assigneeToAddBack = Member.find((item) => item.member.nickname === removedAssignName);
+
+            //member에 다시 집어 넣음
+            if (assigneeToAddBack) {
+                const updatedMember = [...member, assigneeToAddBack];
+                console.log("updatedMember-assigneeToAddBack : ", updatedMember);
+                setMember(updatedMember);
+            }
+
+            console.log("삭제 후 선택한 담당자들: ", updatedAssignees);
+
+        } catch (error) {
+            console.error("Error in handleRemoveAssignees: ", error);
         }
     };
 
 
+    //할 일 추가
     const onInsert = useCallback(async (task, studyId, formattedDate, StringAssignees) => {
-
+        console.log("StringAssignees:", StringAssignees);
         const todoData = {
             task: task,
             dueDate: formattedDate,
         };
+
         if (StringAssignees) {
             const postDataResponse = await axios.post(`http://localhost:8080/todo`, todoData, {
                 params: {
@@ -84,6 +108,7 @@ const TeamToDoList = () => {
                 }
             });
             console.log("전송 성공:", postDataResponse);
+            setAssignees([]);
             setTodoswithAssignee((prevTodos) => ({
                 ...prevTodos, [dateKey]: [...(prevTodos[dateKey] || []), postDataResponse.data],
             }));
@@ -97,7 +122,7 @@ const TeamToDoList = () => {
 
     const filteredTodos = todoswithAssignee[dateKey] || [];
 
-
+//할 일 삭제
     const onRemove = useCallback(
         async (id) => {
             alert("삭제하시겠습니까?");
@@ -117,7 +142,7 @@ const TeamToDoList = () => {
             });
         }, []);
 
-
+//할 일 업데이트
     const onUpdate = useCallback(async (UpdatedToDo) => {
         console.log("selectedTodo..:", UpdatedToDo);
         onInsertToggle();
@@ -156,6 +181,7 @@ const TeamToDoList = () => {
     }, [studyMems, selectedDate, studies, todoswithAssignee]);
 
 
+    //체크
     const onToggle = useCallback(async (assignees, id, todo_status) => {
         const postDataPromises = assignees.map(async (item) => {
             const status = !item.toDoStatus;
@@ -242,6 +268,10 @@ const TeamToDoList = () => {
         })
     }, [studyIdAsNumber, currentMonth]);
 
+    useEffect(() => {
+        console.log("todoswithAssignee: ",todoswithAssignee);
+        console.log("filteredTodos:",filteredTodos);
+    }, [todoswithAssignee,filteredTodos]);
 
     return (<div>
         <Header showSideCenter={true}/>
@@ -262,10 +292,10 @@ const TeamToDoList = () => {
                                 <div className={"assignees"} key={index}>
                                     <div
                                         className="assignee-name"
-                                        data-assign-name={item.member.name}
+                                        data-assign-name={item.member.nickname}
                                         value={item}
                                         onClick={handleAddAssignees}>
-                                        {item.member.name}
+                                        {item.member.nickname}
                                     </div>
                                 </div>
                             ))}
@@ -301,6 +331,7 @@ const TeamToDoList = () => {
                                         onInsertToggle={onInsertToggle}
                                         selectedDate={selectedDate}
                                         Assignees={Assignees}
+                                        Member = {Member}
                                         onClose={() => {
                                             setInsertToggle((prev) => !prev);
                                         }}

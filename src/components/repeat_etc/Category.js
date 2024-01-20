@@ -115,9 +115,26 @@ const category = () => {
 				</div>
 				<div className="sub_c">
 					<nav>
+
 						<ul>
-							<li>스크랩한 스터디</li>
+							<Link
+								to={"/myscrapstudy"}
+								style={{
+									textDecoration: "none",
+									color: "inherit",
+								}}
+							>
+								<li>스크랩한 스터디</li>
+							</Link>
+							<Link
+								to={"/myScrapcommunitypost"}
+								style={{
+									textDecoration: "none",
+									color: "inherit",
+								}}
+							>
 							<li>스크랩한 게시글</li>
+							</Link>
 						</ul>
 					</nav>
 				</div>
