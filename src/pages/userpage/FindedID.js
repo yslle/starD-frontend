@@ -7,7 +7,7 @@ import axios from "axios";
 
 const FindedID = () => {
     const location = useLocation();
-    const id = location.state.findId;
+    const members = location.state.findId;
     return (
         <div>
             <Header showSideCenter={false}/>
@@ -15,7 +15,7 @@ const FindedID = () => {
                     <p id={"find-id"}>아이디 찾기</p>
                 </div>
                 <div className="findresult">
-                <p id={"result-id"}>당신의 아이디는 {id}입니다.</p>
+                <p id={"result-id"}>당신의 아이디는 {members.map((member, index) => (<span key={index}>{member.id}, </span>))}입니다.</p>
                 </div>
             <div className={"gotologin"}>
                 <Link to={"/login"}><button id={"go-to-login"}>로그인하러가기</button> </Link>

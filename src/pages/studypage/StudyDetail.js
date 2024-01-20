@@ -29,6 +29,7 @@ const StudyDetail = ({sideheader}) => {
     const isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
     const [applyReason, setApplyReason] = useState([]);
     const [isRecruiter, setIsRecruiter] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(false);
     useEffect(() => {
         if (studyId === null) {
             studyId = id;
@@ -50,6 +51,21 @@ const StudyDetail = ({sideheader}) => {
                 alert("로그인 해 주세요.");
                 navigate('/login');
                 console.error("스터디 세부 데이터 가져오기 실패:", error);
+            });
+
+        axios.get(`http://localhost:8080/api/v2/studies/${studyId}/study-member`, {
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }).then((res) => {
+            if (res.data.data.length > 0) {   // 스터디원이 있을 경우 -> 모집 완료
+                console.log("모집 완료");
+                setIsCompleted(true);
+            }
+        })
+            .catch((error) => {
+                console.error("스터디 모집 여부 데이터 가져오기 실패:", error);
             });
 
         axios.get(`http://localhost:8080/api/v2/studies/${studyId}/apply-reason`, {
@@ -122,7 +138,7 @@ const StudyDetail = ({sideheader}) => {
                                     <div>{applyReason}</div>
                                 </div>
                             )}
-                            {isApply === false && isRecruiter === false && (
+                            {isApply === false && isRecruiter === false && isCompleted === false && (
                                 <div className="btn">
                                     <Link
                                         to={`/studyapplyform/${studyItem.id}`}

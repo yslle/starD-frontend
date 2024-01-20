@@ -12,7 +12,7 @@ const FindID = () => {
             phone: "",
         }
     );
-    const [findId, setFindId] = useState();
+    const [findId, setFindId] = useState([]);
     const inputemail = useRef();
     const inputphone = useRef();
 
@@ -41,11 +41,11 @@ const FindID = () => {
             }).then((response) => {
 
                 console.log("인증번호 받기 성공: ", response.data);
-                setFindId(response.data.id);
+                setFindId(response.data);
 
                 navigate("/login/findedID", {
                     state: {
-                        findId: response.data.id
+                        findId: response.data
                     }
                 })
 

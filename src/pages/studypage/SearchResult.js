@@ -258,7 +258,7 @@ const SearchResult = () => {
                 });
         };
         fetchStudies(page);
-    }, [page]);
+    }, [page, searchQuery]);
 
 
     return (
