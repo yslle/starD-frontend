@@ -7,6 +7,7 @@ import QnaSearchBar from "../../components/qna/QnaSearchBar";
 import QnaInsert from "../../components/qna/QnaInsert";
 import QnaListItem from "../../components/qna/QnaListItem";
 import axios from "axios";
+import Paging from "../../components/repeat_etc/Paging";
 
 const QnaSearchResult = () => {
     const location = useLocation();
@@ -19,6 +20,13 @@ const QnaSearchResult = () => {
     const [showPostInsert, setShowPostInsert] = useState(false);
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
+
+    const pageparams = location.state ? location.state.page : 1;
+    const [page, setPage] = useState(pageparams);
+    const [count, setCount] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const insertPage = location.state && location.state.page;
+
     const handleMoveToStudyInsert = (e) => {
          if (accessToken && isLoggedInUserId) {
             e.preventDefault();
@@ -29,14 +37,15 @@ const QnaSearchResult = () => {
          }
     };
 
-    useEffect(() => {
+    const fetchQnaAndFaq = (pageNumber) => {
         let base_url = "";
         let params = {};
         if (categoryOption === "전체") {
             base_url = "http://localhost:8080/qna/search";
             params = {
                 searchType: selectOption,
-                searchWord: searchQuery
+                searchWord: searchQuery,
+                page: pageNumber
             };
         }
         else {
@@ -44,18 +53,61 @@ const QnaSearchResult = () => {
             params = {
                 searchType: selectOption,
                 category: categoryOption,
-                searchWord: searchQuery
+                searchWord: searchQuery,
+                page: pageNumber
             };
         }
 
         axios.get(base_url, { params })
             .then((res) => {
-                setPosts(res.data);
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
             })
             .catch((error) => {
                 console.error("데이터 가져오기 실패:", error);
             });
-    }, [searchQuery, selectOption]);
+    };
+
+    useEffect(() => {
+        fetchQnaAndFaq(page);
+    }, [categoryOption, searchQuery, selectOption, page]);
+
+    useEffect(() => {
+        let base_url = "";
+        let params = {};
+        if (categoryOption === "전체") {
+            base_url = "http://localhost:8080/qna/search";
+            params = {
+                searchType: selectOption,
+                searchWord: searchQuery,
+                page: 1
+            };
+        }
+        else {
+            base_url = "http://localhost:8080/qna/search/category";
+            params = {
+                searchType: selectOption,
+                category: categoryOption,
+                searchWord: searchQuery,
+                page: 1
+            };
+        }
+
+        axios.get(base_url, { params })
+            .then((res) => {
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
+            })
+            .catch((error) => {
+                console.error("데이터 가져오기 실패:", error);
+            });
+    }, [insertPage]);
+
+    const handlePageChange = (selectedPage) => {
+        setPage(selectedPage);
+    };
 
     return (
         <div className={"main_wrap"} id={"community"}>
@@ -94,6 +146,10 @@ const QnaSearchResult = () => {
                         </div>
                     </div>
                     )}
+            </div>
+            <div className={"paging"}>
+                <Paging page={page} totalItemCount={count} itemsPerPage={itemsPerPage}
+                        handlePageChange={handlePageChange}/>
             </div>
         </div>
     );
