@@ -22,6 +22,8 @@ const StudyApplyList = () => {
     let {id} = useParams();
     const navigate = useNavigate();
 
+    const [isCompleted, setIsCompleted] = useState(false);
+
 
     useEffect(() => {
         axios.get(`http://localhost:8080/api/v2/studies/${id}/select`, {
@@ -39,6 +41,21 @@ const StudyApplyList = () => {
                 console.error("신청자 데이터 가져오기 실패:", error);
             });
 
+        axios.get(`http://localhost:8080/api/v2/studies/${id}/study-member`, {
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        }).then((res) => {
+            if (res.data.data.length > 0) {   // 스터디원이 있을 경우 -> 모집 완료
+                console.log("모집 완료");
+                setIsCompleted(true);
+            }
+        })
+            .catch((error) => {
+                console.error("스터디 모집 여부 데이터 가져오기 실패:", error);
+            });
+
     }, []);
 
 
@@ -51,55 +68,58 @@ const StudyApplyList = () => {
     };
 
     const handleaccept = (memberId, index) => {
-        const result = window.confirm(memberId + "을(를) 수락하시겠습니까?");
-        if (result) {
-            axios.put(`http://localhost:8080/api/v2/studies/${id}/select`, {}, {
-                params: {
-                    applicantId: memberId,
-                    isSelect: true
-                },
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
-                .then((res) => {
-                    console.log(res.data);
-
-                    if (res.data !== "SUCCESS") {
-                        window.alert(memberId + "을(를) 수락 실패했습니다.");
-                    } else {
-                        window.alert(memberId + "을(를) 수락했습니다.");
-                        setApplyList((prevApplyList) => {
-                            const updatedList = prevApplyList.map((item) => {
-                                if (item.member.id === memberId) {
-                                    return {...item, participationState: true};
-                                }
-                                return item;
-                            });
-                            return updatedList;
-                        });
-
-                        setClickedApplyStates((prevStates) => {
-                            const updatedStates = [...prevStates];
-                            updatedStates[index] = true;
-                            return updatedStates;
-                        });
-
-                        setClickedRejectStates((prevStates) => {
-                            const updatedStates = [...prevStates];
-                            updatedStates[index] = false;
-                            return updatedStates;
-                        });
-
-                        setAcceptedMembers([...acceptedMembers, memberId]);
+        if (isCompleted === true) {
+            alert('이미 모집 완료된 게시글입니다.');
+        } else {
+            const result = window.confirm(memberId + "을(를) 수락하시겠습니까?");
+            if (result) {
+                axios.put(`http://localhost:8080/api/v2/studies/${id}/select`, {}, {
+                    params: {
+                        applicantId: memberId,
+                        isSelect: true
+                    },
+                    withCredentials: true,
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
                     }
                 })
-                .catch((error) => {
-                    console.error("수락 실패:", error);
-                });
-        }
+                    .then((res) => {
+                        console.log(res.data);
 
+                        if (res.data !== "SUCCESS") {
+                            window.alert(memberId + "을(를) 수락 실패했습니다.");
+                        } else {
+                            window.alert(memberId + "을(를) 수락했습니다.");
+                            setApplyList((prevApplyList) => {
+                                const updatedList = prevApplyList.map((item) => {
+                                    if (item.member.id === memberId) {
+                                        return {...item, participationState: true};
+                                    }
+                                    return item;
+                                });
+                                return updatedList;
+                            });
+
+                            setClickedApplyStates((prevStates) => {
+                                const updatedStates = [...prevStates];
+                                updatedStates[index] = true;
+                                return updatedStates;
+                            });
+
+                            setClickedRejectStates((prevStates) => {
+                                const updatedStates = [...prevStates];
+                                updatedStates[index] = false;
+                                return updatedStates;
+                            });
+
+                            setAcceptedMembers([...acceptedMembers, memberId]);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("수락 실패:", error);
+                    });
+            }
+        }
     }
 
     useEffect(() => {
@@ -107,105 +127,112 @@ const StudyApplyList = () => {
     }, [acceptedMembers]);
 
     const handlereturn = (memberId, index) => {
-        const result = window.confirm(memberId + "을(를) 거절하시겠습니까?");
+        if (isCompleted === true) {
+            alert('이미 모집 완료된 게시글입니다.');
+        } else {
+            const result = window.confirm(memberId + "을(를) 거절하시겠습니까?");
 
-        if (result) {
+            if (result) {
 
-            //TODO db에서 받아오기 setApplyList로 상태 업데이트
-            axios.put(`http://localhost:8080/api/v2/studies/${id}/select`, {}, {
-                params: {
-                    applicantId: memberId,
-                    isSelect: false
-                },
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
-                .then((res) => {
-                    console.log(res.data);
-
-                    if (res.data !== "SUCCESS") {
-                        window.alert(memberId + "을(를) 거절 실패했습니다.");
-                        console.log("거절 실패");
-                    } else {
-                        window.alert(memberId + "을(를) 거절했습니다.");
-                        setApplyList((prevApplyList) => {
-                            const updatedList = prevApplyList.map((item) => {
-                                if (item.member.id === memberId) {
-                                    return {...item, participationState: false};
-                                }
-                                return item;
-                            });
-                            return updatedList;
-                        });
-
-                        setClickedRejectStates((prevStates) => {
-                            const updatedStates = [...prevStates];
-                            updatedStates[index] = true;
-                            return updatedStates;
-                        });
-                        setClickedApplyStates((prevStates) => {
-                            const updatedStates = [...prevStates];
-                            updatedStates[index] = false;
-                            return updatedStates;
-                        });
-                        setAcceptedMembers(acceptedMembers.filter((id) => id !== memberId));
+                //TODO db에서 받아오기 setApplyList로 상태 업데이트
+                axios.put(`http://localhost:8080/api/v2/studies/${id}/select`, {}, {
+                    params: {
+                        applicantId: memberId,
+                        isSelect: false
+                    },
+                    withCredentials: true,
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
                     }
-
                 })
-                .catch((error) => {
-                    console.error("거절 실패:", error);
-                });
+                    .then((res) => {
+                        console.log(res.data);
+
+                        if (res.data !== "SUCCESS") {
+                            window.alert(memberId + "을(를) 거절 실패했습니다.");
+                            console.log("거절 실패");
+                        } else {
+                            window.alert(memberId + "을(를) 거절했습니다.");
+                            setApplyList((prevApplyList) => {
+                                const updatedList = prevApplyList.map((item) => {
+                                    if (item.member.id === memberId) {
+                                        return {...item, participationState: false};
+                                    }
+                                    return item;
+                                });
+                                return updatedList;
+                            });
+
+                            setClickedRejectStates((prevStates) => {
+                                const updatedStates = [...prevStates];
+                                updatedStates[index] = true;
+                                return updatedStates;
+                            });
+                            setClickedApplyStates((prevStates) => {
+                                const updatedStates = [...prevStates];
+                                updatedStates[index] = false;
+                                return updatedStates;
+                            });
+                            setAcceptedMembers(acceptedMembers.filter((id) => id !== memberId));
+                        }
+
+                    })
+                    .catch((error) => {
+                        console.error("거절 실패:", error);
+                    });
+            }
         }
     }
     const goNextTeamBlog = (count) => {
-
-        if (count > capacity) {
-            alert("모집인원을 초과하였습니다.");
-            return;
+        if (isCompleted === true) {
+            alert('이미 모집 완료된 게시글입니다.');
         } else {
-            axios.post(`http://localhost:8080/api/v2/studies/${id}/open`, {}, {
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
-                .then((res) => {
-                    console.log(res.data);
-
-                    const requestData = {
-                        studyId: id
-                    };
-                    axios.post('http://localhost:8080/chat/room', requestData, {
-                        withCredentials: true,
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    })
-                        .then((response) => {
-                            if (response.data === "SUCCESS") {
-                                console.log(id, " 채팅방 생성 완료");
-                            }
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                        });
-
-                    if (res.data !== "SUCCESS") {
-                        console.log("모집 완료 실패");
-                    } else {
-                        alert("모집 완료. 팀블로그로 이동합니다.");
-                        navigate(`/${id}/teamblog`, {
-                            state: {
-                                "studyId": id,
-                            }
-                        })
+            if (count > capacity) {
+                alert("모집인원을 초과하였습니다.");
+                return;
+            } else {
+                axios.post(`http://localhost:8080/api/v2/studies/${id}/open`, {}, {
+                    withCredentials: true,
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
                     }
                 })
-                .catch((error) => {
-                    console.error("참여완료 데이터 전송 실패:", error);
-                });
+                    .then((res) => {
+                        console.log(res.data);
+
+                        const requestData = {
+                            studyId: id
+                        };
+                        axios.post('http://localhost:8080/chat/room', requestData, {
+                            withCredentials: true,
+                            headers: {
+                                'Authorization': `Bearer ${accessToken}`
+                            }
+                        })
+                            .then((response) => {
+                                if (response.data === "SUCCESS") {
+                                    console.log(id, " 채팅방 생성 완료");
+                                }
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+
+                        if (res.data !== "SUCCESS") {
+                            console.log("모집 완료 실패");
+                        } else {
+                            alert("모집 완료. 팀블로그로 이동합니다.");
+                            navigate(`/${id}/teamblog`, {
+                                state: {
+                                    "studyId": id,
+                                }
+                            })
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("참여완료 데이터 전송 실패:", error);
+                    });
+            }
         }
     }
     return (
@@ -285,9 +312,11 @@ const StudyApplyList = () => {
                         </table>
                     </div>
                 </div>
-                <div className={"apply"}>
-                    <button id={"apply-btn"} onClick={() => goNextTeamBlog(count)}>모집완료</button>
-                </div>
+                {isCompleted === false && (
+                    <div className={"apply"}>
+                        <button id={"apply-btn"} onClick={() => goNextTeamBlog(count)}>모집완료</button>
+                    </div>
+                )}
             </div>
         </div>
     )
