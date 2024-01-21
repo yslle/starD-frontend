@@ -7,6 +7,7 @@ import NoticeSearchBar from "../../components/notice/NoticeSearchBar";
 import NoticeInsert from "../../components/notice/NoticeInsert";
 import NoticeListItem from "../../components/notice/NoticeListItem";
 import axios from "axios";
+import Paging from "../../components/repeat_etc/Paging";
 
 const Notice = () => {
     const location = useLocation();
@@ -18,6 +19,13 @@ const Notice = () => {
     const [showPostInsert, setShowPostInsert] = useState(false);
     let accessToken = localStorage.getItem('accessToken');
     let isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
+
+    const pageparams = location.state ? location.state.page : 1;
+    const [page, setPage] = useState(pageparams);
+    const [count, setCount] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const insertPage = location.state && location.state.page;
+
     const handleMoveToStudyInsert = (e) => {
          if (accessToken && isLoggedInUserId) {
             e.preventDefault();
@@ -28,20 +36,49 @@ const Notice = () => {
          }
     };
 
-    useEffect(() => {
+    const fetchNotices = (pageNumber) => {
         let base_url = "http://localhost:8080/notice/search";
         let params = {
             searchType: selectOption,
-            searchWord: searchQuery
+            searchWord: searchQuery,
+            page: pageNumber,
         };
         axios.get(base_url, { params })
             .then((res) => {
-                setPosts(res.data);
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
             })
             .catch((error) => {
                 console.error("데이터 가져오기 실패:", error);
             });
-    }, [searchQuery, selectOption]);
+    };
+
+    useEffect(() => {
+        fetchNotices(page);
+    }, [searchQuery, selectOption, page]);
+
+    useEffect(() => {
+        let base_url = "http://localhost:8080/notice/search";
+        let params = {
+            searchType: selectOption,
+            searchWord: searchQuery,
+            page: 1,
+        };
+        axios.get(base_url, { params })
+            .then((res) => {
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
+            })
+            .catch((error) => {
+                console.error("데이터 가져오기 실패:", error);
+            });
+    }, [insertPage]);
+
+    const handlePageChange = (selectedPage) => {
+        setPage(selectedPage);
+    };
 
     return (
         <div className={"main_wrap"} id={"community"}>
@@ -79,6 +116,10 @@ const Notice = () => {
                         </div>
                     </div>
                     )}
+            </div>
+            <div className={"paging"}>
+                <Paging page={page} totalItemCount={count} itemsPerPage={itemsPerPage}
+                        handlePageChange={handlePageChange}/>
             </div>
         </div>
     );
