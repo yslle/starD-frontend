@@ -328,7 +328,7 @@ const PostDetail = () => {
                                         {isLoggedInUserId !== postItem.member.id && (
                                             <>
                                                 <span>&nbsp;&nbsp; | &nbsp;&nbsp;</span>
-                                                <span className="report_btn" onClick={() => handleOpenReportModal(postItem.id)}>신고</span>
+                                                <span className="report_btn" onClick={(e) => handleOpenReportModal(postItem.id, e)}>신고</span>
                                             </>
                                         )}
                                         <Report

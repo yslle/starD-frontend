@@ -304,9 +304,11 @@ const ReportManagement = () => {
                                     <div className="modal-content">
                                         <span className="close" onClick={closeReasonModal}>&times;</span>
                                         <h3>신고 사유</h3>
-                                        {reportReason.map((reason, index) => (
-                                            <p id="report-reason" key={index}>{getTranslatedReason(reason)}</p>
-                                        ))}
+                                        <div id="report-reason">
+                                            {Object.entries(reportReason).map(([reason, count], index) => (
+                                                <p id="report-reason" key={index}>{getTranslatedReason(reason)}: {count}회</p>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             )}
