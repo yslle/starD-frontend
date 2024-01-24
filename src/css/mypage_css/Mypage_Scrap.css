@@ -22,6 +22,10 @@
 	height: 70%;
 	overflow: hidden;
 }
+#scrap_study .study_list{
+	display: flex;
+	flex-wrap: inherit;
+}
 /*이 아래부터 MyOpenStudy.css것이 적용됨*/
 .study_list {
 	display: flex;
@@ -78,8 +82,8 @@
 	width: 200px;
 	height: inherit;
 	margin-bottom: 0;
-	padding: 30px;
-	margin-right: 20px;
+	padding: 25px;
+	margin-right: 35px;
 	border:lightgray solid 1px;
 	border-radius: 10px;
 }

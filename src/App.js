@@ -56,6 +56,8 @@ import Profile from "./pages/mypage/Profile";
 import EditProfile from "./pages/mypage/EditProfile";
 import MyScrapStudy from "./pages/mypage/MyScrapStudy";
 import MyScrapCommunityPost from "./pages/mypage/MyScrapCommunityPost";
+import MyWritePost from "./pages/mypage/MyWritePost";
+import MyWriteComment from "./pages/mypage/MyWriteComment";
 
 function App() {
     return (
@@ -299,6 +301,18 @@ function App() {
                         path="/MyPage/myscore"
                         element={
                             <MyScore/>
+                        }
+                    />
+                    <Route
+                        path="/MyPage/mypost"
+                        element={
+                            <MyWritePost/>
+                        }
+                    />
+                    <Route
+                        path="/MyPage/mycomment"
+                        element={
+                            <MyWriteComment/>
                         }
                     />
                 </Routes>

@@ -152,13 +152,23 @@ const Slide = ({ state }) => {
         });
     };
 
-  const toPrev = () => {
-    slidePx < 0 && setSlidePx(slidePx + 284);
-  };
+    const studiesPerSlide = 3; // 처음에 보여지는 스터디 개수
+    const studiesPerPage = 1;  // 넘어가는 스터디 개수
+    const totalStudies = scrapStudies.length;
+    const totalSlides = Math.ceil((totalStudies - studiesPerSlide + 1) / studiesPerPage); // 전체 슬라이드 개수
+    const maxSlidePx = -286.3 * (totalSlides - 1); // 계산된 최대 슬라이드 위치
 
-  const toNext = () => {
-    slidePx > -1980 && setSlidePx(slidePx - 284);
-  };
+    const toPrev = () => {
+        if (slidePx < 0) {
+            setSlidePx(slidePx + 286.3 * studiesPerPage);
+        }
+    };
+
+    const toNext = () => {
+        if (slidePx > maxSlidePx) {
+            setSlidePx(slidePx - 286.3 * studiesPerPage);
+        }
+    };
 
   return (
     <div>
