@@ -103,8 +103,24 @@ const category = () => {
 				<div className="sub_c">
 					<nav>
 						<ul>
-							<li>내가 작성한 글</li>
-							<li>내가 작성한 댓글</li>
+							<Link
+								to={"/MyPage/mypost"}
+								style={{
+									textDecoration: "none",
+									color: "inherit",
+								}}
+							>
+								<li>내가 작성한 글</li>
+							</Link>
+							<Link
+								to={"/MyPage/mycomment"}
+								style={{
+									textDecoration: "none",
+									color: "inherit",
+								}}
+							>
+								<li>내가 작성한 댓글</li>
+							</Link>
 						</ul>
 					</nav>
 				</div>
