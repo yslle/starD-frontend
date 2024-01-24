@@ -48,13 +48,13 @@ const TeamToDoList = () => {
 
     //담당자 추가 핸들러
     const handleAddAssignees = (e) => {
-        const assignName = e.target.getAttribute('data-assign-name');
-        console.log("assignName : ", assignName);
-        const updatedAssignees = [...Assignees, assignName];
+        const assignNicName = e.target.getAttribute('data-assign-name');
+        console.log("assignName : ", assignNicName);
+        const updatedAssignees = [...Assignees, assignNicName];
         console.log("updatedAssignees : ", updatedAssignees);
         setAssignees(updatedAssignees);
 
-        const updatedMember = member.filter((item) => item.member.nickname !== assignName); //지정된 멤버 제외 남은 멤버
+        const updatedMember = member.filter((item) => item.member.nickname !== assignNicName); //지정된 멤버 제외 남은 멤버
         console.log("updatedMember : ", updatedMember);
         setMember(updatedMember);
     };

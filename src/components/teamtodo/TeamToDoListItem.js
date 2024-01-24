@@ -13,7 +13,7 @@ const TeamToDoListItem = ({todo,todos, onRemove, onToggle, onChangeSelectedTodo,
     console.log('todos:', todos);
     // const todosString = "eeee,dddd";
     // const todosArray = todosString.split(',');
-    const Assignee = todo.assignees.map((item) => item.member.name);
+    const Assignee = todo.assignees.map((item) => item.member.nickname);
     const TODO = todos[0];
     const [selectedTodo, setSelectedTodo] = useState(null);
 
@@ -22,7 +22,7 @@ const TeamToDoListItem = ({todo,todos, onRemove, onToggle, onChangeSelectedTodo,
     // };
     
      console.log('TODO:', TODO.toDo.id);
-    console.log("넘어온 담당자 이름들", Assignee);
+    console.log("넘어온 담당자 닉네임들", Assignee);
     return (<li key={todo.id} className="TodoListItem">
             {Assignee.map((assignee, index) => (<p key={index}>{assignee}</p>))}
             <div className={cn('checkbox', {checked: TODO.toDoStatus})}
