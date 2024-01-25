@@ -58,15 +58,21 @@ const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
 
 
     const onSubmit = useCallback(async (e) => {
-        // alert("수정되었습니다.");
         if (todoassignees.length === 0) {
             alert("담당자를 선택해주세요.");
             onClose();
             return;
         }
 
+        //수정된 할 일이 없을 때
         if (task == selectedTodo.task) {
             alert("수정된 할 일이 없습니다.");
+            onClose();
+            return;
+        }
+
+        if (task == '') {
+            alert("할 일을 적어주세요.");
             onClose();
             return;
         }
@@ -77,7 +83,8 @@ const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
 
     useEffect(() => {
         if (selectedTodo) {
-            setTask(selectedTodo.task);
+           // setTask(selectedTodo.task); 기존의 할 일이 보이도록
+            setTask('');
         }
         console.log("selectedTodotask,",selectedTodo.task);
     }, [selectedTodo]);
