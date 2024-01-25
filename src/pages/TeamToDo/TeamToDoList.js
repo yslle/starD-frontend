@@ -211,7 +211,7 @@ const TeamToDoList = () => {
             Object.keys(updatedTodos).forEach((dateKey) => {
                 updatedTodos[dateKey] = updatedTodos[dateKey].map((todo) => todo.id === id ? {
                     ...todo,
-                    toDoStatus: !todo.toDoStatus
+                    toDoStatus: !todo.toDoStatus,
                 } : todo);
             });
             return updatedTodos;
@@ -272,6 +272,7 @@ const TeamToDoList = () => {
         console.log("todoswithAssignee: ",todoswithAssignee);
         console.log("filteredTodos:",filteredTodos);
     }, [todoswithAssignee,filteredTodos]);
+    
 
     return (<div>
         <Header showSideCenter={true}/>

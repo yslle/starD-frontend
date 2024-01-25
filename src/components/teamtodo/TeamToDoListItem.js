@@ -9,6 +9,11 @@ import React, {useEffect, useState} from "react";
 
 //할 일 보여주는 컴포넌트
 const TeamToDoListItem = ({todo,todos, onRemove, onToggle, onChangeSelectedTodo, onInsertToggle, selectedDate, Assignees,Member}) => {
+
+    useEffect(() => {
+        console.log("TODO changed:", todo);
+    }, [todo]);
+
     console.log('todo:', todo);
     console.log('todos:', todos);
     // const todosString = "eeee,dddd";
@@ -25,9 +30,9 @@ const TeamToDoListItem = ({todo,todos, onRemove, onToggle, onChangeSelectedTodo,
     console.log("넘어온 담당자 닉네임들", Assignee);
     return (<li key={todo.id} className="TodoListItem">
             {Assignee.map((assignee, index) => (<p key={index}>{assignee}</p>))}
-            <div className={cn('checkbox', {checked: TODO.toDoStatus})}
-                 onClick={() => onToggle(todo.assignees,TODO.toDo.id, TODO.toDoStatus)}>
-                {TODO.toDoStatus ? <img src={checkbox} width="20px"/> : <img src={uncheckbox} width="20px"/>}
+            <div className={cn('checkbox', {checked: todo.toDoStatus})}
+                 onClick={() => onToggle(todo.assignees,TODO.toDo.id, todo.toDoStatus)}>
+                {todo.toDoStatus ? <img src={checkbox} width="20px"/> : <img src={uncheckbox} width="20px"/>}
                 <div className="text">{TODO.toDo.task}</div>
             </div>
             <div className="Edit" onClick={() => {
