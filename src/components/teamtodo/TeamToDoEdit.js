@@ -59,6 +59,11 @@ const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
 
     const onSubmit = useCallback(async (e) => {
         // alert("수정되었습니다.");
+        if (todoassignees.length === 0) {
+            alert("담당자를 선택해주세요.");
+            onClose();
+            return;
+        }
         console.log("todoassignees:",todoassignees);
          console.log("setUpdatedToDo?:", UpdatedToDo);
         onUpdate(UpdatedToDo);
