@@ -64,6 +64,12 @@ const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
             onClose();
             return;
         }
+
+        if (task == selectedTodo.task) {
+            alert("수정된 할 일이 없습니다.");
+            onClose();
+            return;
+        }
         console.log("todoassignees:",todoassignees);
          console.log("setUpdatedToDo?:", UpdatedToDo);
         onUpdate(UpdatedToDo);
