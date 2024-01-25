@@ -48,13 +48,13 @@ const TeamToDoList = () => {
 
     //담당자 추가 핸들러
     const handleAddAssignees = (e) => {
-        const assignName = e.target.getAttribute('data-assign-name');
-        console.log("assignName : ", assignName);
-        const updatedAssignees = [...Assignees, assignName];
+        const assignNicName = e.target.getAttribute('data-assign-name');
+        console.log("assignName : ", assignNicName);
+        const updatedAssignees = [...Assignees, assignNicName];
         console.log("updatedAssignees : ", updatedAssignees);
         setAssignees(updatedAssignees);
 
-        const updatedMember = member.filter((item) => item.member.nickname !== assignName); //지정된 멤버 제외 남은 멤버
+        const updatedMember = member.filter((item) => item.member.nickname !== assignNicName); //지정된 멤버 제외 남은 멤버
         console.log("updatedMember : ", updatedMember);
         setMember(updatedMember);
     };
@@ -211,7 +211,7 @@ const TeamToDoList = () => {
             Object.keys(updatedTodos).forEach((dateKey) => {
                 updatedTodos[dateKey] = updatedTodos[dateKey].map((todo) => todo.id === id ? {
                     ...todo,
-                    toDoStatus: !todo.toDoStatus
+                    toDoStatus: !todo.toDoStatus,
                 } : todo);
             });
             return updatedTodos;
@@ -272,6 +272,7 @@ const TeamToDoList = () => {
         console.log("todoswithAssignee: ",todoswithAssignee);
         console.log("filteredTodos:",filteredTodos);
     }, [todoswithAssignee,filteredTodos]);
+    
 
     return (<div>
         <Header showSideCenter={true}/>

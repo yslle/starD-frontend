@@ -145,9 +145,11 @@ const ToDoInsert = ({onInsert, dueDate, Inserttodostudyid, Inserttodotitle, Inse
             <input id={"insert-input"} onChange={onChange}
                    value={TaskValue}
                    placeholder="할 일을 입력하세요"
-                   disabled={isInputDisabled}/>
+                   disabled={isInputDisabled}
+                  />
             <button type="submit">입력</button>
         </form>
     );
 };
 export default ToDoInsert;
+
