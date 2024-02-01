@@ -173,6 +173,13 @@ const MyScrapStudy = () => {
             return "모집 완료";
     }
 
+    const navigate = useNavigate();
+
+    const GoNextDetailPage = (study)=>{
+        // console.log(d.id);
+        navigate(`/studydetail/${study.id}`, {state: study.id})
+    }
+
 
     return (
         <div className={"main_wrap"} id={"community"}>
@@ -212,9 +219,9 @@ const MyScrapStudy = () => {
                                     <div className="list_deadline">
                                         마감일 | {study.recruitmentDeadline}
                                     </div>
-                                    <div className="list_title">{study.title}</div>
-                                    <div className="list_tag">{study.tags}</div>
-                                    <div className="list_onoff">{study.onOff}</div>
+                                    <div className="list_title" onClick={() => GoNextDetailPage(study)}>{study.title}</div>
+                                    <div className="list_tag" onClick={() => GoNextDetailPage(study)}>{study.tags}</div>
+                                    <div className="list_onoff" onClick={() => GoNextDetailPage(study)}>{study.onOff}</div>
                                     <div className="stroke"></div>
                                     <div className="list_founder">{study.recruiter?.nickname}</div>
                                 </div>
