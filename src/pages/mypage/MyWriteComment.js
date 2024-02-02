@@ -1,6 +1,6 @@
 import Header from "../../components/repeat_etc/Header";
 import React, {useEffect, useRef, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 
 import "../../css/community_css/Community.css";
 import SearchBar from "../../components/community/CommSearchBar";
@@ -8,6 +8,7 @@ import PostInsert from "../../components/community/PostInsert";
 import PostListItem from "../../components/community/PostListItem";
 import axios from "axios";
 import Backarrow from "../../components/repeat_etc/Backarrow";
+import Paging from "../../components/repeat_etc/Paging";
 
 const MyWriteComment = () => {
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ const MyWriteComment = () => {
     const [todayKey, setTodayKey] = useState("");
     const [credibility, setCredibility] = useState("");
 
-    const [writtenPosts, setWrittenPosts] = useState([]); //스크랩한 게시물을 보유할 상태 변수
+    const [writtenComments, setWrittenComments] = useState([]);
 
     const Year = today.getFullYear();
     const Month = today.getMonth() + 1;
@@ -44,8 +45,41 @@ const MyWriteComment = () => {
         return formattedDatetime;
     };
 
+    const location = useLocation();
+    const pageparams = location.state ? location.state.page : 1;
+    const [page, setPage] = useState(pageparams);
+    const [count, setCount] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const insertPage = location.state && location.state.page;
+
+    const fetchMyComments = (pageNumber) => {
+        axios.get("http://localhost:8080/user/mypage/reply", {
+            params: {
+                page: pageNumber,
+            },
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+            .then((res) => {
+                setWrittenComments(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
+            }).catch((error) => {
+            console.error("작성한 게시물을 가져오는 중 오류 발생:", error);
+        });
+    };
+
     useEffect(() => {
-        axios.get("http://localhost:8080/", {
+        fetchMyComments(page);
+    }, [page]);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/user/mypage/reply", {
+            params: {
+                page: 1,
+            },
             withCredentials: true,
             headers: {
                 'Authorization': `Bearer ${accessToken}`
@@ -55,39 +89,94 @@ const MyWriteComment = () => {
                 console.log("전송 성공");
                 console.log(res.data);
 
-                setWrittenPosts(res.data);
+                setWrittenComments(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
             })
             .catch((error) => {
-                console.error('작성한 게시물을 가져오는 중 오류 발생: ', error);
+                console.error('작성한 댓글을 가져오는 중 오류 발생: ', error);
             });
-    }, []);
+    }, [insertPage]);
+
+    const handlePageChange = (selectedPage) => {
+        setPage(selectedPage);
+        navigate(`/MyPage/mycomment/page=${selectedPage}`);
+    };
 
     const mypost = () => {
+        console.log("Written posts:", writtenComments);
+
+        if (!Array.isArray(writtenComments)) {
+            return <p className="no_scrap">작성한 게시글이 없습니다.</p>;
+        }
+
         return (
             <>
-                {(writtenPosts.length === 0) && <p className="no_scrap">작성한 게시글이 없습니다.</p>}
-                {(writtenPosts.length !== 0) &&
+                {(writtenComments.length === 0) && <p className="no_scrap">작성한 댓글이 없습니다.</p>}
+                {(writtenComments.length !== 0) &&
                     <table className="post_table">
-                        <th>카테고리</th>
-                        <th>제목</th>
-                        <th>닉네임</th>
-                        <th>날짜</th>
-                        <th>조회수</th>
-                        {/*{writtenPosts.map((post) => (*/}
-                        {/*    <tr className="post_list">*/}
-                        {/*        <td className="community_category">{post.category}</td>*/}
-                        {/*        <Link to={`/postdetail/${post.id}`}*/}
-                        {/*              style={{*/}
-                        {/*                  textDecoration: "none",*/}
-                        {/*                  color: "inherit",*/}
-                        {/*              }}>*/}
-                        {/*            <td className="community_title">{post.title}</td>*/}
-                        {/*        </Link>*/}
-                        {/*        <td className="community_nickname">{post.member.nickname}</td>*/}
-                        {/*        <td className="community_datetime">{formatDatetime(post.createdAt)}</td>*/}
-                        {/*        <td>{post.viewCount}</td>*/}
-                        {/*    </tr>*/}
-                        {/*))}*/}
+                        <thead>
+                        <tr>
+                            <th>타입</th>
+                            <th>댓글 내용</th>
+                            <th>닉네임</th>
+                            <th>날짜</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {writtenComments.map((comment) => (
+                            <tr className="post_list" key={comment.id}>
+                                <td className="community_category">{comment.type}</td>
+                                <td className="community_title">
+                                    {comment.type === 'COMM' ? (
+                                        <Link
+                                            to={`/postdetail/${comment.post.id}`}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "inherit",
+                                            }}
+                                        >
+                                            {comment.content}
+                                        </Link>
+                                    ) : comment.type === 'QNA' ? (
+                                        <Link
+                                            to={`/qnadetail/${comment.post.id}`}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "inherit",
+                                            }}
+                                        >
+                                            {comment.content}
+                                        </Link>
+                                    ) : comment.type === 'STUDY' ? (
+                                        <Link
+                                            to={`/studydetail/${comment.study.id}`}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "inherit",
+                                            }}
+                                        >
+                                            {comment.content}
+                                        </Link>
+                                    ) : comment.type === 'STUDYPOST' ? (
+                                        <Link
+                                            to={`/${comment.study.id}/teamblog/TeamCommunity/studypostdetail/${comment.studyPost.id}`}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "inherit",
+                                            }}
+                                        >
+                                            {comment.content}
+                                        </Link>
+                                    ) : (
+                                        <span>{comment.content}</span>
+                                    )}
+                                </td>
+                                <td className="community_nickname">{comment.member?.nickname || '익명'}</td>
+                                <td className="community_datetime">{formatDatetime(comment.createdAt)}</td>
+                            </tr>
+                        ))}
+                        </tbody>
                     </table>
                 }
             </>
@@ -106,6 +195,10 @@ const MyWriteComment = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className={"paging"}>
+                <Paging page={page} totalItemCount={count} itemsPerPage={itemsPerPage}
+                        handlePageChange={handlePageChange}/>
             </div>
         </div>
     );

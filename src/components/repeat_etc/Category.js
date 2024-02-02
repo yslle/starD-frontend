@@ -104,7 +104,7 @@ const category = () => {
 					<nav>
 						<ul>
 							<Link
-								to={"/MyPage/mypost"}
+								to={"/MyPage/mypost/page=1"}
 								style={{
 									textDecoration: "none",
 									color: "inherit",
@@ -113,7 +113,7 @@ const category = () => {
 								<li>내가 작성한 글</li>
 							</Link>
 							<Link
-								to={"/MyPage/mycomment"}
+								to={"/MyPage/mycomment/page=1"}
 								style={{
 									textDecoration: "none",
 									color: "inherit",

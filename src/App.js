@@ -304,13 +304,13 @@ function App() {
                         }
                     />
                     <Route
-                        path="/MyPage/mypost"
+                        path="/MyPage/mypost/:page"
                         element={
                             <MyWritePost/>
                         }
                     />
                     <Route
-                        path="/MyPage/mycomment"
+                        path="/MyPage/mycomment/:page"
                         element={
                             <MyWriteComment/>
                         }
