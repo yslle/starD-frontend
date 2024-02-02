@@ -27,11 +27,6 @@ const MemberManagement = () => {
 
     //TODO 강제탈퇴
     const handleWithdraw = useCallback((member) => {
-        if (member.reportCount < 10) {
-            alert("누적 신고 수가 10회 이상인 경우만 강제 탈퇴 처리가 가능합니다.");
-            return;
-        }
-
         const confirmWithdraw = window.confirm("정말로 강제 탈퇴 시키겠습니까?");
 
         if (confirmWithdraw) {
@@ -61,7 +56,7 @@ const MemberManagement = () => {
         <div className="admin_sub_container">
             <h2 className="admin_title">회원 관리</h2>
             <div className="admin_table_wrapper">
-                <h3>* 누적 신고 수가 10회 이상이면 강제 탈퇴 처리가 가능합니다.</h3>
+                <h3>* 누적 신고 수가 10회 이상이면 자동으로 강제 탈퇴 처리됩니다.</h3>
                 <table className="member_admin_table">
                     <thead>
                     <tr>
