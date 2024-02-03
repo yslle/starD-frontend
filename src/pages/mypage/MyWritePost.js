@@ -117,7 +117,7 @@ const MyWritePost = () => {
                     <table className="post_table">
                         <thead>
                         <tr>
-                            <th>카테고리</th>
+                            <th>타입</th>
                             <th>제목</th>
                             <th>닉네임</th>
                             <th>날짜</th>
@@ -127,18 +127,41 @@ const MyWritePost = () => {
                         <tbody>
                         {writtenPosts.map((post) => (
                             <tr className="post_list" key={post.id}>
-                                <td className="community_category">{post.category}</td>
+                                <td className="community_category">{post.type}</td>
                                 <td className="community_title">
-                                    {/*// TODO post.postTㅔype에 따라서 COMM이면 postdetail, QNA면 qnadetail로*/}
-                                    <Link
-                                        to={`/postdetail/${post.id}`}
-                                        style={{
-                                            textDecoration: "none",
-                                            color: "inherit",
-                                        }}
-                                    >
-                                        {post.title}
-                                    </Link>
+                                    {post.type === 'COMM' ? (
+                                        <Link
+                                            to={`/postdetail/${post.id}`}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "inherit",
+                                            }}
+                                        >
+                                            {post.title}
+                                        </Link>
+                                    ) : post.type === 'QNA'  || post.type === 'FAQ' ? (
+                                        <Link
+                                            to={`/qnadetail/${post.id}`}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "inherit",
+                                            }}
+                                        >
+                                            {post.title}
+                                        </Link>
+                                    ) : post.type === 'NOTICE' ? (
+                                        <Link
+                                            to={`/noticedetail/${post.id}`}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "inherit",
+                                            }}
+                                        >
+                                            {post.title}
+                                        </Link>
+                                    ) : (
+                                        <span>{post.title}</span>
+                                    )}
                                 </td>
                                 <td className="community_nickname">{post.member?.nickname || '익명'}</td>
                                 <td className="community_datetime">{formatDatetime(post.createdAt)}</td>
