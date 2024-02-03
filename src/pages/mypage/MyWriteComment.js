@@ -126,7 +126,11 @@ const MyWriteComment = () => {
                         <tbody>
                         {writtenComments.map((comment) => (
                             <tr className="post_list" key={comment.id}>
-                                <td className="community_category">{comment.type}</td>
+                                <td className="community_category">
+                                    {comment.type === 'COMM' ? '커뮤니티' 
+                                        : comment.type === 'STUDY' ? '스터디'
+                                        : comment.type === 'STUDYPOST' ? '팀 커뮤니티' : comment.type}
+                                </td>
                                 <td className="community_title">
                                     {comment.type === 'COMM' ? (
                                         <Link

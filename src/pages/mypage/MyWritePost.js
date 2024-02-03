@@ -51,9 +51,18 @@ const MyWritePost = () => {
     const [count, setCount] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const insertPage = location.state && location.state.page;
+    const [selectedCategory, setSelectedCategory] = useState("ALL");
 
-    const fetchMyPosts = (pageNumber) => {
-        axios.get("http://localhost:8080/user/mypage/post", {
+    const fetchMyPosts = (pageNumber, selectedCategory) => {
+        let url;
+
+        if (selectedCategory === "STUDYPOST") {
+            url = "http://localhost:8080/user/mypage/studypost";
+        }
+        else {
+            url = "http://localhost:8080/user/mypage/post";
+        }
+        axios.get(url, {
             params: {
                 page: pageNumber,
             },
@@ -72,8 +81,8 @@ const MyWritePost = () => {
     };
 
     useEffect(() => {
-        fetchMyPosts(page);
-    }, [page]);
+        fetchMyPosts(page, selectedCategory);
+    }, [page, selectedCategory]);
 
     useEffect(() => {
         axios.get("http://localhost:8080/user/mypage/post", {
@@ -103,6 +112,11 @@ const MyWritePost = () => {
         navigate(`/MyPage/mypost/page=${selectedPage}`);
     };
 
+    const handleCategoryChange = (selectedCategory) => {
+        setSelectedCategory(selectedCategory);
+        fetchMyPosts(page);
+    };
+
     const mypost = () => {
         console.log("Written posts:", writtenPosts);
 
@@ -112,6 +126,14 @@ const MyWritePost = () => {
 
         return (
             <>
+                <div>
+                    <select id="sub"  value={selectedCategory} onChange={(e) => handleCategoryChange(e.target.value)}>
+                        <option value="ALL">전체</option>
+                        <option value="STUDYPOST">팀블로그</option>
+                    </select>
+                </div>
+                <br/><br/><br/>
+                <div>
                 {(writtenPosts.length === 0) && <p className="no_scrap">작성한 게시글이 없습니다.</p>}
                 {(writtenPosts.length !== 0) &&
                     <table className="post_table">
@@ -127,7 +149,11 @@ const MyWritePost = () => {
                         <tbody>
                         {writtenPosts.map((post) => (
                             <tr className="post_list" key={post.id}>
-                                <td className="community_category">{post.type}</td>
+                                <td className="community_category">
+                                    {post.type === 'COMM' ? '커뮤니티'
+                                        : post.type === 'STUDYPOST' ? '팀 커뮤니티'
+                                        : post.type === 'NOTICE' ? '공지사항' : post.type}
+                                </td>
                                 <td className="community_title">
                                     {post.type === 'COMM' ? (
                                         <Link
@@ -159,6 +185,16 @@ const MyWritePost = () => {
                                         >
                                             {post.title}
                                         </Link>
+                                    ) : post.type === 'STUDYPOST' ? (
+                                        <Link
+                                            to={`/${post.study.id}/teamblog/TeamCommunity/studypostdetail/${post.id}`}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "inherit",
+                                            }}
+                                        >
+                                            {post.title}
+                                        </Link>
                                     ) : (
                                         <span>{post.title}</span>
                                     )}
@@ -171,6 +207,7 @@ const MyWritePost = () => {
                         </tbody>
                     </table>
                 }
+                </div>
             </>
         );
     };
