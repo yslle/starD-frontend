@@ -303,7 +303,7 @@ const Mypage = ({sideheader}) => {
                     </div>
 
                     <p>스크랩한 스터디</p>
-                    <Slide state={state}/>
+                    <Slide state={state} type="scrap"/>
                     <p>스크랩한 게시글</p>
                     <div className="sub_container">
                         {scrapstory()}

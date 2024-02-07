@@ -158,8 +158,9 @@ li {
 .scrap_button {
 	display: flex;
 	justify-content: space-between;
-	position: relative;
-	bottom: 55%;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
 	width: 100%;
 }
 
@@ -258,6 +259,28 @@ li {
 	margin-left: 0px;
 }
 
+.other_profile{
+	display: flex;
+	align-items: center;
+}
+.other_profile .profile_right_content{
+	margin-left:100px;
+
+}
+.other_profile .profile_right_content p{
+	font-size:18px;
+}
+.other_profile .profile_right_content .bold,
+.main_container .bold {
+	font-weight: bold;
+}
+.main_container .another_open_study,
+.main_container .another_write_post {
+	margin-top:50px;
+}
+.main_container .another_write_post{
+	margin-bottom: 50px;
+}
 
 @media (max-width: 1300px) {
 	/* 레이아웃 크기 바꾸기 배치는 그대로 */

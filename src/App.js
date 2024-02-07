@@ -58,6 +58,7 @@ import MyScrapStudy from "./pages/mypage/MyScrapStudy";
 import MyScrapCommunityPost from "./pages/mypage/MyScrapCommunityPost";
 import MyWritePost from "./pages/mypage/MyWritePost";
 import MyWriteComment from "./pages/mypage/MyWriteComment";
+import AnotherUserProfile from "./pages/mypage/AnotherUserProfile";
 
 function App() {
     return (
@@ -313,6 +314,12 @@ function App() {
                         path="/MyPage/mycomment/:page"
                         element={
                             <MyWriteComment/>
+                        }
+                    />
+                    <Route
+                        path="/:id/userprofile"
+                        element={
+                            <AnotherUserProfile/>
                         }
                     />
                 </Routes>
