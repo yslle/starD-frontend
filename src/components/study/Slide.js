@@ -227,7 +227,7 @@ const Slide = ({ type, userId }) => {
             {type === "openStudy" && (
                 <div style={{ position: "relative" }}>
                     <div className="sub_container" id="scrap_study">
-                        {openStudies.length === 0 ? (
+                        {(openStudies.length === 0 || openStudies.content.length === 0) ? (
                             <p className="no_scrap">개설한 스터디가 없습니다.</p>
                         ) : (
                             <div className="sub_wrap">
@@ -239,7 +239,7 @@ const Slide = ({ type, userId }) => {
                             </div>
                         )}
                     </div>
-                    {openStudies.length !== 0 && (
+                    {(openStudies.length !== 0 && openStudies.content.length !== 0) && (
                         <div className="scrap_button">
                             <button
                                 className="prev_btn"

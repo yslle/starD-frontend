@@ -122,21 +122,21 @@ const AnotherUserProfile = () => {
                     <div className="sub_container other_profile">
                         <ImageComponent getImgName = {uploadImgUrl} imageSrc={""} />
                         <div className="profile_right_content">
-                            <p><span className="bold">닉네임:</span> {profile?.nickname}</p>
-                            <p><span className="bold">자기소개:</span> {profile?.introduce === null ? (
+                            <p><span className="color">닉네임:</span> {profile?.nickname}</p>
+                            <p><span className="color">자기소개:</span> {profile?.introduce === null ? (
                                 <span>자기소개란이 비었어요!</span>
                             ) : (
                                 <span>{profile?.introduce}</span>
                             )}</p>
-                            <p style={{marginBottom:"0"}}>{profile?.nickname}님의 개인신뢰도는 <span className="bold">{profile?.credibility}</span>입니다.</p>
+                            <p style={{marginBottom:"0"}}>{profile?.nickname}님의 개인신뢰도는 <span className="color">{profile?.credibility}</span>입니다.</p>
                         </div>
                     </div>
                     <div className="another_open_study">
-                        <p><span className="bold">{profile?.nickname}</span>님이 개설한 스터디</p>
+                        <p><span className="color">{profile?.nickname}</span>님이 개설한 스터디</p>
                         <Slide userId={id} type="openStudy"/>
                     </div>
                     <div className="another_write_post">
-                        <p><span className="bold">{profile?.nickname}</span>님이 작성한 게시글</p>
+                        <p><span className="color">{profile?.nickname}</span>님이 작성한 게시글</p>
                         {writepost()}
                     </div>
                 </div>

@@ -270,9 +270,9 @@ li {
 .other_profile .profile_right_content p{
 	font-size:18px;
 }
-.other_profile .profile_right_content .bold,
-.main_container .bold {
-	font-weight: bold;
+.other_profile .profile_right_content .color,
+.main_container .color {
+	color:#99A98F;
 }
 .main_container .another_open_study,
 .main_container .another_write_post {
