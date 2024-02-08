@@ -143,9 +143,10 @@ const TeamSchedule = () => {
             <Category/>
             <div className="main_schedule_container">
                 <p id={"entry-path"}> 스터디 참여내역 > 팀블로그 > 팀 스터디 일정</p>
-                <Backarrow subname={"스터디 모임 일정"}/>
+                <Backarrow subname={"팀 스터디 모임 일정"}/>
                 <div className="sub_container" id="todo_sub">
                     <TeamScheduleCalender
+                        studyId = {studyId}
                         studies={studies}
                         studyTitles={studyTitles}
                         onDateClick={handleToggle}
@@ -156,6 +157,7 @@ const TeamSchedule = () => {
                     />
                 </div>
                 {addToggle && (<TeamAddSchedule
+                    studyId = {studyId}
                     studies={studies}
                     studyTitles={studyTitles}
                     selectedDate={selectedDate}
