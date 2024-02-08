@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Report from "../report/Report";
 import CommentForm from "../comment/CommentForm";
 import axios from "axios";
@@ -96,7 +96,17 @@ const StudyInfo = ({study, isRecruiter}) => {
                 <h2 className="study_title">{study.title}</h2>
                 <div>
                     <div className="study_author_info">
-                        <p className="study_author">{study.recruiter.nickname}</p>
+                        <p className="study_author">
+                            <Link
+                                to={`/${study.recruiter.id}/userprofile`}
+                                style={{
+                                    textDecoration: "none",
+                                    color: "inherit",
+                                }}
+                            >
+                                {study.recruiter.nickname}
+                            </Link>
+                        </p>
                         <p className="study_created_date">{formatDatetime(study.recruitmentStart)}</p>
                         {(study.recruitStatus !== 'RECRUITMENT_COMPLETE') | (study.recruiter !== isLoggedInUserId)  && (
                             <>

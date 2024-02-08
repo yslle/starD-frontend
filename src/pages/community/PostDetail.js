@@ -317,7 +317,15 @@ const PostDetail = () => {
                                 </div>
                                 <div className="post_info">
                                     <div className="left">
-                                        <span className="post_nickname">{postItem.member.nickname}</span>
+                                        <Link
+                                            to={`/${postItem.member.id}/userprofile`}
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "inherit",
+                                            }}
+                                        >
+                                            <span className="post_nickname">{postItem.member.nickname}</span>
+                                        </Link>
                                         <span className="post_created_date">{formatDatetime(postItem.createdAt)}</span>
                                         {postItem.createdAt !== postItem.updatedAt && (
                                           <>
