@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import ScheduleAdd from "../../css/schedule_css/ScheduleAdd.css";
 import { CirclePicker } from "react-color";
 
-const TeamAddSchedule = ({studies,studyTitles, selectedDate, onInsert, onClose }) => {
+const TeamAddSchedule = ({studyId,studies,studyTitles, selectedDate, onInsert, onClose }) => {
   const localDate = new Date(selectedDate);
   const localDateString = localDate.toLocaleDateString();
   const [startDate, setStartDate] = useState(new Date(selectedDate));
@@ -13,26 +13,13 @@ const TeamAddSchedule = ({studies,studyTitles, selectedDate, onInsert, onClose }
   const [content, setContent] = useState("");
   const [color, setColor] = useState("");
   const [InsertToDoTitle, setInsertToDoTitle] = useState("")
-  const [InsertStudyId, setInsertStudyId] = useState(studies[0].study.id) // 초기값 : 첫 번째 스터디 (기본 선택값)
-  const [InsertStudy, setInsertStudy] = useState([]); //선택한 스터디 객체
-  const studyIdAsNumber = parseFloat(InsertStudyId);
-
+  const studyIdAsNumber = parseFloat(studyId);
   const onChangeTitle = useCallback((e) => {
     setTitle(e.target.value);
   }, []);
   const onChangeContent = useCallback((e) => {
     setContent(e.target.value);
   }, []);
-  const selectScehduleStudy = (e) => {
-    setInsertToDoTitle(e.target.value)
-    const selectedStudy = studies.find((study) => study.study.title === e.target.value);
-    const selectedId = selectedStudy.study.id;
-    setInsertStudyId(selectedId);
-    setInsertStudy(selectedStudy.study);
-    console.log(e.target.value);
-    console.log("선택한 스터디 아이디", selectedId);
-    console.log("선택한 스터디", selectedStudy.study);
-  }
 
   const onChangeColor = useCallback((color) => {
     setColor(color.hex);
@@ -60,12 +47,7 @@ const TeamAddSchedule = ({studies,studyTitles, selectedDate, onInsert, onClose }
         <form className="Scheduleedit_insert">
           <h2>{localDateString}</h2>
           <div className="selectstudy">
-            <p>스터디 선택:</p>
-            <select onChange={selectScehduleStudy} disabled>
-              {studyTitles.map((item, index) => (
-                  <option key={index} value={item}>{item}</option>
-              ))}
-            </select>
+
           </div>
           <div className="selectDay">
             <div className="selectstartDay">

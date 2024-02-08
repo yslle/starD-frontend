@@ -6,10 +6,11 @@ import RenderDays from "../calender/RenderDays";
 import ScheduleCalender_CSS from "../../css/schedule_css/ScheduleCalender.css";
 import TeamRenderScheduleCells from "./TeamRenderScheduleCells";
 
-const TeamScheduleCalender = ({studies, studyTitles,onDateClick ,meetings, schedules,onUpdate,onRemove}) => {
+const TeamScheduleCalender = ({studyId,studies, studyTitles,onDateClick ,meetings, schedules,onUpdate,onRemove}) => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
 
+    console.log("studies:", studies);
     const prevMonth = () => {
         setCurrentMonth(subMonths(currentMonth, 1));
     };
