@@ -5,7 +5,7 @@ import CommentEdit from "./CommentEdit";
 import {useLocation, useParams} from "react-router-dom";
 import axios from "axios";
 
-const Comment = () => {
+const Comment = ({ type }) => {
   const accessToken = localStorage.getItem('accessToken');
   const [userNickname, setUserNickname] = useState("");
   const location = useLocation();
@@ -14,8 +14,6 @@ const Comment = () => {
   const [comments, setComments] = useState([]);
   const [editingComment, setEditingComment] = useState(null);
 
-  // study/qna/comm 타입을 저장할 상태 변수
-  const [type, setType] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const {id} = useParams();
@@ -53,7 +51,7 @@ const Comment = () => {
           console.error("댓글 목록을 불러오는 중 에러 발생:", error);
           setLoading(false); // 에러 발생 시에도 로딩 상태를 false로 설정합니다.
         });
-    }, [id, type, accessToken]);
+    }, [id, accessToken]);
 
   useEffect(() => {
     axios
@@ -73,27 +71,6 @@ const Comment = () => {
       });
   }, [accessToken]);
 
-  useEffect(() => {
-    if (targetId) {
-      axios
-        .get(`http://localhost:8080/replies/type/${targetId}`, {
-          withCredentials: true,
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        })
-        .then((response) => {
-          const type = response.data;
-          setType(type);
-          console.log("게시글 타입: ", type);
-        })
-        .catch((error) => {
-          console.error("스터디 타입을 가져오는 중 에러 발생:", error);
-        });
-    }
-  }, [targetId, accessToken]);
-
-
   const fetchComments = () => {
     // targetId가 없다면 댓글 목록을 가져올 수 없음
     if (targetId === "") {
@@ -106,7 +83,7 @@ const Comment = () => {
       url = `http://localhost:8080/replies/post/${targetId}`;
     } else if (type === "STUDY") {
       url = `http://localhost:8080/replies/study/${targetId}`;
-    } else if (type == "STUDYPOST") {
+    } else if (type === "STUDYPOST") {
       url = `http://localhost:8080/replies/studypost/${targetId}`;
     }
 
