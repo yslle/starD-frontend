@@ -18,6 +18,7 @@ const TeamCommunity = () => {
     const [allow, setAllow] = useState(null); // 사용자 동의 여부 저장
 
     const formatDeleteAllow = (deleteAllow) => {
+        console.log(deleteAllow);
         if (deleteAllow === true) {
             return "동의";
         }
@@ -97,7 +98,7 @@ const TeamCommunity = () => {
                     </div>
 
                     {!allow && (
-                        <button onClick={() => delete_allow()}>중단 동의하기(임시)</button>
+                        <button onClick={() => delete_allow()}>중단 동의하기</button>
                     )}
                 </div>
             </div>

@@ -13,9 +13,10 @@ const Chat = (props) => {
     const [greetings, setGreetings] = useState([]);
     const [studyId, setStudyId] = useState(props.studyId);
     const [studyTitle, setStudyTitle] = useState(props.studyTitle);
+    const progressStatus= useState(props.progressStatus);
     const [pendingEnter, setPendingEnter] = useState(false); //
     const LogNicname = localStorage.getItem("isLoggedInUserId");
-
+    
     const stompClient = useRef(
         new Client({
             brokerURL: 'ws://localhost:8080/gs-guide-websocket',
@@ -167,8 +168,12 @@ const Chat = (props) => {
                 Authorization: `${accessToken}`,
             };
             if (message.length === 0) {
-                alert('메시지를 입력하세요.');
-            } else {
+                if(progressStatus==="DISCONTINUE"){
+                    alert('중단된 스터디는 채팅이 불가능합니다.');
+                } else {
+                    alert('메시지를 입력하세요.');
+                }
+            }else {
                 stompClient.current.publish({
                     destination: `/app/chat/${studyId}`,
                     body: JSON.stringify({type: 'TALK', studyId: studyId, message: `${message}`}),
@@ -257,6 +262,7 @@ const Chat = (props) => {
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={onKeyDown}
                     placeholder="내용을 입력하세요"
+                    disabled={progressStatus === 'DISCONTINUE'}
                 />
                 <button onClick={sendMessage}>Send</button>
             </div>

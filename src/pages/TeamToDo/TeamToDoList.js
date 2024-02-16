@@ -20,14 +20,19 @@ const TeamToDoList = () => {
     let Month = selectedDate.getMonth() + 1;
     const Dates = selectedDate.getDate();
     const location = useLocation();
-    const {studyId, Member, selecteStudy} = location.state;
+    const {studyId, Member, selecteStudy,progressStatus} = location.state;
     const [studies, setStudy] = useState([]);
     const [studyMems, setStudyMems] = useState([]);
     const [member, setMember] = useState(Member);
     const [Assignees, setAssignees] = useState([]);
     const studyIdAsNumber = parseFloat(studyId);
 
+    console.log("studyId:",studyId);
+    console.log("ss:", progressStatus);
 
+    useEffect(() => {
+        const {studyId, Member, selecteStudy,progressStatus} = location.state;
+    }, []);
     const onInsertToggle = () => {
         if (selectedTodo) {
             setSelectedTodo(null);
@@ -315,7 +320,7 @@ const TeamToDoList = () => {
 
                         </div>
                         <TeamToDoInsert onInsert={onInsert} dueDate={selectedDate} Inserttodostudyid={studyId}
-                                        studyidasnumber={studyIdAsNumber} Assignees={Assignees}/>
+                                        studyidasnumber={studyIdAsNumber} Assignees={Assignees} progressStatus={progressStatus}/>
                         <ul className="TodoList">
                             {filteredTodos.length === 0 && (<div className="alert_empty_todo">
                                 <span>할 일이 없습니다.<br/>  할 일을 입력해주세요.</span>

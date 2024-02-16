@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import ScheduleAdd from "../../css/schedule_css/ScheduleAdd.css";
 import { CirclePicker } from "react-color";
 
-const TeamAddSchedule = ({studyId,studies,studyTitles, selectedDate, onInsert, onClose }) => {
+const TeamAddSchedule = ({studyId,studies,studyTitles, selectedDate, onInsert, onClose,progressStatus }) => {
   const localDate = new Date(selectedDate);
   const localDateString = localDate.toLocaleDateString();
   const [startDate, setStartDate] = useState(new Date(selectedDate));
@@ -32,7 +32,11 @@ const TeamAddSchedule = ({studyId,studies,studyTitles, selectedDate, onInsert, o
           console.log("addschedule:", endDate.toDateString());
           onInsert(startDate, title, color, studyIdAsNumber);
           onClose()
-        } else {
+        }else if(progressStatus === 'DISCONTINUE') {
+          alert("중단된 스터디는 일정 추가가 불가능합니다.");
+          onClose()
+        }
+        else {
           alert("모두 입력해주세요.");
         }
         setTitle("");
@@ -57,6 +61,7 @@ const TeamAddSchedule = ({studyId,studies,studyTitles, selectedDate, onInsert, o
                   onChange={(date) => setStartDate(date)}
                   dateFormat="yyyy-MM-dd"
                   placeholder="시작 날짜 선택"
+                  disabled={progressStatus === 'DISCONTINUE'}
               />
             </div>
           </div>
@@ -66,6 +71,7 @@ const TeamAddSchedule = ({studyId,studies,studyTitles, selectedDate, onInsert, o
                 onChange={onChangeTitle}
                 value={title}
                 placeholder="일정 이름을 입력하세요"
+                disabled={progressStatus === 'DISCONTINUE'}
             />
           </div>
           <div className="selectcolor">

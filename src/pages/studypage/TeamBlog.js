@@ -31,7 +31,7 @@ const TeamBlog = () => {
     const Month = today.getMonth() + 1;
     const Dates = today.getDate()
     const studyIdAsNumber = parseFloat(studyId);
-
+    const [progressStatus, setProgressStatus] = useState(""); //중단된 스터디인지 판별
 
     if (studyId !== undefined) {
         console.log("Study ID:", studyId);
@@ -52,6 +52,7 @@ const TeamBlog = () => {
                     studyId: studyId,
                     Member: Member,
                     selectStudy: studyItem,
+                    progressStatus:progressStatus,
                 }
             })
     }
@@ -61,6 +62,7 @@ const TeamBlog = () => {
                 studyId: studyId,
                 Member: Member,
                 selectStudy: studyItem,
+                progressStatus:progressStatus,
             }
         })
 
@@ -69,6 +71,7 @@ const TeamBlog = () => {
         navigate(`/${studyIdAsNumber}/teamblog/TeamCommunity`, {
             state: {
                 studyId: studyId,
+                progressStatus:progressStatus,
             }
         })
     }
@@ -110,7 +113,11 @@ const TeamBlog = () => {
             }
         }).then((res) => {
             setStudyItem(res.data);
-            console.error("스터디 세부 데이터 가져오기 성공:", res.data);
+            console.log("스터디 세부 데이터 가져오기 성공:", res.data);
+            if(res.data.progressStatus == "DISCONTINUE"){
+                alert("중단된 스터디 입니다. 수정은 불가하며 읽기만 가능합니다.");
+                setProgressStatus(res.data.progressStatus);
+            }
         })
             .catch((error) => {
                 console.error("스터디 세부 데이터 가져오기 실패:", error);
@@ -275,14 +282,14 @@ const TeamBlog = () => {
                                         <p>중간장소 찾기</p>
                                     </div>
                                     <div id="detail">
-                                        <MapNaverDefault studyId={studyId} Member={Member}/>
+                                        <MapNaverDefault studyId={studyId} Member={Member} progressStatus={progressStatus}/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className={"content_right"}>
                             <div className={"chat_content"}>
-                                <Chat studyId={studyId} studyTitle={studyItem.title}/>
+                                <Chat studyId={studyId} studyTitle={studyItem.title} progressStatus={progressStatus}/>
                             </div>
                         </div>
                     </div>

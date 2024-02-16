@@ -101,6 +101,7 @@ const Comment = ({ type }) => {
           author: comment.member.nickname,
         }));
         setComments(commentsWithIds);
+        console.log("댓글목록",commentsWithIds);
       })
       .catch((error) => {
         console.error("댓글 목록을 불러오는 중 에러 발생:", error);
