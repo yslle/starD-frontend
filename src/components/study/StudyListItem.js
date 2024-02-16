@@ -15,21 +15,24 @@ function calculateDateDifference(startDate, endDate) {
     return daysDifference;
 }
 
-function checkRecruitStatus(recruitStatus) {
+function checkRecruitStatus(recruitStatus, proressStatus) {
 
     if (recruitStatus == "RECRUITING")
         return "모집 중";
+    else if (proressStatus == "DISCONTINUE")
+        return "중단된 스터디";
     else
         return "모집 완료";
 }
 
 const StudyListItem = ({studies, toggleLike, toggleScrap, d, index}) => {
+    console.log(studies);
     const daysDifference = calculateDateDifference(studies.activityStart, studies.activityDeadline);
-    const recruitStatus = checkRecruitStatus(studies.recruitStatus);
+    const recruitStatus = checkRecruitStatus(studies.recruitStatus, studies.progressStatus);
     const navigate = useNavigate();
 
 
-    const GoNextDetailPage = ()=>{
+    const GoNextDetailPage = () => {
         // console.log(d.id);
         navigate(`/studydetail/${d.id}`, {state: studies.id})
     }

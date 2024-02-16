@@ -17,10 +17,16 @@ const TeamCommunity = () => {
     const isLoggedInUserId = localStorage.getItem('isLoggedInUserId');
 
     const location = useLocation();
-    const {studyId} = location.state;
+    const {studyId,progressStatus} = location.state;
 
     const handleMoveToPostInsert = (e) => {
-        setShowPostInsert(!showPostInsert);
+        if(progressStatus ==="DISCONTINUE"){
+            alert("중단된 스터디는 커뮤니티 글 쓰기가 불가능합니다.");
+        }
+        else{
+            setShowPostInsert(!showPostInsert);
+        }
+
     };
 
     useEffect(() => {
@@ -48,7 +54,7 @@ const TeamCommunity = () => {
                     <p id={"entry-path"}> 스터디 참여내역 > 팀블로그 > 팀 커뮤니티</p>
                     <Backarrow subname={"TEAM COMMUNITY LIST"}/>
                     {showPostInsert && (
-                        <PostInsert studyId={studyId} />
+                        <PostInsert studyId={studyId}/>
                     )}
                     {!showPostInsert && (
                         <div>

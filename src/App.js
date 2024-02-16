@@ -59,7 +59,7 @@ import MyScrapCommunityPost from "./pages/mypage/MyScrapCommunityPost";
 import MyWritePost from "./pages/mypage/MyWritePost";
 import MyWriteComment from "./pages/mypage/MyWriteComment";
 import AnotherUserProfile from "./pages/mypage/AnotherUserProfile";
-
+import OtherProfile from "./pages/studypage/OtherProfile";
 function App() {
     return (
         <BrowserRouter>
@@ -320,6 +320,13 @@ function App() {
                         path="/:id/userprofile"
                         element={
                             <AnotherUserProfile/>
+                        }
+                    />
+
+                    <Route
+                        path="/:memberId/profile"
+                        element={
+                            <OtherProfile/>
                         }
                     />
                 </Routes>

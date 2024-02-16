@@ -299,7 +299,11 @@ const MyParticipateStudy = ({sideheader}) => {
                                 </div>
                                 {d.study.progressStatus === "IN_PROGRESS" ? (
                                     <div className="list_status">진행중</div>
-                                ) : (<div className="list_status">진행 완료</div>)}
+                                ) : d.study.progressStatus === "DISCONTINUE" ? (
+                                    <div className="list_status">중단된 스터디</div>
+                                ) : (
+                                    <div className="list_status">진행 완료</div>
+                                )}
 
                             </div>
                             <div className="list_btn">

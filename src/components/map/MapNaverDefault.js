@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState, useCallback} from 'react';
 import axios from "axios";
 import { Naver_ID, Naver_Secret } from '../../config';
 
-const MapNaverDefault = ({studyId, Member}) => {
+const MapNaverDefault = ({studyId, Member,progressStatus}) => {
 
     const accessToken = localStorage.getItem('accessToken');
 
@@ -191,9 +191,15 @@ const MapNaverDefault = ({studyId, Member}) => {
     //중간위치 찾아주기
     const findMidpoint = () => {
         if (inputs.some(input => !input.trim())) {
-            alert('모든 입력 값을 올바르게 작성하세요.');
-            return;
+            if(progressStatus === 'DISCONTINUE'){
+                alert('중단된 스터디는 중간지점 찾기가 불가능합니다.');
+                return;
+            }else {
+                alert('모든 입력 값을 올바르게 작성하세요.');
+                return;
+            }
         }
+
 
         axios.get("http://localhost:8080/location/find", {
             params: {placeList: inputs.join(',')},
@@ -219,7 +225,7 @@ const MapNaverDefault = ({studyId, Member}) => {
                 <div>
                     <div key={index} id={"input-location"}>
                         <input placeholder={" 장소를 입력하세요."}
-                               onChange={(e) => handleInputChange(index, e.target.value)}/>
+                               onChange={(e) => handleInputChange(index, e.target.value)} disabled={progressStatus === 'DISCONTINUE'}/>
                         {inputs.length - 1 === index && (
                             <button onClick={addInput}>+</button>
                         )}

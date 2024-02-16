@@ -14,7 +14,7 @@ const TeamSchedule = () => {
     const [addToggle, setAddToggle] = useState(false);
     const accessToken = localStorage.getItem('accessToken');
     const location = useLocation();
-    const {studyId, Member, selecteStudy} = location.state;
+    const {studyId, Member, selecteStudy,progressStatus} = location.state;
 
     const [studies, setStudy] = useState([]);
     const [studyTitles, setStudyTitles] = useState([]);
@@ -165,6 +165,7 @@ const TeamSchedule = () => {
                     onClose={() => {
                         setAddToggle(false);
                     }}
+                    progressStatus={progressStatus}
                 />)}
             </div>
         </div>

@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import Report from "../report/Report.js";
+import {Link, useNavigate} from "react-router-dom";
 
 const formatDatetime = (datetime) => {
   const date = new Date(datetime);
@@ -14,7 +15,7 @@ const formatDatetime = (datetime) => {
 const CommentList = ({ comments, onEditClick, onRemoveClick, onReplySubmit, userNickname }) => {
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportCommentId, setReportCommentId] = useState(null);
-
+  const navigate = useNavigate();
 
   const handleOpenReportModal = (commentId) => {
     setReportCommentId(commentId);
@@ -34,12 +35,19 @@ const CommentList = ({ comments, onEditClick, onRemoveClick, onReplySubmit, user
   if (!comments) {
     comments = [];
   }
+
   return (
     <div className="comment_list">
       <ul>
         {comments.map((comment, index) => (
-          <li key={index} className="comment">
-            <strong>{comment.author}</strong>
+          <li key={index} className="comment" >
+            <Link to={`/${comment.author}/profile`}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}>
+              <strong>{comment.author}</strong>
+            </Link>
             <div style={{ float: "right" }}>
               {comment.author === userNickname && (
                 <>
