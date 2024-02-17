@@ -60,6 +60,7 @@ import MyWritePost from "./pages/mypage/MyWritePost";
 import MyWriteComment from "./pages/mypage/MyWriteComment";
 import AnotherUserProfile from "./pages/mypage/AnotherUserProfile";
 import OtherProfile from "./pages/studypage/OtherProfile";
+import  SetNewPw from "./pages/userpage/SetNewPw";
 function App() {
     return (
         <BrowserRouter>
@@ -92,6 +93,12 @@ function App() {
                     <Route
                         path="/login/findePW"
                         element={<FindPW/>}
+                    />
+                    <Route
+                        path="/reset-password"
+                        element={
+                            <SetNewPw/>
+                        }
                     />
                     <Route
                         path="/mypage"
@@ -329,6 +336,10 @@ function App() {
                             <OtherProfile/>
                         }
                     />
+
+
+
+
                 </Routes>
 
                 <Footer/>
