@@ -53,9 +53,10 @@ const TeamToDoList = () => {
 
     //담당자 추가 핸들러
     const handleAddAssignees = (e) => {
+        const assignId = e.target.getAttribute('data-assign-id');
         const assignNicName = e.target.getAttribute('data-assign-name');
         console.log("assignName : ", assignNicName);
-        const updatedAssignees = [...Assignees, assignNicName];
+        const updatedAssignees = [...Assignees, { id: assignId, nickname: assignNicName }];
         console.log("updatedAssignees : ", updatedAssignees);
         setAssignees(updatedAssignees);
 
@@ -67,16 +68,16 @@ const TeamToDoList = () => {
     //담당자 삭제 핸들러
     const handleRemoveAssignees = async (e) => {
         try {
-            const removedAssignName = e.target.value;
+            const removedAssignNickname = e.target.value;
 
             //해당 닉네임을 가진 담당자를 선택에서 해제
-            const updatedAssignees = Assignees.filter((item) => item !== removedAssignName);
+            const updatedAssignees = Assignees.filter((item) => item.id !== removedAssignNickname);
             await setAssignees(updatedAssignees);
 
             console.log("삭제한 후 담당자 상태: ", updatedAssignees);
 
             //되돌릴 멤버
-            const assigneeToAddBack = Member.find((item) => item.member.nickname === removedAssignName);
+            const assigneeToAddBack = Member.find((item) => item.member.id === removedAssignNickname);
 
             //member에 다시 집어 넣음
             if (assigneeToAddBack) {
@@ -153,15 +154,19 @@ const TeamToDoList = () => {
     const onUpdate = useCallback(async (UpdatedToDo) => {
         console.log("selectedTodo..:", UpdatedToDo);
         onInsertToggle();
-        const assigneeStr = UpdatedToDo.assignees.toString();
+        const assigneeIds = UpdatedToDo.assignees.map(assignee => assignee.id);
+        const assigneeStr = assigneeIds.toString();
+
         const updateToDo = {
             task: UpdatedToDo.toDo.task, dueDate: UpdatedToDo.toDo.dueDate,
         };
         const toDoId = UpdatedToDo.toDo.id;
+
         const postDataResponse = await axios.put(`http://localhost:8080/todo/${toDoId}`, updateToDo, {
             params: {
-              assigneeStr: assigneeStr,
-            }, withCredentials: true, headers: {
+                assigneeStr: assigneeStr,
+            },
+            withCredentials: true, headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
         });
@@ -301,6 +306,7 @@ const TeamToDoList = () => {
                                 <div className={"assignees"} key={index}>
                                     <div
                                         className="assignee-name"
+                                        data-assign-id={item.member.id}
                                         data-assign-name={item.member.nickname}
                                         value={item}
                                         onClick={handleAddAssignees}>
@@ -313,8 +319,8 @@ const TeamToDoList = () => {
                             <p>선택한 담당자</p>
                             {Assignees.map((assignee, index) => (
                                 <div className={"assignees"}>
-                                    <div key={index}>{assignee}</div>
-                                    <button id={"delete_assignees"} value={assignee}
+                                    <div key={index}>{assignee.nickname}</div>
+                                    <button id={"delete_assignees"} value={assignee.id}
                                             onClick={handleRemoveAssignees}>x
                                     </button>
                                 </div>
