@@ -37,7 +37,15 @@ const category = () => {
 							>
 								<li>개인정보 수정</li>
 							</Link>
+							<Link
+								to={"/notification"}
+								style={{
+									textDecoration: "none",
+									color: "inherit",
+								}}
+							>
 							<li>알림</li>
+						</Link>
 						</ul>
 					</nav>
 				</div>

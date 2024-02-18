@@ -20,7 +20,7 @@ const OtherProfile=()=>{
             .catch((error) => {
                 console.error("Error fetching member profile:", error);
             });
-    }, [memberId]);
+    }, []);
     //다른 사용자 프로필 조회
     //다른 사용자 프로필 스터디 모집 게시글 조회
     //다른 사용자의 커뮤니티 게시글 조회

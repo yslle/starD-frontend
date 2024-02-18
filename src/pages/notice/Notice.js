@@ -87,10 +87,10 @@ const Notice = () => {
                 page: 1,
             }
         }).then((res) => {
-                setPosts(res.data.content);
-                setItemsPerPage(res.data.pageable.pageSize);
-                setCount(res.data.totalElements);
-            })
+            setPosts(res.data.content);
+            setItemsPerPage(res.data.pageable.pageSize);
+            setCount(res.data.totalElements);
+        })
             .catch((error) => {
                 console.error("데이터 가져오기 실패:", error);
             });
@@ -131,7 +131,7 @@ const Notice = () => {
                                     <th>공감수</th>
                                     {posts.map((d, index) => (
                                         <NoticeListItem setPosts={setPosts} posts={d} d={d}
-                                                      index={index} key={d.id}/>
+                                                        index={index} key={d.id}/>
                                     ))}
                                 </table>
                             </div>

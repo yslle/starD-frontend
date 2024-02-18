@@ -221,7 +221,7 @@ const Header = ({showSideCenter}) => {
 
                         </MemoizedLink>
                         <MemoizedLink
-                            to={"/admin"}
+                            to={"/admin/MemberManagement"}
                             children={(<li>관리자 페이지</li>)}
                             style={{
                                 textDecoration: "none",

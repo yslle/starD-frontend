@@ -32,7 +32,7 @@ const EditProfile = () => {
                 console.log("이미지:",res.data.imgUrl );
                 var str = res.data.imgUrl.substr(14);
                 var str_result = str.substr(1);
-                const fullImageUrl = `C:\\stard\\${str_result}`;
+                const fullImageUrl = `D:\\stard\\${str_result}`;
                 console.log("fullImageUrl:", fullImageUrl);
 
                 // TODO 2023-11-28 uploadImgUrl을 서버에 저장된 이미지 파일명으로 설정

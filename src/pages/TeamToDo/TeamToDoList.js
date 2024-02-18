@@ -20,18 +20,18 @@ const TeamToDoList = () => {
     let Month = selectedDate.getMonth() + 1;
     const Dates = selectedDate.getDate();
     const location = useLocation();
-    const {studyId, Member, selecteStudy,progressStatus} = location.state;
+    const {studyId, Member, selecteStudy, progressStatus} = location.state;
     const [studies, setStudy] = useState([]);
     const [studyMems, setStudyMems] = useState([]);
     const [member, setMember] = useState(Member);
     const [Assignees, setAssignees] = useState([]);
     const studyIdAsNumber = parseFloat(studyId);
 
-    console.log("studyId:",studyId);
+    console.log("studyId:", studyId);
     console.log("ss:", progressStatus);
 
     useEffect(() => {
-        const {studyId, Member, selecteStudy,progressStatus} = location.state;
+        const {studyId, Member, selecteStudy, progressStatus} = location.state;
     }, []);
     const onInsertToggle = () => {
         if (selectedTodo) {
@@ -91,7 +91,9 @@ const TeamToDoList = () => {
             console.error("Error in handleRemoveAssignees: ", error);
         }
     };
-
+    useEffect(() => {
+        console.log("Assignees ::", Assignees);
+    }, [Assignees]);
 
     //할 일 추가
     const onInsert = useCallback(async (task, studyId, formattedDate, StringAssignees) => {
@@ -152,12 +154,13 @@ const TeamToDoList = () => {
         console.log("selectedTodo..:", UpdatedToDo);
         onInsertToggle();
         const assigneeStr = UpdatedToDo.assignees.toString();
-        const todoData = {
+        const updateToDo = {
             task: UpdatedToDo.toDo.task, dueDate: UpdatedToDo.toDo.dueDate,
         };
-        const postDataResponse = await axios.put(`http://localhost:8080/todo/${UpdatedToDo.toDo.id}`, todoData, {
+        const toDoId = UpdatedToDo.toDo.id;
+        const postDataResponse = await axios.put(`http://localhost:8080/todo/${toDoId}`, updateToDo, {
             params: {
-                studyId: UpdatedToDo.toDo.study.id, assigneeStr: assigneeStr,
+              assigneeStr: assigneeStr,
             }, withCredentials: true, headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -274,10 +277,10 @@ const TeamToDoList = () => {
     }, [studyIdAsNumber, currentMonth]);
 
     useEffect(() => {
-        console.log("todoswithAssignee: ",todoswithAssignee);
-        console.log("filteredTodos:",filteredTodos);
-    }, [todoswithAssignee,filteredTodos]);
-    
+        console.log("todoswithAssignee: ", todoswithAssignee);
+        console.log("filteredTodos:", filteredTodos);
+    }, [todoswithAssignee, filteredTodos]);
+
 
     return (<div>
         <Header showSideCenter={true}/>
@@ -320,7 +323,8 @@ const TeamToDoList = () => {
 
                         </div>
                         <TeamToDoInsert onInsert={onInsert} dueDate={selectedDate} Inserttodostudyid={studyId}
-                                        studyidasnumber={studyIdAsNumber} Assignees={Assignees} progressStatus={progressStatus}/>
+                                        studyidasnumber={studyIdAsNumber} Assignees={Assignees}
+                                        progressStatus={progressStatus}/>
                         <ul className="TodoList">
                             {filteredTodos.length === 0 && (<div className="alert_empty_todo">
                                 <span>할 일이 없습니다.<br/>  할 일을 입력해주세요.</span>
@@ -337,7 +341,7 @@ const TeamToDoList = () => {
                                         onInsertToggle={onInsertToggle}
                                         selectedDate={selectedDate}
                                         Assignees={Assignees}
-                                        Member = {Member}
+                                        Member={Member}
                                         onClose={() => {
                                             setInsertToggle((prev) => !prev);
                                         }}

@@ -4,21 +4,45 @@ import {useLocation} from "react-router-dom";
 import axios from "axios";
 
 const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
-    console.log("Member", Member);
     const accessToken = localStorage.getItem('accessToken');
-    console.log("selectedTodo", selectedTodo);
-     const n = selectedTodo.assignees.map((item)=> item.member.nickname);
-    console.log("Assignees", n);
-     const [todoassignees,setTodoAssignees] = useState(n);
+
+    console.log("selectedTodo", selectedTodo); //선택된 투두리스트
+    console.log("Member", Member);
+    console.log("Assignees", Assignees);
+
+
+    //선택한 투두리스트의 담당자들의 닉네임을 n에 담음
+    const n = selectedTodo.assignees.map((item)=> item.member.nickname);
+    const [todoassignees,setTodoAssignees] = useState(n);
     const inputDate = new Date(selectedTodo.dueDate);
-     const [UpdatedToDo, setUpdatedToDo] = useState({});
-// 로컬 시간대 고려
+    const [UpdatedToDo, setUpdatedToDo] = useState({});
+
+    const [memberNicknames, setMemberNicknames] = useState([]);
+    const [notAssignedMemberNicknames, setNotAssignedMemberNicknames] = useState([]);
+
+
+    useEffect(() => {
+        // Member 배열에서 닉네임만 추출하여 새로운 배열 생성
+        const memberNicknames = Member.map(item => item.member?.nickname).filter(nickname => nickname);
+
+        // todoassignees에 없는 Member Nicknames 필터링
+        const notAssignedNicknames = memberNicknames.filter(nickname => !todoassignees.includes(nickname));
+
+        // 상태 업데이트
+        setMemberNicknames(memberNicknames);
+        setNotAssignedMemberNicknames(notAssignedNicknames);
+
+        console.log("Member Nicknames:", memberNicknames); //스터디에 참여하는 팀원 닉네임 배열
+        console.log("Not Assigned Member Nicknames:", notAssignedNicknames); //담당자로 선택받지 못한 자의 닉네임 배열
+    }, []);
+
+
+     // 로컬 시간대 고려
     const offset = inputDate.getTimezoneOffset();
     inputDate.setMinutes(inputDate.getMinutes() - offset);
-
     const formattedDate = inputDate;
-
     const [task, setTask] = useState('');
+
 
     //담당자 선택 함수
     const handleAddAssignees = (e) => {
@@ -27,15 +51,19 @@ const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
         setTodoAssignees(updatedAssignees);
         console.log("updatedAssignees", updatedAssignees);
     };
+
+
     //담당자 삭제 함수
     const handleRemoveAssignees = (e) => {
-
         //해당 닉네임을 가진 담당자를 선택에서 해제
-        const removeAssignName = Assignees.filter((item) => item !== e.target.value);
-        setTodoAssignees(removeAssignName);
-        console.log("삭제 완료: ", Assignees);
-        console.log("삭제한 후 담당자 상태: ", removeAssignName);
+        const afterremoveAssignName = todoassignees.filter((item) => item !== e.target.value);
+        setTodoAssignees(afterremoveAssignName);
+        console.log("삭제한 후 담당자 상태: ", afterremoveAssignName);
     };
+
+    useEffect(() => {
+        console.log("todoassignees : ", todoassignees);
+    }, [todoassignees]);
 
 
     const onChange = useCallback((e) => {
@@ -76,8 +104,8 @@ const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
             onClose();
             return;
         }
-        console.log("todoassignees:",todoassignees);
-         console.log("setUpdatedToDo?:", UpdatedToDo);
+        console.log("todoassignees::::",todoassignees);
+         console.log("setUpdatedToDo?::::", UpdatedToDo);
         onUpdate(UpdatedToDo);
     }, [onChange,todoassignees,handleAddAssignees]);
 
@@ -87,7 +115,7 @@ const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
             setTask('');
         }
         console.log("selectedTodotask,",selectedTodo.task);
-    }, [selectedTodo]);
+    }, [selectedTodo,todoassignees]);
 
 
     return (
