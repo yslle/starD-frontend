@@ -42,6 +42,7 @@ const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
 
     //담당자 삭제 함수
     const handleRemoveAssignees = (e) => {
+        e.preventDefault(); // 이벤트의 기본 동작 중지
         const removedAssignId = e.target.value;
         //해당 닉네임을 가진 담당자를 선택에서 해제
         const updatedAssignees  = todoassignees.filter((item) => item.id !== removedAssignId);
@@ -142,9 +143,15 @@ const TeamToDoEdit = ({selectedTodo, onUpdate,Member,Assignees,onClose}) => {
                 <input
                     onChange={onChange}
                     value={task}
-                    placeholder="할 일을 입력하세요"/>
+                    placeholder="할 일을 입력하세요"
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault(); // 엔터키 기본 동작 제거
+                            onSubmit(); // 폼 제출 함수 호출
+                        }
+                    }}/>
                 <div className={"todo-edit-btn"}>
-                    <button type="submit">수정하기</button>
+                    <button type="submit" id={"edit"}>수정하기</button>
                     <button id="cancel" type="button" onClick={onClose}>
                         취소
                     </button>

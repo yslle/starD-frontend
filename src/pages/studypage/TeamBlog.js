@@ -236,7 +236,7 @@ const TeamBlog = () => {
                                                     {filteredToDo.map((todo) => (
                                                         <li key={todo.id}>
                                                             {todo.assignees.map((assign)=>(
-                                                                <div id="todotext">{assign.member.name}  </div>
+                                                                <div id="todotext">{assign.member.nickname}  </div>
                                                             ))}
                                                             <div id="todotext"> | </div>
                                                             <div id="todotext">{todo.task}</div>

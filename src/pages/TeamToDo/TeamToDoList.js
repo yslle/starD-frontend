@@ -56,7 +56,7 @@ const TeamToDoList = () => {
         const assignId = e.target.getAttribute('data-assign-id');
         const assignNicName = e.target.getAttribute('data-assign-name');
         console.log("assignName : ", assignNicName);
-        const updatedAssignees = [...Assignees, { id: assignId, nickname: assignNicName }];
+        const updatedAssignees = [...Assignees, {id: assignId, nickname: assignNicName}];
         console.log("updatedAssignees : ", updatedAssignees);
         setAssignees(updatedAssignees);
 
@@ -68,16 +68,16 @@ const TeamToDoList = () => {
     //담당자 삭제 핸들러
     const handleRemoveAssignees = async (e) => {
         try {
-            const removedAssignNickname = e.target.value;
+            const removedAssignId = e.target.value;
 
             //해당 닉네임을 가진 담당자를 선택에서 해제
-            const updatedAssignees = Assignees.filter((item) => item.id !== removedAssignNickname);
+            const updatedAssignees = Assignees.filter((item) => item.id !== removedAssignId);
             await setAssignees(updatedAssignees);
 
             console.log("삭제한 후 담당자 상태: ", updatedAssignees);
 
             //되돌릴 멤버
-            const assigneeToAddBack = Member.find((item) => item.member.id === removedAssignNickname);
+            const assigneeToAddBack = Member.find((item) => item.member.id === removedAssignId);
 
             //member에 다시 집어 넣음
             if (assigneeToAddBack) {
@@ -195,40 +195,81 @@ const TeamToDoList = () => {
 
 
     //체크
-    const onToggle = useCallback(async (assignees, id, todo_status) => {
-        const postDataPromises = assignees.map(async (item) => {
-            const status = !item.toDoStatus;
-            return axios.post(
-                `http://localhost:8080/todo/${item.toDo.id}/status`,
-                null,
-                {
-                    params: {status: status},
-                    withCredentials: true,
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                }
-            );
-        });
+    const onToggle = useCallback(async (assignees, toDoId, currentUserTodoIndex, todo_status, allTodoStatusTrue) => {
+        console.log("id::", toDoId);
+        if (currentUserTodoIndex == -1) {
+            alert("당신의 할 일이 아닙니다.");
+            return;
+        } else {
+            console.log("assignees=>", assignees);
+            console.log("currentUserTodoIndex=>", currentUserTodoIndex);
+            console.log("todo_status=>", todo_status);
 
-        try {
-            const postDataResponses = await Promise.all(postDataPromises);
-            console.log("체크 성공:", postDataResponses);
-        } catch (error) {
-            console.error("Error:", error);
+            const loggedInUserId = localStorage.getItem('isLoggedInUserId');
+            console.log("loggedInUserId=>", loggedInUserId);
+
+            console.log("진행 중이다.");
+            try {
+                const response = await axios.post(
+                    `http://localhost:8080/todo/${toDoId}/status`,
+                    null,
+                    {
+                        params: {status: !todo_status},
+                        withCredentials: true,
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    }
+                );
+                if (response.status === 200) {
+                    console.log("체크 성공:", response);
+
+                    axios.get(`http://localhost:8080/todo/${studyIdAsNumber}`, {
+                        params: {
+                            year: Year, month: Month,
+                        }, headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    }).then((response) => {
+                        console.log('스터디별 투두리스트 가져오기 성공:', response.data);
+                        const maxId = Math.max(...response.data.map(schedule => schedule.id));
+                        nextId.current = maxId + 1;
+                        const groupedTodos = {};
+                        response.data.forEach((todoItem) => {
+                            const dueDate = new Date(todoItem.dueDate).toDateString();
+                            if (!groupedTodos[dueDate]) {
+                                groupedTodos[dueDate] = [];
+                            }
+                            groupedTodos[dueDate].push(todoItem);
+                        });
+
+                        setTodoswithAssignee((prevTodos) => ({
+                            ...prevTodos, ...groupedTodos,
+                        }));
+                    }).catch((error) => {
+                        console.log('스터디별 투두리스트 가져오기 실패:', error);
+                    })
+                    if (!allTodoStatusTrue) {
+                        alert("모든 담당자가 할 일을 끝내야만 체크표시가 됩니다.");
+                    }
+                    
+                    setTodoswithAssignee((prevTodos) => {
+                        const updatedTodos = {...prevTodos};
+                        Object.keys(updatedTodos).forEach((dateKey) => {
+                            updatedTodos[dateKey] = updatedTodos[dateKey].map((todo) => todo.id === toDoId ? {
+                                ...todo,
+                                toDoStatus: !todo_status,
+                            } : todo);
+                        });
+                        return updatedTodos;
+                    });
+
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
 
         }
-
-        setTodoswithAssignee((prevTodos) => {
-            const updatedTodos = {...prevTodos};
-            Object.keys(updatedTodos).forEach((dateKey) => {
-                updatedTodos[dateKey] = updatedTodos[dateKey].map((todo) => todo.id === id ? {
-                    ...todo,
-                    toDoStatus: !todo.toDoStatus,
-                } : todo);
-            });
-            return updatedTodos;
-        });
     }, []);
 
     const handleDateClick = (day) => {
