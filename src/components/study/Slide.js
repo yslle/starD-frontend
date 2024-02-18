@@ -17,13 +17,17 @@ const Slide = ({ type, userId }) => {
 
     let accessToken = localStorage.getItem('accessToken');
 
+    const config = {
+        withCredentials: true,
+        headers: {}
+    };
+
+    if (accessToken) {
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+
     useEffect(() => {
-        axios.get("http://localhost:8080/study/stars/scraps", {
-            withCredentials: true,
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        })
+        axios.get("http://localhost:8080/study/stars/scraps", config)
             .then (response => {
                 setLikeStates(response.data);
             })
@@ -33,12 +37,7 @@ const Slide = ({ type, userId }) => {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/scrap/study", {
-            withCredentials: true,
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        })
+        axios.get("http://localhost:8080/scrap/study", config)
             .then(response => {
                 const studyList = response.data;
 
@@ -62,12 +61,7 @@ const Slide = ({ type, userId }) => {
     //다른 사용자 스터디 모집 게시글 조회
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/user/mypage/profile/${userId}/open-study`, {
-                withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
+            .get(`http://localhost:8080/user/mypage/profile/${userId}/open-study`, config)
             .then((res) => {
                 console.error("스터디 모집 게시글 가져오기 성공:", res.data);
                 setOpenStudies(res.data);
@@ -91,14 +85,16 @@ const Slide = ({ type, userId }) => {
         setScrapStudies((prevStudies) => {
             const newStudies = [...prevStudies];
             const studyId = newStudies[index].id;
+            config = {
+                params: { id: studyId },
+                withCredentials: true,
+                headers: {}
+            };
+            if (accessToken) {
+                config.headers['Authorization'] = `Bearer ${accessToken}`;
+            }
             if (newStudies[index].scrap) {
-                axios.delete(`http://localhost:8080/scrap/study/${studyId}`, {
-                    params: { id: studyId },
-                    withCredentials: true,
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                })
+                axios.delete(`http://localhost:8080/scrap/study/${studyId}`, config)
                     .then(response => {
                         console.log("스크랩 취소 성공 " + response.data);
                     })
@@ -107,13 +103,7 @@ const Slide = ({ type, userId }) => {
                         console.log("스크랩 취소 실패");
                     });
             } else {
-                axios.post(`http://localhost:8080/scrap/study/${studyId}`, null, {
-                    params: { id: studyId },
-                    withCredentials: true,
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                })
+                axios.post(`http://localhost:8080/scrap/study/${studyId}`, null, config)
                     .then(response => {
                         console.log("스크랩 성공");
                     })
@@ -132,14 +122,16 @@ const Slide = ({ type, userId }) => {
         setScrapStudies((prevStudies) => {
             const newStudies = [...prevStudies];
             const studyId = newStudies[index].id;
+            config = {
+                params: { id: studyId },
+                withCredentials: true,
+                headers: {}
+            };
+            if (accessToken) {
+                config.headers['Authorization'] = `Bearer ${accessToken}`;
+            }
             if (newStudies[index].like) {
-                axios.delete(`http://localhost:8080/star/study/${studyId}`, {
-                    params: { id: studyId },
-                    withCredentials: true,
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                })
+                axios.delete(`http://localhost:8080/star/study/${studyId}`, config)
                     .then(response => {
                         console.log("공감 취소 성공 " + response.data);
                     })
@@ -148,13 +140,7 @@ const Slide = ({ type, userId }) => {
                         console.log("공감 취소 실패");
                     });
             } else {
-                axios.post(`http://localhost:8080/star/study/${studyId}`, null, {
-                    params: { id: studyId },
-                    withCredentials: true,
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`
-                    }
-                })
+                axios.post(`http://localhost:8080/star/study/${studyId}`, null, config)
                     .then(response => {
                         console.log("공감 성공");
                     })

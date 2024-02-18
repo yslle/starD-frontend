@@ -35,9 +35,6 @@ const AnotherUserProfile = () => {
         axios
             .get(`http://localhost:8080/user/mypage/profile/${id}`, {
                 withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
             })
             .then((res) => {
                 console.error("프로필 가져오기 성공:", res.data);
@@ -56,9 +53,6 @@ const AnotherUserProfile = () => {
         axios
             .get(`http://localhost:8080/user/mypage/profile/${id}/community`, {
                 withCredentials: true,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
             })
             .then((res) => {
                 console.error("커뮤니티 게시글 가져오기 성공:", res.data);
