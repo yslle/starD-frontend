@@ -30,8 +30,14 @@
   margin-bottom: 20px;
 }
 .background .todoedit_insert button{
-  background-color: #395b64;
+  background-color: rgba(242, 241, 238, 0.6);
   color: white;
   border-radius: 5px;
   border-style: none;
+}
+#delete_assignees{
+  color:rgba(0, 0, 0, 0.548);
+}
+#edit{
+  background-color:#395b64 ;
 }

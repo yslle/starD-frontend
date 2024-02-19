@@ -61,6 +61,11 @@ import MyWriteComment from "./pages/mypage/MyWriteComment";
 import AnotherUserProfile from "./pages/mypage/AnotherUserProfile";
 import OtherProfile from "./pages/studypage/OtherProfile";
 import  SetNewPw from "./pages/userpage/SetNewPw";
+import SubscribeComponent from "./pages/notification/SubscribeComponent";
+import  FAQManagement from "./pages/admin/FAQManagement";
+import  MemberManagement from "./pages/admin/MemberManagement";
+import NoticeManagement from "./pages/admin/NoticeManagement";
+import ReportManagement from "./pages/admin/ReportManagement";
 function App() {
     return (
         <BrowserRouter>
@@ -250,6 +255,9 @@ function App() {
                             <Qna/>
                         }
                     />
+
+
+
                     <Route
                         path="/postdetail/:id"
                         element={
@@ -336,8 +344,30 @@ function App() {
                             <OtherProfile/>
                         }
                     />
+                    <Route
+                        path="/notification"
+                        element={
+                            <SubscribeComponent/>
+                        }
+                    />
+                    {/*관리자 페이지*/}
+                    <Route
+                        path="/admin/MemberManagement"
+                        element={<MemberManagement/>}
+                    />
+                    <Route
+                        path="/admin/ReportManagement"
+                        element={<ReportManagement/>}
+                    />
+                    <Route
+                        path="/admin/FAQManagement/:page"
+                        element={<FAQManagement/>}
+                    />
 
-
+                    <Route
+                        path="/admin/NoticeManagement/:page"
+                        element={<NoticeManagement/>}
+                    />
 
 
                 </Routes>

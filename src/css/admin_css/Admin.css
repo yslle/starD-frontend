@@ -9,12 +9,17 @@ a{
     margin:0 auto 40px;
     font-size: 30px;
 }
+.admin_body_container{
+    display: flex;
+}
+
 .admin_body{
     display: flex;
 }
 .admin_sub_container{
     width:100%;
     position: relative;
+    left: 6%;
 }
 .admin_title{
     font-size: 20px;

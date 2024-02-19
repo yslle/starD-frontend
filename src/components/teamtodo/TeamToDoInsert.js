@@ -14,8 +14,9 @@ const TeamToDoInsert = ({onInsert, dueDate, Inserttodostudyid, studyidasnumber, 
     const [studyIds, setStudyIds] = useState([]); //참여 중인 스터디 아이디
     const [studyMems, setStudyMems] = useState(""); //참여 멤버
     const [responseData, setResponseData] = useState([]);
-    const StringAssignees = Assignees.toString(); //담당자 문자열
-    
+    const StringAssignees = Assignees.map(assignee => assignee.nickname).join(','); //담당자 문자열
+
+    console.log("문자열로된 담당자?: ",StringAssignees);
 
     const inputDate = new Date(dueDate);
 
@@ -82,8 +83,8 @@ const TeamToDoInsert = ({onInsert, dueDate, Inserttodostudyid, studyidasnumber, 
     const onSubmit = useCallback(
         async (e) => {
             if (TaskValue !== '') {
-                    onInsert(TaskValue, studyIdAsNumber, formattedDate, StringAssignees);
-                    nextId.current += 1;
+                onInsert(TaskValue, studyIdAsNumber, formattedDate, StringAssignees);
+                nextId.current += 1;
             }else if(progressStatus==="DISCONTINUE"){
                 alert("중단된 스터디는 할 일을 추가할 수 없습니다.");
                 e.preventDefault();
@@ -102,7 +103,7 @@ const TeamToDoInsert = ({onInsert, dueDate, Inserttodostudyid, studyidasnumber, 
 
     useEffect(() => {
         console.log('투두리스트:', responseData);
-        console.log('담당자:', Assignees.toString()); //배열형태로 잘 옴
+        console.log('담당자:', Assignees);
     }, [responseData]);
 
     //
