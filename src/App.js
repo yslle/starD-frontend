@@ -1,10 +1,6 @@
-import {Link} from "react-router-dom";
-import axios from "axios";
 import "./App.css";
-import React, {useState, useRef, useEffect,useMemo, lazy, Suspense} from "react";
+import React from "react";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-
-
 
 import Home from "./pages/Home";
 import Login from "./pages/userpage/Login";
@@ -23,17 +19,14 @@ import Study from "./pages/studypage/Study";
 import StudyInsert from "./pages/studypage/StudyInsert";
 import StudyEdit from "./pages/studypage/StudyEdit";
 import MyApplyStudy from "./pages/mypage/MyApplyStudy";
-import Header from "./components/repeat_etc/Header";
 import InputSubSign from "./pages/userpage/InputSubSign";
 import FindID from "./pages/userpage/FindID";
-import SearchBar from "./SearchBar";
 import SearchResult from "./pages/studypage/SearchResult";
 import StudyApplyList from "./pages/studypage/StudyApplyList";
 import TeamBlog from "./pages/studypage/TeamBlog";
 import Community from "./pages/community/Community";
 import Notice from "./pages/notice/Notice";
 import PostDetail from "./pages/community/PostDetail";
-import CommSearchBar from "./components/community/CommSearchBar";
 import CommSearchResult from "./pages/community/CommSearchResult";
 import Chat from "./components/chat/Chat";
 import FindedID from "./pages/userpage/FindedID.js";
@@ -66,6 +59,8 @@ import  FAQManagement from "./pages/admin/FAQManagement";
 import  MemberManagement from "./pages/admin/MemberManagement";
 import NoticeManagement from "./pages/admin/NoticeManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
+import ResetPwTokenVerification from "./pages/userpage/ResetPwTokenVerification";
+
 function App() {
     return (
         <BrowserRouter>
@@ -99,12 +94,12 @@ function App() {
                         path="/login/findPW"
                         element={<FindPW/>}
                     />
-                    <Route
-                        path="/reset-password"
-                        element={
-                            <SetNewPw/>
-                        }
-                    />
+                    {/*<Route*/}
+                    {/*    path="/reset-password"*/}
+                    {/*    element={*/}
+                    {/*        <SetNewPw/>*/}
+                    {/*    }*/}
+                    {/*/>*/}
                     <Route
                         path="/mypage"
                         element={<Mypage/>}
@@ -367,6 +362,16 @@ function App() {
                     <Route
                         path="/admin/NoticeManagement/:page"
                         element={<NoticeManagement/>}
+                    />
+
+                    <Route
+                        path="/reset-password"
+                        element={<ResetPwTokenVerification/>}
+                    />
+
+                    <Route
+                        path="/update-password"
+                        element={<ResetPwTokenVerification/>}
                     />
 
 
