@@ -75,51 +75,56 @@ const ResetPwTokenVerification = () => {
     }
 
     return (
+
         <div>
-            <Header showSideCenter={false}/>
-            <div className={"page_title"}>
-                <p id={"find-id"}>새로운 비밀번호 입력</p>
-            </div>
-            <div className="findwrap">
-                <div className={"container_findwrap"}>
-                    <div className="container_find" id="logs">
-                        <div className="input_infos">
-                            <div className="subinfos">비밀번호</div>
-                            <div className="subinfos2">
-                                <input
-                                    ref={inputPw}
-                                    name={"pw"}
-                                    placeholder="새로운 비밀번호를 입력해주세요"
-                                    value={state.pw}
-                                    onChange={handleEditChange}
-                                />
-                            </div>
-                        </div>
+            {showContent && (
+                <div>
+                    <Header showSideCenter={false}/>
+                    <div className={"page_title"}>
+                        <p id={"find-id"}>새로운 비밀번호 입력</p>
                     </div>
-                    <div className="container_find" id="phone">
-                        <div className="input_phone">
-                            <div className="subinfos">
-                                비밀번호 재확인
+                    <div className="findwrap">
+                        <div className={"container_findwrap"}>
+                            <div className="container_find" id="logs">
+                                <div className="input_infos">
+                                    <div className="subinfos">비밀번호</div>
+                                    <div className="subinfos2">
+                                        <input
+                                            ref={inputPw}
+                                            name={"pw"}
+                                            placeholder="새로운 비밀번호를 입력해주세요"
+                                            value={state.pw}
+                                            onChange={handleEditChange}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                            <div className={"inputform"}>
-                                <input
-                                    ref={inputConfirmPw}
-                                    id="phonecontent"
-                                    name={"confirmPw"}
-                                    value={state.confirmPw}
-                                    onChange={handleEditChange}
-                                    placeholder={"비밀번호를 재입력해주세요."}
-                                ></input>
-                            </div>
-                            <div className={"Certification_Number"}>
-                                <button onClick={resetPw}>변경하기</button>
+                            <div className="container_find" id="phone">
+                                <div className="input_phone">
+                                    <div className="subinfos">
+                                        비밀번호 재확인
+                                    </div>
+                                    <div className={"inputform"}>
+                                        <input
+                                            ref={inputConfirmPw}
+                                            id="phonecontent"
+                                            name={"confirmPw"}
+                                            value={state.confirmPw}
+                                            onChange={handleEditChange}
+                                            placeholder={"비밀번호를 재입력해주세요."}
+                                        ></input>
+                                    </div>
+                                    <div className={"Certification_Number"}>
+                                        <button onClick={resetPw}>변경하기</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
-)
+);
 
 };
 
