@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useParams, useNavigate} from "react-router-dom";
+import {useParams, useNavigate, Link} from "react-router-dom";
 
 import "../../css/study_css/ApplyList.css";
 import Header from "../../components/repeat_etc/Header";
@@ -251,7 +251,17 @@ const StudyApplyList = () => {
                         <tbody>
                         {applyList.map((item, index) => (
                             <tr key={index}>
-                                <td id={"apply_name"}>{item.member.nickname}</td>
+                                <td id={"apply_name"}>
+                                    <Link
+                                        to={`/${item.member.id}/userprofile`}
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "inherit",
+                                        }}
+                                    >
+                                        {item.member.nickname}
+                                    </Link>
+                                </td>
                                 <td>
                                     <button className={"look_motive"} onClick={() => toggleMotivation(index)}>보기
                                     </button>
@@ -289,7 +299,17 @@ const StudyApplyList = () => {
                             {applyList.map((item, index) => (
                                 item.participationState && (
                                     <tr key={index}>
-                                        <td id={"apply_name"}>{item.member.nickname}</td>
+                                        <td id={"apply_name"}>
+                                            <Link
+                                                to={`/${item.member.id}/userprofile`}
+                                                style={{
+                                                    textDecoration: "none",
+                                                    color: "inherit",
+                                                }}
+                                            >
+                                                {item.member.nickname}
+                                            </Link>
+                                        </td>
                                         <td>
                                             <button className={"look_motive"}
                                                     onClick={() => toggleMotivation(index)}>보기
