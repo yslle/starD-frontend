@@ -4,25 +4,17 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
 
-/*
-2023-10-30 by jiruen 수정 중
- */
-
 const FindPW = () => {
 
     const [state, setState] = useState({
-            email: "",
-            code: "",
+            email: ""
         }
     );
-    const [code, setCode] = useState("");
-    const [findpw, setFindPw] = useState();
-    const inputemail = useRef();
-    const inputphone = useRef(); //인증 코드
 
+    const inputemail = useRef();
     const navigate = useNavigate();
-    const handleEditChange = (e) => { //핸들러 나누기
-        // event handler
+
+    const handleEditChange = (e) => {
         console.log(e.target.value.toString());
         setState({
             ...state,
@@ -30,53 +22,30 @@ const FindPW = () => {
         });
     };
 
-    const postCertificate = () => {
-        console.log("인증번호 보내기");
-        try {
-                axios.post("http://localhost:8080/emails/verification-requests", {
-                    email: state.email
-                }).then((response) => {
-                    console.log("인증번호 보내기 성공: ", response.data);
-                    // 필요한 작업 수행
-                }).catch((error) => {
-                    console.log("인증번호 보내기 실패", error);
-                });
-            }
-        catch (error) {
-            console.error("Error:", error);
-        }
-    }
+
     const vaildateCertificate = () => {
-        console.log(`인증번호 맞는지 아닌지 확인${state.code}`);
 
-        // 첫 번째 요청: 이메일 및 인증 코드 확인
-        axios.get("http://localhost:8080/emails/verifications", {
-            params: {
-                "email": state.email,
-                "authCode": state.code,
-            }
-        }).then((response) => {
-                console.log("인증번호 맞음: ", response);
+        const emailDto = {
+            email: state.email
+        };
+        console.log(emailDto.email);
 
-                // 첫 번째 요청이 성공하면 두 번째 요청: 비밀번호 재설정 이메일 전송
-                if (response.data === true) {
-                    return axios.post("http://localhost:8080/find-password", {
-                        email: state.email
-                    }).then((response) => {
-                        alert("비밀번호 재설정 이메일을 전송하였습니다. 해당 이메일을 확인해주세요.");
-                        console.log("비밀번호 재설정 이메일 보내기 성공: ", response.data);
+        axios.post("http://localhost:8080/find-password", emailDto)
+            .then((res) => {
 
-                    });
-                } else {
-                    alert("인증번호가 틀렸습니다.");
-                    throw new Error("인증번호 확인에 실패했습니다.");
-                }
-
+                // TODO 이메일 전송했다는 페이지로 이동
+                console.log("이메일 전송 성공");
 
         }).catch((error) => {
+
+            if (error.response && error.response.status === 404) {
+                // 404 에러 발생 시 컨펌 창 띄우기
+                window.alert("이메일을 찾을 수 없습니다.");
+            } else {
                 console.error("에러:", error);
-                // 요청 실패 또는 오류 발생 시 처리
-            });
+            }
+
+        });
     }
 
 
@@ -88,38 +57,24 @@ const FindPW = () => {
             </div>
             <div className="findwrap">
                 <div className={"container_findwrap"}>
-                    <div className="container_find" id="logs">
-                        <div className="input_infos">
-                            <div className="subinfos">이메일</div>
-                            <div className="subinfos2">
-                                <input
-                                    ref={inputemail}
-                                    name={"email"}
-                                    placeholder="이메일을 입력해주세요"
-                                    value={state.email}
-                                    onChange={handleEditChange}
-                                />
-                                <div className={"Certification_Number1"}><button onClick={postCertificate}>전송</button></div>
-                            </div>
-                        </div>
-                    </div>
                     <div className="container_find" id="phone">
                         <div className="input_phone">
                             <div className="subinfos">
-                                인증번호
+                                입력한 이메일 주소로 비밀번호 재설정을 위한 인증 메일이 발송됩니다.
+                                <br/>이메일을 확인하여 12시간 이내에 비밀번호 재설정을 완료해주세요.
                             </div>
                             <div className={"inputform"}>
                                 <input
-                                    ref={inputphone}
+                                    ref={inputemail}
                                     id="phonecontent"
-                                    name={"code"}
-                                    value={state.code}
+                                    name={"email"}
+                                    value={state.email}
                                     onChange={handleEditChange}
-                                    placeholder={"인증번호를 입력해주세요."}
+                                    placeholder={"이메일을 입력해주세요."}
                                 ></input>
                             </div>
                             <div className={"Certification_Number"}>
-                                <button onClick={vaildateCertificate}>비밀번호 찾기</button>
+                                <button onClick={vaildateCertificate}>확인</button>
                             </div>
                         </div>
                     </div>
