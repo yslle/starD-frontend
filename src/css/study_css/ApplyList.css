@@ -39,6 +39,10 @@
 }
 #apply_name{
     font-size: 15px;
+    cursor: pointer;
+}
+#apply_name:hover{
+    text-decoration: underline;
 }
 
 

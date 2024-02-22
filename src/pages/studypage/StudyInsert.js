@@ -30,7 +30,7 @@ const StudyInsert = () => {
     const [current, setCurrent] = useState("Recruiting");
     const [formData, setFormData] = useState({
         title: "",
-        field: "",
+        field: "취업",
         author: "",
         number: "",
         onoff: "",
