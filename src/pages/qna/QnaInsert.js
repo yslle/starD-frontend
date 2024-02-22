@@ -1,17 +1,19 @@
 import React, {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import Header from "../../components/repeat_etc/Header";
+import Backarrow from "../../components/repeat_etc/Backarrow";
 
-const QnaInsert = ({ postType }) => {
-    console.log("type: ",postType);
-
+const QnaInsert = () => {
+    //console.log("type: ",postType);
+    const postType = "qna"
     const navigate = useNavigate();
     const [dataId, setDataId] = useState(0);
     const [posts, setPosts] = useState([]);
     const [formData, setFormData] = useState({
-        title:"",
-        content:"",
-        created_date:new Date(),
+        title: "",
+        content: "",
+        created_date: new Date(),
     })
 
     const handleInputChange = (e) => {
@@ -62,20 +64,19 @@ const QnaInsert = ({ postType }) => {
         }
         setFormData(onInsertPost(formData));
 
-        let url;
-        if (postType === "FAQ") {
-            url = "http://localhost:8080/faq"
-        }
-        else if (postType === "QNA") {
-            url = "http://localhost:8080/qna"
-        }
+        // let url;
+        // if (postType === "FAQ") {
+        //     url = "http://localhost:8080/faq"
+        // } else if (postType === "QNA") {
+        //     url = "http://localhost:8080/qna"
+        // }
 
         const accessToken = localStorage.getItem('accessToken');
 
-        const response = axios.post(url,
+        const response = axios.post("http://localhost:8080/qna",
             {
-                title:formData.title,
-                content:formData.content,
+                title: formData.title,
+                content: formData.content,
             },
             {
                 withCredentials: true,
@@ -95,15 +96,20 @@ const QnaInsert = ({ postType }) => {
         e.preventDefault();
     }, [formData])
 
-    return (
-        <form className="new_post_form" onSubmit={handleSubmit}>
-            <div style={{display:"flex"}}>
-                <span style={{paddingLeft: "10px",marginTop:"25px"}}>제목</span>
-                <input type="text" name="title" value={formData.title} onChange={handleInputChange}/>
-            </div>
-            <div>
-                <span>카테고리</span>
-                <span className="field_wrapper">
+    return (<div className={"main_wrap"} id={"community"}>
+            <Header showSideCenter={true}/>
+            <div className="community_container">
+                <div className="community_container">
+                    <p id={"entry-path"}> 홈 > QNA </p>
+                    <Backarrow subname={"QNA LIST"}/>
+                    <form className="new_post_form" onSubmit={handleSubmit}>
+                        <div style={{display: "flex"}}>
+                            <span style={{paddingLeft: "10px", marginTop: "25px"}}>제목</span>
+                            <input type="text" name="title" value={formData.title} onChange={handleInputChange}/>
+                        </div>
+                        <div>
+                            <span>카테고리</span>
+                            <span className="field_wrapper">
                     <select name="category" onChange={handleInputChange} disabled>
                         {postType === 'FAQ' ? (
                             <option value="qna">FAQ</option>
@@ -111,15 +117,18 @@ const QnaInsert = ({ postType }) => {
                         }
                     </select>
                 </span>
+                        </div>
+                        <div style={{display: "flex"}}>
+                            <span style={{paddingLeft: "10px", marginTop: "5px"}}>상세 내용</span>
+                            <textarea name="content" value={formData.content} onChange={handleInputChange}/>
+                        </div>
+                        <div className="btn">
+                            <input type="submit" value="등록하기" className="register_btn"/>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div style={{display:"flex"}}>
-                <span style={{paddingLeft: "10px",marginTop:"5px"}}>상세 내용</span>
-                <textarea name="content" value={formData.content} onChange={handleInputChange}/>
-            </div>
-            <div className="btn">
-                <input type="submit" value="등록하기" className="register_btn"/>
-            </div>
-        </form>
+        </div>
     )
 }
 export default QnaInsert;

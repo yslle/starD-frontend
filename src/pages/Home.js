@@ -52,7 +52,6 @@ const Home = () => {
         setUser(user);
     }, []);
 
-
     // TODO 가장 인기 있는 분야 Top 5
     useEffect(() => {
         AOS.init();
@@ -81,10 +80,7 @@ const Home = () => {
         })
     }, []);
 
-    useEffect(() => {
-        console.log("렌더링")
-    });
-
+    
     const getTodoItemClassName = (checked) => {
         return checked ? "checked" : "unchecked";
     };
@@ -116,6 +112,31 @@ const Home = () => {
         }
 
     };
+
+
+    // useEffect(() => {
+    //     const eventSource = new EventSource("http://localhost:8080/notifications/subscribe");
+    //
+    //     eventSource.onopen = () => {
+    //         console.log("SSE 연결이 열렸습니다.");
+    //     };
+    //
+    //     eventSource.onmessage = (event) => {
+    //         const eventData = JSON.parse(event.data);
+    //         console.log("새로운 이벤트를 수신했습니다:", eventData);
+    //         // 여기서 필요한 작업을 수행합니다.
+    //     };
+    //
+    //     eventSource.onerror = (error) => {
+    //         console.error("SSE 연결에 오류가 발생했습니다:", error);
+    //         eventSource.close();
+    //     };
+    //
+    //     return () => {
+    //         eventSource.close();
+    //     };
+    // }, []);
+
     return (
         <div className="main_wrap">
             <Header showSideCenter={true}/>

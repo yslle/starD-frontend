@@ -28,6 +28,18 @@ const Login = () => {
             handleSubmit();
         }
     };
+    const login = () => {
+        const accessToken = localStorage.getItem('accessToken');
+        const eventSource = new EventSource(`/notifications/subscribe`);
+
+        eventSource.addEventListener("sse", function (event) {
+            console.log(event.data);
+
+            const data = JSON.parse(event.data);
+        });
+
+    };
+
     const handleSubmit = () => {
 
         if (state.ID.length < 3) {
@@ -58,7 +70,8 @@ const Login = () => {
 
                     localStorage.setItem('accessToken', accessToken);
                     localStorage.setItem('isLoggedInUserId', state.ID);
-
+                    // // SSE를 구독하기 위해 SSEComponent 호출
+                    login();
                     navigate('/'); // useNavigate를 사용하여 페이지를 이동
                 }
             })

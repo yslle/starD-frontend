@@ -4,6 +4,7 @@ import Header from "../../components/repeat_etc/Header";
 import AdminCategory from "../../components/repeat_etc/AdminCategory";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import Paging from "../../components/repeat_etc/Paging";
+import NoticeManagingListItem from "../../components/admin/NoticeManagingListItem";
 const NoticeManagement = () => {
     const [members, setMembers] = useState([]);
 
@@ -15,10 +16,47 @@ const NoticeManagement = () => {
     const [page, setPage] = useState(pageparams);
     const [count, setCount] = useState(0);
     const [itemsPerPage, setItemsPerPage] = useState(10);
+    
+    const [posts, setPosts] = useState([]);
+
+    const fetchNotices = (pageNumber) => {
+        axios.get("http://localhost:8080/notice", {
+            params: {
+                page: pageNumber,
+            },
+        })
+            .then((res) => {
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
+            }).catch((error) => {
+            console.error("데이터 가져오기 실패:", error);
+        });
+    };
+
+    useEffect(() => {
+        fetchNotices(page);
+    }, [page]);
+
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/notice", {
+            params: {
+                page: 1,
+            }
+        }).then((res) => {
+            setPosts(res.data.content);
+            setItemsPerPage(res.data.pageable.pageSize);
+            setCount(res.data.totalElements);
+        })
+            .catch((error) => {
+                console.error("데이터 가져오기 실패:", error);
+            });
+    }, []);
 
     const handlePageChange = (selectedPage) => {
         setPage(selectedPage);
-        navigate(`/admin/FAQManagement/page=${selectedPage}`);
+        navigate(`/admin/NoticeManagement/page=${selectedPage}`);
     };
 
     //TODO 신고 횟수 1이상인 멤버 리스트 가져오기
@@ -83,23 +121,18 @@ const NoticeManagement = () => {
                         <table className="member_admin_table">
                             <thead>
                             <tr>
-                                <th>회원 ID</th>
-                                <th>닉네임</th>
-                                <th>누적 신고 횟수</th>
-                                <th>버튼</th>
+                                <th>제목</th>
+                                <th>글쓴이</th>
+                                <th>날짜</th>
+                                <th>조회수</th>
+                                <th>공감수</th>
+                                <th>삭제</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {members.map((member) => (
-                                <tr>
-                                    <td>{member.id}</td>
-                                    <td>{member.nickname}</td>
-                                    <td>{member.reportCount}</td>
-                                    <td>
-                                        <button className="withdraw_btn" onClick={() => handleWithdraw(member)}>강제 탈퇴
-                                        </button>
-                                    </td>
-                                </tr>
+                            {posts.map((d, index) => (
+                                <NoticeManagingListItem setPosts={setPosts} posts={d} d={d}
+                                                index={index} key={d.id}/>
                             ))}
                             </tbody>
                         </table>
