@@ -8,7 +8,7 @@ import SearchBar from "../../components/qna/QnaSearchBar";
 import QnaListItem from "../../components/qna/QnaListItem";
 import axios from "axios";
 import Backarrow from "../../components/repeat_etc/Backarrow";
-import QnaInsert from "../../components/qna/QnaInsert";
+import QnaInsert from "../qna/QnaInsert";
 import Paging from "../../components/repeat_etc/Paging";
 
 const Qna = () => {
@@ -31,14 +31,19 @@ const Qna = () => {
     const handleMoveToStudyInsert = (e, type) => {
         if (accessToken && isLoggedInUserId) {
             e.preventDefault();
-
-            if (userIsAdmin) {
-                setPostType(type);
-                setShowFaqInsert(!showFaqInsert);
-            } else {
-                setPostType(type);
-                setShowQnaInsert(!showQnaInsert);
-            }
+            <Link to={`/insert-QnaAndFaq`}
+                  style={{
+                      textDecoration: "none",
+                      color: "inherit",
+                  }}>
+            </Link>
+            // if (userIsAdmin) {
+            //     setPostType(type);
+            //     setShowFaqInsert(!showFaqInsert);
+            // } else {
+            //     setPostType(type);
+            //     setShowQnaInsert(!showQnaInsert);
+            // }
         } else {
             alert("로그인 해주세요");
             navigate("/login");
@@ -60,8 +65,7 @@ const Qna = () => {
 
                 if (auth === "ROLE_USER") {
                     setUserIsAdmin(false);
-                }
-                else if (auth === "ROLE_ADMIN") {
+                } else if (auth === "ROLE_ADMIN") {
                     setUserIsAdmin(true);
                 }
             })
@@ -117,7 +121,7 @@ const Qna = () => {
                 <p id={"entry-path"}> 홈 > QNA </p>
                 <Backarrow subname={"QNA LIST"}/>
                 {showFaqInsert && (
-                    <QnaInsert postType={postType} />
+                    <QnaInsert postType={postType}/>
                 )}
                 {showQnaInsert && (
                     <QnaInsert postType={postType}/>
@@ -126,17 +130,29 @@ const Qna = () => {
                     <div>
                         <div className="community_header">
                             <SearchBar/>
-                            <button onClick={(e) => handleMoveToStudyInsert(e, "QNA")} className="new_post_btn">
-                                QNA 작성
-                            </button>
+
                             {userIsAdmin ? (
                                 <>
                                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                    <button onClick={(e) => handleMoveToStudyInsert(e, "FAQ")} className="new_post_btn">
-                                        FAQ 작성
-                                    </button>
+                                    <Link to={`/admin/insert-Faq`}
+                                          style={{
+                                              textDecoration: "none",
+                                              color: "inherit",
+                                          }}>
+                                        <button className="new_post_btn">
+                                            FAQ 작성
+                                        </button>
+                                    </Link>
                                 </>
-                            ) : null}
+                            ) : <Link to={`/insert-Qna`}
+                                      style={{
+                                          textDecoration: "none",
+                                          color: "inherit",
+                                      }}>
+                                <button className="new_post_btn">
+                                    QNA 작성
+                                </button>
+                            </Link>}
                         </div>
                         <div className="community">
                             <div>
@@ -154,13 +170,14 @@ const Qna = () => {
                                 </table>
                             </div>
                         </div>
+                        <div className={"paging"}>
+                            <Paging page={page} totalItemCount={count} itemsPerPage={itemsPerPage}
+                                    handlePageChange={handlePageChange}/>
+                        </div>
                     </div>
                 )}
             </div>
-            <div className={"paging"}>
-                <Paging page={page} totalItemCount={count} itemsPerPage={itemsPerPage}
-                        handlePageChange={handlePageChange}/>
-            </div>
+
         </div>
     );
 }

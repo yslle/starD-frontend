@@ -8,7 +8,7 @@ import SearchBar from "../../components/notice/NoticeSearchBar";
 import NoticeListItem from "../../components/notice/NoticeListItem";
 import axios from "axios";
 import Backarrow from "../../components/repeat_etc/Backarrow";
-import NoticeInsert from "../../components/notice/NoticeInsert";
+import NoticeInsert from "../../pages/notice/NoticeInsert";
 import Paging from "../../components/repeat_etc/Paging";
 
 const Notice = () => {
@@ -29,7 +29,7 @@ const Notice = () => {
     const handleMoveToStudyInsert = (e) => {
         if (accessToken && isLoggedInUserId) {
             e.preventDefault();
-            setShowPostInsert(!showPostInsert);
+            //setShowPostInsert(!showPostInsert);
         } else {
             alert("로그인 해주세요");
             navigate("/login");
@@ -51,8 +51,7 @@ const Notice = () => {
 
                 if (auth === "ROLE_USER") {
                     setUserIsAdmin(false);
-                }
-                else if (auth === "ROLE_ADMIN") {
+                } else if (auth === "ROLE_ADMIN") {
                     setUserIsAdmin(true);
                 }
             })
@@ -108,16 +107,22 @@ const Notice = () => {
                 <p id={"entry-path"}> 홈 > 공지사항 </p>
                 <Backarrow subname={"NOTICE LIST"}/>
                 {showPostInsert && (
-                    <NoticeInsert />
+                    <NoticeInsert/>
                 )}
                 {!showPostInsert && (
                     <div>
                         <div className="community_header">
                             <SearchBar/>
                             {userIsAdmin ? (
-                                <button onClick={handleMoveToStudyInsert} className="new_post_btn">
-                                    새 글 작성
-                                </button>
+                                <Link to={`/admin/insert-notice`}
+                                      style={{
+                                          textDecoration: "none",
+                                          color: "inherit",
+                                      }}>
+                                    <button className="new_post_btn">
+                                        새 글 작성
+                                    </button>
+                                </Link>
                             ) : null}
 
                         </div>
@@ -136,12 +141,12 @@ const Notice = () => {
                                 </table>
                             </div>
                         </div>
+                        <div className={"paging"}>
+                            <Paging page={page} totalItemCount={count} itemsPerPage={itemsPerPage}
+                                    handlePageChange={handlePageChange}/>
+                        </div>
                     </div>
                 )}
-            </div>
-            <div className={"paging"}>
-                <Paging page={page} totalItemCount={count} itemsPerPage={itemsPerPage}
-                        handlePageChange={handlePageChange}/>
             </div>
         </div>
     );

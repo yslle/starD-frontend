@@ -4,7 +4,7 @@ import {Link, useNavigate, useLocation} from "react-router-dom";
 
 import "../../css/community_css/Community.css";
 import QnaSearchBar from "../../components/qna/QnaSearchBar";
-import QnaInsert from "../../components/qna/QnaInsert";
+import QnaInsert from "../qna/QnaInsert";
 import QnaListItem from "../../components/qna/QnaListItem";
 import axios from "axios";
 import Paging from "../../components/repeat_etc/Paging";

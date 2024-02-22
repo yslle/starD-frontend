@@ -4,7 +4,7 @@ import {Link, useNavigate, useLocation} from "react-router-dom";
 
 import "../../css/community_css/Community.css";
 import NoticeSearchBar from "../../components/notice/NoticeSearchBar";
-import NoticeInsert from "../../components/notice/NoticeInsert";
+import NoticeInsert from "../../pages/notice/NoticeInsert";
 import NoticeListItem from "../../components/notice/NoticeListItem";
 import axios from "axios";
 import Paging from "../../components/repeat_etc/Paging";

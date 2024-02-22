@@ -4,6 +4,7 @@ import Header from "../../components/repeat_etc/Header";
 import AdminCategory from "../../components/repeat_etc/AdminCategory";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import Paging from "../../components/repeat_etc/Paging";
+import FaqManagingListItem from "../../components/admin/FaqManagingListItem";
 const FAQManagement = () => {
     const [members, setMembers] = useState([]);
     const accessToken = localStorage.getItem('accessToken');
@@ -16,10 +17,49 @@ const FAQManagement = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
 
+    const [posts, setPosts] = useState([]);
+
     const handlePageChange = (selectedPage) => {
         setPage(selectedPage);
         navigate(`/admin/FAQManagement/page=${selectedPage}`);
     };
+
+    //페이지 수마다 가져오기
+    const fetchQnaAndFaq = (pageNumber) => {
+        axios.get("http://localhost:8080/faq", {
+            params: {
+                page: pageNumber,
+            },
+        })
+            .then((res) => {
+                setPosts(res.data.content);
+                setItemsPerPage(res.data.pageable.pageSize);
+                setCount(res.data.totalElements);
+                console.log("전송 성공");
+                console.log(res.data);
+            }).catch((error) => {
+            console.error("데이터 가져오기 실패:", error);
+        });
+    };
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/faq", {
+            params: {
+                page: 1,
+            }
+        }).then((res) => {
+            setPosts(res.data.content);
+            setItemsPerPage(res.data.pageable.pageSize);
+            setCount(res.data.totalElements);
+        })
+            .catch((error) => {
+                console.error("데이터 가져오기 실패:", error);
+            });
+    }, []);
+
+    useEffect(() => {
+        fetchQnaAndFaq(page);
+    }, [page]);
 
 
     //TODO 신고 횟수 1이상인 멤버 리스트 가져오기
@@ -68,6 +108,8 @@ const FAQManagement = () => {
         }
     }, []);
 
+
+
     return (
         <div>
             <Header showSideCenter={true}/>
@@ -83,26 +125,19 @@ const FAQManagement = () => {
                         <div className="admin_table_wrapper">
                             <table className="member_admin_table">
                                 <thead>
-                                <tr>
-                                    <th>회원 ID</th>
-                                    <th>닉네임</th>
-                                    <th>누적 신고 횟수</th>
-                                    <th>버튼</th>
-                                </tr>
+                                        <th>카테고리</th>
+                                        <th>제목</th>
+                                        <th>닉네임</th>
+                                        <th>날짜</th>
+                                        <th>조회수</th>
+                                        <th>공감수</th>
+                                        <th>삭제</th>
                                 </thead>
                                 <tbody>
-                                {members.map((member) => (
-                                    <tr>
-                                        <td>{member.id}</td>
-                                        <td>{member.nickname}</td>
-                                        <td>{member.reportCount}</td>
-                                        <td>
-                                            <button className="withdraw_btn" onClick={() => handleWithdraw(member)}>강제
-                                                탈퇴
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                 {posts.map((d, index) => (
+                                        <FaqManagingListItem setPosts={setPosts} posts={d} d={d}
+                                                     index={index} key={d.id}/>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>

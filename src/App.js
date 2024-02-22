@@ -60,6 +60,10 @@ import  MemberManagement from "./pages/admin/MemberManagement";
 import NoticeManagement from "./pages/admin/NoticeManagement";
 import ReportManagement from "./pages/admin/ReportManagement";
 import ResetPwTokenVerification from "./pages/userpage/ResetPwTokenVerification";
+import QnaInsert from "./pages/qna/QnaInsert";
+import FaqInsert from "./pages/admin/FaqInsert";
+import FaqDetail from "./pages/qna/FaqDetail";
+import NoticeInsert from "./pages/notice/NoticeInsert";
 
 function App() {
     return (
@@ -373,8 +377,23 @@ function App() {
                         path="/update-password"
                         element={<ResetPwTokenVerification/>}
                     />
+                    <Route
+                        path="/insert-Qna"
+                        element={<QnaInsert/>}
+                    />
+                    <Route
+                        path="/admin/insert-Faq"
+                        element={<FaqInsert/>}
+                    />
+                    <Route
+                        path="/faqdetail/:id"
+                        element={<FaqDetail/>}
+                    />
 
-
+                    <Route
+                        path="/admin/insert-notice"
+                        element={<NoticeInsert/>}
+                    />
                 </Routes>
 
                 <Footer/>
