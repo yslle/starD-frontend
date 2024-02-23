@@ -1,6 +1,8 @@
 import React, {useCallback, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import Header from "../../components/repeat_etc/Header";
+import Backarrow from "../../components/repeat_etc/Backarrow";
 
 const NoticeInsert = () => {
     const navigate = useNavigate();
@@ -87,6 +89,12 @@ const NoticeInsert = () => {
     }, [formData])
 
     return (
+        <div className={"main_wrap"} id={"community"}>
+            <Header showSideCenter={true}/>
+            <div className="community_container">
+                <div className="community_container">
+                    <p id={"entry-path"}> 홈 > Notice </p>
+                    <Backarrow subname={"Notice Insert"}/>
         <form className="new_post_form" onSubmit={handleSubmit}>
             <div style={{display:"flex"}}>
                 <span style={{paddingLeft: "10px",marginTop:"25px"}}>제목</span>
@@ -108,6 +116,9 @@ const NoticeInsert = () => {
                 <input type="submit" value="등록하기" className="register_btn"/>
             </div>
         </form>
+                </div>
+            </div>
+        </div>
     )
 }
 export default NoticeInsert;

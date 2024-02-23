@@ -20,6 +20,7 @@ import communityfield from "../images/communityfield.png";
 import communityscrap from "../images/communityscrap.png";
 import axios from "axios";
 import MemoizedLink from "../MemoizedLink";
+import {EventSourcePolyfill} from 'event-source-polyfill';
 
 const CenteredDiv = styled.div`
   display: flex;
@@ -80,7 +81,7 @@ const Home = () => {
         })
     }, []);
 
-    
+
     const getTodoItemClassName = (checked) => {
         return checked ? "checked" : "unchecked";
     };
@@ -89,7 +90,7 @@ const Home = () => {
     const [filteredToDo, setFilteredToDo] = useState([]);
 
     useEffect(() => {
-        console.log("parsedTodos",parsedTodos);
+        console.log("parsedTodos", parsedTodos);
         if (Array.isArray(parsedTodos)) {
             const filteredToDo = parsedTodos.filter((todo) => {
                 const todoDueDate = new Date(todo.toDo.dueDate).toDateString();
@@ -112,6 +113,71 @@ const Home = () => {
         }
 
     };
+
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+
+        const eventSource = new EventSourcePolyfill('http://localhost:8080/notifications/subscribe', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "text/event-stream",
+            },
+            heartbeatTimeout: 86400000, //sse 연결 시간 (토큰 유지 24시간)
+            withCredentials: true,
+        });
+
+        eventSource.onopen = (event) => {
+            if (event.status === 200) {
+                console.log('이벤트 연결 성공');
+            }
+            // console.log('이벤트 연결 성공');
+            // console.log('EventSource 상태:', eventSource.readyState);
+        };
+
+        // TODO 이벤트 받는 로직 변경 필요
+        // 서버로부터 이벤트를 수신할 때의 핸들러
+        eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log("data :",data);
+            setNotifications((prevNotifications) => [...prevNotifications, data]);
+        };
+
+        eventSource.onerror = (event) => {
+            console.log('error 발생: ', event);
+            eventSource.close();
+        }
+
+        // 컴포넌트가 언마운트될 때 연결 종료
+        return () => {
+            console.log("실시간 알림 연결 종료");
+            eventSource.close();
+        };
+    }, [accessToken]); // 빈 배열은 컴포넌트가 처음 마운트될 때만 실행되도록 함
+
+    // useEffect(() => {
+    //     if (isLogin && user) {
+    //         const eventSource = new EventSourcePolyfill('http://localhost:8080/notifications/subscribe', {
+    //             withCredentials: true,
+    //             headers: {
+    //                 Authorization: `Bearer ${accessToken}`,
+    //             },
+    //         });
+    //
+    //         eventSource.onopen = () => {
+    //             console.log('이벤트 연결 성공');
+    //         };
+    //         eventSource.onmessage = (event) => {
+    //             const eventData = JSON.parse(event.data);
+    //             console.log("새로운 이벤트를 수신했습니다:", eventData);
+    //             // 여기서 필요한 작업을 수행합니다.
+    //         };
+    //
+    //         return () => {
+    //             eventSource.close();
+    //         };
+    //     }
+    // }, []);
 
 
     // useEffect(() => {
@@ -199,8 +265,10 @@ const Home = () => {
 
                 <span id="today">{`${Year}. ${Month}. ${Dates} / 오늘의 할 일`}
                     <MemoizedLink to={"/ToDoList"}
-                                  style={{textDecoration: "none",
-                                            color: "inherit",}}> <button
+                                  style={{
+                                      textDecoration: "none",
+                                      color: "inherit",
+                                  }}> <button
                         id="todo_more">{`ToDoList Page >>`}</button></MemoizedLink></span>
                                 <hr/>
                                 {filteredToDo.length === 0 ? (
