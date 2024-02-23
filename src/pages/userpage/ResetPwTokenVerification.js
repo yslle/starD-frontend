@@ -63,14 +63,17 @@ const ResetPwTokenVerification = () => {
             newPassword: state.pw
         };
 
-        axios.put("http://localhost:8080/reset-password", passwordUpdateDto,{
+        axios.put("http://localhost:8080/user/mypage/reset-password", passwordUpdateDto,{
             withCredentials: true,
             headers: { 'Authorization': `Bearer ${accessToken}` } })
             .then((res) => {
                 console.error("비밀번호 변경 성공");
                 window.alert("비밀번호 변경 성공");
         }).catch((error) => {
-            console.error("에러:", error);
+            console.log("비밀번호 수정 실패", error);
+
+            if (error.response && error.response.status === 409)
+                window.alert("기존 비밀번호와 동일");
         });
     }
 
