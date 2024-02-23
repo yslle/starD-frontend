@@ -101,7 +101,7 @@ const FaqInsert = () => {
             <div className="community_container">
                 <div className="community_container">
                     <p id={"entry-path"}> 홈 > FAQ </p>
-                    <Backarrow subname={"FaqInsert Insert"}/>
+                    <Backarrow subname={"Faq Insert"}/>
                     <form className="new_post_form" onSubmit={handleSubmit}>
                         <div style={{display: "flex"}}>
                             <span style={{paddingLeft: "10px", marginTop: "25px"}}>제목</span>

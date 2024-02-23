@@ -49,7 +49,9 @@ const Logout = ({sideheader}) => {
             navigate("/login");
         }
     }, []);
-
+    return (
+        null
+    );
 }
 
 export default Logout;
