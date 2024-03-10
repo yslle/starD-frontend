@@ -7,12 +7,6 @@ const SubscribeComponent = () => {
     const accessToken = localStorage.getItem('accessToken');
 
     useEffect(() => {
-        // const eventSource = new EventSource("http://localhost:8080/notifications/subscribe", {
-        //     withCredentials: true,
-        //     headers: {
-        //         Authorization: `Bearer ${accessToken}`
-        //     }
-        // });
         const eventSource = new EventSource(`http://localhost:8080/notifications/subscribe?token=${accessToken}`, { withCredentials: true });
 
         eventSource.onopen = () => {
