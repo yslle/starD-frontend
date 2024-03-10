@@ -4,10 +4,15 @@ import Header from "../../components/repeat_etc/Header";
 const SubscribeComponent = () => {
     const [lastEventId, setLastEventId] = useState("");
     const [notifications, setNotifications] = useState([]);
+    const accessToken = localStorage.getItem('accessToken');
 
     useEffect(() => {
-        const eventSource = new EventSource("http://localhost:8080/subscribe");
-
+        const eventSource = new EventSource("http://localhost:8080/notifications/subscribe", {
+            withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
         eventSource.onopen = () => {
             console.log("SSE 연결이 열렸습니다.");
         };
@@ -32,7 +37,7 @@ const SubscribeComponent = () => {
 
     const sendData = async (id) => {
         try {
-            await axios.post(`http://localhost:8080/send-data/${id}`);
+            await axios.post(`http://localhost:8080/notifications/send-data/${id}`);
             console.log("데이터 전송 성공");
         } catch (error) {
             console.error("데이터 전송 실패:", error);
