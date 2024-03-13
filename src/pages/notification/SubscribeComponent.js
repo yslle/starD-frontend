@@ -4,9 +4,10 @@ import Header from "../../components/repeat_etc/Header";
 const SubscribeComponent = () => {
     const [lastEventId, setLastEventId] = useState("");
     const [notifications, setNotifications] = useState([]);
+    const accessToken = localStorage.getItem('accessToken');
 
     useEffect(() => {
-        const eventSource = new EventSource("http://localhost:8080/subscribe");
+        const eventSource = new EventSource(`http://localhost:8080/notifications/subscribe?token=${accessToken}`, { withCredentials: true });
 
         eventSource.onopen = () => {
             console.log("SSE 연결이 열렸습니다.");
@@ -30,9 +31,9 @@ const SubscribeComponent = () => {
         };
     }, [lastEventId]); // lastEventId가 변경될 때마다 SSE를 다시 구독합니다.
 
-    const sendData = async (id) => {
+    const sendData = async () => {
         try {
-            await axios.post(`http://localhost:8080/send-data/${id}`);
+            await axios.post(`http://localhost:8080/notifications/send-data?token=${accessToken}`, null, { withCredentials: true });
             console.log("데이터 전송 성공");
         } catch (error) {
             console.error("데이터 전송 실패:", error);
@@ -49,7 +50,7 @@ const SubscribeComponent = () => {
                     <li key={index}>{notification}</li>
                 ))}
             </ul>
-            <button onClick={() => sendData("123")}>데이터 전송</button>
+            <button onClick={() => sendData()}>데이터 전송</button>
         </div>
         </div>
     );
