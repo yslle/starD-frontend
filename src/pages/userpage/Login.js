@@ -52,32 +52,30 @@ const Login = () => {
         }
 
         axios
-            .post("http://localhost:8080/api/v2/members/login", {
+            .post("http://localhost:8080/user/auth/sign-in", {
                 memberId: state.ID,
                 password: state.PW
             }, {
-                params: {
-                    memberId: state.ID,
-                    password: state.PW
-                },
                 withCredentials: true
             })
             .then((res) => {
-                if (res.data.state === 400) {
-                    alert("입력값을 확인해주세요.\n로그인 실패");
-                } else {
-                    const accessToken = res.data.data.accessToken;
+                const accessToken = res.data.accessToken;
 
-                    localStorage.setItem('accessToken', accessToken);
-                    localStorage.setItem('isLoggedInUserId', state.ID);
-                    // // SSE를 구독하기 위해 SSEComponent 호출
-                    login();
-                    navigate('/'); // useNavigate를 사용하여 페이지를 이동
-                }
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('isLoggedInUserId', state.ID);
+
+                // // SSE를 구독하기 위해 SSEComponent 호출
+                login();
+                navigate('/'); // useNavigate를 사용하여 페이지를 이동
+
             })
             .catch(error => {
-                console.log('전송 실패', error);
-                alert("입력값을 확인해주세요.\n로그인 실패");
+                console.log(error);
+                if (error.response.status === 400)
+                    alert("입력 값을 확인해주세요.");
+
+                if (error.response.status === 404)
+                    alert("가입되지 않는 회원입니다.");
             });
     };
 
