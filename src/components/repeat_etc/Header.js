@@ -23,15 +23,15 @@ const Header = ({showSideCenter}) => {
                     }
                 })
                     .then(() => {
-                        console.log("로그아웃 성공");
-                        localStorage.removeItem('accessToken');
-                        localStorage.removeItem('isLoggedInUserId');
-                        setIsLoggedIn(false);
-                        alert("30분이 지나 자동 로그아웃");
-                        navigate("/");
+                        // console.log("로그아웃 성공");
+                        // localStorage.removeItem('accessToken');
+                        // localStorage.removeItem('isLoggedInUserId');
+                        // setIsLoggedIn(false);
+                        // alert("30분이 지나 자동 로그아웃");
+                        // navigate("/");
                     })
                     .catch(error => {
-                        console.log("로그아웃 실패", error);
+                        alert("30분이 지나 자동 로그아웃");
                         localStorage.removeItem('accessToken');
                         localStorage.removeItem('isLoggedInUserId');
                         setIsLoggedIn(false);
@@ -45,9 +45,6 @@ const Header = ({showSideCenter}) => {
                     withCredentials: true,
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
-                    },
-                    params: {
-                        accessToken: accessToken
                     }
                 })
                     .then((res) => {
