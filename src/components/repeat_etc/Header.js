@@ -16,17 +16,10 @@ const Header = ({showSideCenter}) => {
         useEffect(() => {
 
             const logout = (member) => {
-                axios.post("http://localhost:8080/api/v2/members/logout", {
-                    accessToken: accessToken,
-                    memberId: member
-                }, {
+                axios.post("http://localhost:8080/user/auth/sign-out", {}, {
                     withCredentials: true,
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
-                    },
-                    params: {
-                        accessToken: accessToken,
-                        memberId: member
                     }
                 })
                     .then(() => {
@@ -48,7 +41,7 @@ const Header = ({showSideCenter}) => {
 
 
             if (accessToken != null && isLoggedInUserId != null) {
-                axios.get("http://localhost:8080/api/v2/members/accessToken-expiration", {    // accessToken 만료 여부 확인 function
+                axios.get("http://localhost:8080/user/auth/accessToken-expiration", {    // accessToken 만료 여부 확인 function
                     withCredentials: true,
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
@@ -82,14 +75,14 @@ const Header = ({showSideCenter}) => {
         useEffect(() => {
             if (accessToken != null && isLoggedInUserId != null) {
                 axios
-                    .get("http://localhost:8080/member/auth", {
+                    .get("http://localhost:8080/user/auth/authority", {
                         withCredentials: true,
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
                     })
                     .then((res) => {
-                        const auth = res.data[0].authority;
+                        const auth = res.data;
                         console.log("*auth :", auth);
 
                         if (auth === "ROLE_USER") {
