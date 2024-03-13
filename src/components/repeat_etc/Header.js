@@ -16,29 +16,22 @@ const Header = ({showSideCenter}) => {
         useEffect(() => {
 
             const logout = (member) => {
-                axios.post("http://localhost:8080/api/v2/members/logout", {
-                    accessToken: accessToken,
-                    memberId: member
-                }, {
+                axios.post("http://localhost:8080/user/auth/sign-out", {}, {
                     withCredentials: true,
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
-                    },
-                    params: {
-                        accessToken: accessToken,
-                        memberId: member
                     }
                 })
                     .then(() => {
-                        console.log("로그아웃 성공");
-                        localStorage.removeItem('accessToken');
-                        localStorage.removeItem('isLoggedInUserId');
-                        setIsLoggedIn(false);
-                        alert("30분이 지나 자동 로그아웃");
-                        navigate("/");
+                        // console.log("로그아웃 성공");
+                        // localStorage.removeItem('accessToken');
+                        // localStorage.removeItem('isLoggedInUserId');
+                        // setIsLoggedIn(false);
+                        // alert("30분이 지나 자동 로그아웃");
+                        // navigate("/");
                     })
                     .catch(error => {
-                        console.log("로그아웃 실패", error);
+                        alert("30분이 지나 자동 로그아웃");
                         localStorage.removeItem('accessToken');
                         localStorage.removeItem('isLoggedInUserId');
                         setIsLoggedIn(false);
@@ -48,13 +41,10 @@ const Header = ({showSideCenter}) => {
 
 
             if (accessToken != null && isLoggedInUserId != null) {
-                axios.get("http://localhost:8080/api/v2/members/accessToken-expiration", {    // accessToken 만료 여부 확인 function
+                axios.get("http://localhost:8080/user/auth/accessToken-expiration", {    // accessToken 만료 여부 확인 function
                     withCredentials: true,
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
-                    },
-                    params: {
-                        accessToken: accessToken
                     }
                 })
                     .then((res) => {
@@ -82,14 +72,14 @@ const Header = ({showSideCenter}) => {
         useEffect(() => {
             if (accessToken != null && isLoggedInUserId != null) {
                 axios
-                    .get("http://localhost:8080/member/auth", {
+                    .get("http://localhost:8080/user/auth/authority", {
                         withCredentials: true,
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
                     })
                     .then((res) => {
-                        const auth = res.data[0].authority;
+                        const auth = res.data;
                         console.log("*auth :", auth);
 
                         if (auth === "ROLE_USER") {
