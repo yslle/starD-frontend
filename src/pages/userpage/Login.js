@@ -29,13 +29,13 @@ const Login = () => {
         }
     };
     const login = () => {
-        const accessToken = localStorage.getItem('accessToken');
-        const eventSource = new EventSource(`/notifications/subscribe`);
+        // const accessToken = localStorage.getItem('accessToken');
+        const eventSource = new EventSource(`http://localhost:8080/notifications/subscribe/${state.ID}`);
 
         eventSource.addEventListener("sse", function (event) {
             console.log(event.data);
 
-            const data = JSON.parse(event.data);
+            // const data = JSON.parse(event.data);
         });
 
     };

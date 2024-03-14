@@ -116,44 +116,45 @@ const Home = () => {
 
     const [notifications, setNotifications] = useState([]);
 
-    useEffect(() => {
-
-        const eventSource = new EventSourcePolyfill('http://localhost:8080/notifications/subscribe', {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "text/event-stream",
-            },
-            heartbeatTimeout: 86400000, //sse 연결 시간 (토큰 유지 24시간)
-            withCredentials: true,
-        });
-
-        eventSource.onopen = (event) => {
-            if (event.status === 200) {
-                console.log('이벤트 연결 성공');
-            }
-            // console.log('이벤트 연결 성공');
-            // console.log('EventSource 상태:', eventSource.readyState);
-        };
-
-        // TODO 이벤트 받는 로직 변경 필요
-        // 서버로부터 이벤트를 수신할 때의 핸들러
-        eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            console.log("data :",data);
-            setNotifications((prevNotifications) => [...prevNotifications, data]);
-        };
-
-        eventSource.onerror = (event) => {
-            console.log('error 발생: ', event);
-            eventSource.close();
-        }
-
-        // 컴포넌트가 언마운트될 때 연결 종료
-        return () => {
-            console.log("실시간 알림 연결 종료");
-            eventSource.close();
-        };
-    }, [accessToken]); // 빈 배열은 컴포넌트가 처음 마운트될 때만 실행되도록 함
+    // TODO 2024/03/14 120-157번째 줄까지 에러 발생하므로 주석 처리
+    // useEffect(() => {
+    //
+    //     const eventSource = new EventSourcePolyfill('http://localhost:8080/notifications/subscribe', {
+    //         headers: {
+    //             Authorization: `Bearer ${accessToken}`,
+    //             "Content-Type": "text/event-stream",
+    //         },
+    //         heartbeatTimeout: 86400000, //sse 연결 시간 (토큰 유지 24시간)
+    //         withCredentials: true,
+    //     });
+    //
+    //     eventSource.onopen = (event) => {
+    //         if (event.status === 200) {
+    //             console.log('이벤트 연결 성공');
+    //         }
+    //         // console.log('이벤트 연결 성공');
+    //         // console.log('EventSource 상태:', eventSource.readyState);
+    //     };
+    //
+    //     // TODO 이벤트 받는 로직 변경 필요
+    //     // 서버로부터 이벤트를 수신할 때의 핸들러
+    //     eventSource.onmessage = (event) => {
+    //         const data = JSON.parse(event.data);
+    //         console.log("data :",data);
+    //         setNotifications((prevNotifications) => [...prevNotifications, data]);
+    //     };
+    //
+    //     eventSource.onerror = (event) => {
+    //         console.log('error 발생: ', event);
+    //         eventSource.close();
+    //     }
+    //
+    //     // 컴포넌트가 언마운트될 때 연결 종료
+    //     return () => {
+    //         console.log("실시간 알림 연결 종료");
+    //         eventSource.close();
+    //     };
+    // }, [accessToken]); // 빈 배열은 컴포넌트가 처음 마운트될 때만 실행되도록 함
 
     // useEffect(() => {
     //     if (isLogin && user) {
